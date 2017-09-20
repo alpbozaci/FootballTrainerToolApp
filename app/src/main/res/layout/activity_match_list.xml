@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:weightSum="1"
+             android:paddingBottom="10dp"
+             android:orientation="vertical"
+             tools:context="ch.bozaci.footballtrainertoolapp.MatchListActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:layout_marginTop="2dp"
+        android:background="#AAAAAA"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ListView
+            android:id="@+id/listview_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_add_match"
+        android:layout_width="@dimen/add_button_diameter"
+        android:layout_height="@dimen/add_button_diameter"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:clickable="true"
+        android:elevation="@dimen/elevation_low"
+        android:tint="@android:color/white"
+        app:backgroundTint="@android:color/holo_orange_dark"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="RtlCompat"
+        />
+
+</FrameLayout>
