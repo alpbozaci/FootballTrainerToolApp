@@ -8,6 +8,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MatchActivity extends AppCompatActivity
@@ -15,8 +16,13 @@ public class MatchActivity extends AppCompatActivity
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private List<Player> mPlayerList;
-    private ArrayAdapter<Player> mPlayerListAdapter;
+    private List<Event> mEventList;
+    private SelectPlayerListAdapter mSelectPlayerListAdapter;
+    private EventListAdapter mEventListAdapter;
     private ListView mPlayerListView;
+    private ListView mEventListView;
+    private Match mMatch;
+
     private DatabaseAdapter databaseAdapter;
 
     @Override
@@ -44,28 +50,33 @@ public class MatchActivity extends AppCompatActivity
         tabHost.addTab(tab3);
 
 
-        Match match = null;
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null)
         {
-            match = (Match)bundle.getSerializable("match");
-            System.out.println(match.toString());
+            mMatch = (Match)bundle.getSerializable("match");
+            System.out.println(mMatch.toString());
 
             TextView textView = (TextView) findViewById(R.id.textview_started_match);
-            textView.setText(match.getHomeTeam() + " - " + match.getGuestTeam());
+            textView.setText(mMatch.getHomeTeam() + " - " + mMatch.getGuestTeam());
         }
 
         mPlayerList = new ArrayList<>();
+        mEventList = new ArrayList<>();
 
         databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
         loadPlayerList();
 
-        SelectPlayerListAdapter selectPlayerListAdapter = new SelectPlayerListAdapter(this, mPlayerList, new MyPlayerClickListener(), new MyActivateDeactivatePlayerClickListener());
+        mSelectPlayerListAdapter = new SelectPlayerListAdapter(this, mPlayerList, new MyPlayerClickListener(), new MyActivateDeactivatePlayerClickListener());
 
         mPlayerListView = (ListView) findViewById(R.id.listview_select_player);
-        mPlayerListView.setAdapter(selectPlayerListAdapter);
+        mPlayerListView.setAdapter(mSelectPlayerListAdapter);
+
+        mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener());
+
+        mEventListView = (ListView) findViewById(R.id.listview_event);
+        mEventListView.setAdapter(mEventListAdapter);
     }
 
     private void loadPlayerList()
@@ -81,14 +92,20 @@ public class MatchActivity extends AppCompatActivity
 
     private interface PlayerClickListener
     {
-        public void onPlayerClicked(Player player);
+        void onPlayerClicked(Player player);
     }
 
     private interface ActivateDeactivatePlayerClickListener
     {
-        public void onActivatePlayerClicked(Player player);
-        public void onDeactivatePlayerClicked(Player player);
+        void onActivatePlayerClicked(Player player);
+        void onDeactivatePlayerClicked(Player player);
     }
+
+    private interface EventClickListener
+    {
+        void onEventClicked(Event event);
+    }
+
 
     class MyPlayerClickListener implements PlayerClickListener
     {
@@ -105,12 +122,31 @@ public class MatchActivity extends AppCompatActivity
         public void onActivatePlayerClicked(Player player)
         {
             System.out.println("activated: " + player.toString());
+
+            Event event = new Event();
+            event.setDate(new Date());
+            event.setPlayerId(player.getId());
+            event.setMatchId(mMatch.getId());
+            event.setType("Activated Player : " + player.getFirstName());
+
+            mEventList.add(event);
+
+            mEventListAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void onDeactivatePlayerClicked(Player player)
         {
             System.out.println("deactivated: " + player.toString());
+        }
+    }
+
+    class MyEventClickListener implements EventClickListener
+    {
+        @Override
+        public void onEventClicked(Event event)
+        {
+            System.out.println("clicked: " + event.toString());
         }
     }
 }

@@ -19,8 +19,8 @@
 
     <TabHost
         android:id="@+id/tabhost"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"/>
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
@@ -57,6 +57,108 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <TableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/holo_orange_light">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_span="2"
+                                android:text="@string/hometeam"
+                                />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_span="2"
+                                android:text="@string/guestteam"
+                                />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <Button
+                                android:id="@+id/button_goal_hometeam"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="GOAL"
+                                />
+
+                            <TextView
+                                android:id="@+id/textview_score_hometeam"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="0"
+                                />
+
+                            <TextView
+                                android:id="@+id/textview_score_guestteam"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="0"
+                                />
+
+                            <Button
+                                android:id="@+id/button_goal_guestteam"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="GOAL"
+                                />
+
+                        </TableRow>
+
+                    </TableLayout>
+
+                    <TableLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/holo_blue_dark">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textview_timer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_span="2"
+                                android:text="25"
+                                />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <Button
+                                android:id="@+id/button_start_timer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Play"
+                                />
+
+                            <Button
+                                android:id="@+id/button_pause_timer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Pause"
+                                />
+
+                        </TableRow>
+
+                    </TableLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -65,12 +167,17 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <ListView
+                        android:id="@+id/listview_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
                 </LinearLayout>
 
             </FrameLayout>
-
         </LinearLayout>
-
     </TabHost>
+
 
 </LinearLayout>
