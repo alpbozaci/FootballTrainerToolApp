@@ -17,6 +17,27 @@ public class Event implements Serializable
     public static final String COLUMN_TYPE      = "type";
     public static final String COLUMN_DATE      = "date";
 
+    public static enum EventType
+    {
+        GOAL("GOAL"),
+        ASSIST("ASSIST"),
+        YELLOW_CARD("YELLOW CARD"),
+        RED_CARD("RED CARD"),
+        INJURED("INJURED");
+
+        private String type;
+
+        EventType(String type)
+        {
+            this.type = type;
+        }
+
+        public String getType()
+        {
+            return type;
+        }
+    }
+
     private Integer id;
     private Integer matchId;
     private Integer playerId;

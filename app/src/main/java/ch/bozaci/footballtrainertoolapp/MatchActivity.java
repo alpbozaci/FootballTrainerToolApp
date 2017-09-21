@@ -1,12 +1,17 @@
 package ch.bozaci.footballtrainertoolapp;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,12 +74,10 @@ public class MatchActivity extends AppCompatActivity
         loadPlayerList();
 
         mSelectPlayerListAdapter = new SelectPlayerListAdapter(this, mPlayerList, new MyPlayerClickListener(), new MyActivateDeactivatePlayerClickListener());
-
         mPlayerListView = (ListView) findViewById(R.id.listview_select_player);
         mPlayerListView.setAdapter(mSelectPlayerListAdapter);
 
         mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener());
-
         mEventListView = (ListView) findViewById(R.id.listview_event);
         mEventListView.setAdapter(mEventListAdapter);
     }
@@ -87,6 +90,69 @@ public class MatchActivity extends AppCompatActivity
         for (Player player : dbPlayerList)
         {
             mPlayerList.add(player);
+        }
+    }
+
+
+    private void showAddEventTypeDialog(final Player player)
+    {
+        final Dialog eventTypeDialog = new Dialog(this);
+        eventTypeDialog.setContentView(R.layout.dialog_eventtype);
+
+        Button goal       = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_goal);
+        Button assist     = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_assist);
+        Button yellowCard = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_yellow_card);
+        Button redCard    = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_red_card);
+        Button injured    = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_injured);
+
+        goal.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Event event = createEvent(player, Event.EventType.GOAL);
+                addEvent(event);
+                loadEventList();
+                eventTypeDialog.dismiss();
+            }
+        });
+
+        eventTypeDialog.show();
+    }
+
+    private Event createEvent(Player player, Event.EventType eventType)
+    {
+        Event event = new Event();
+        event.setMatchId(mMatch.getId());
+        event.setPlayerId(player.getId());
+        event.setDate(new Date());
+        event.setType(eventType.getType());
+
+        return event;
+    }
+
+    private void addEvent(Event event)
+    {
+        databaseAdapter.addEvent(event);
+        Log.i(LOG_TAG, "event added" );
+    }
+
+    private void loadEventList()
+    {
+        mEventList.clear();
+
+        try
+        {
+            List<Event> dbEventList = databaseAdapter.getEventList(mMatch.getId());
+            for (Event event : dbEventList)
+            {
+                mEventList.add(event);
+            }
+            mEventListAdapter.notifyDataSetChanged();
+        }
+        catch (ParseException ex)
+        {
+            Log.e(LOG_TAG, ex.getMessage());
         }
     }
 
@@ -113,6 +179,7 @@ public class MatchActivity extends AppCompatActivity
         public void onPlayerClicked(Player player)
         {
             System.out.println("clicked: " + player.toString());
+            showAddEventTypeDialog(player);
         }
     }
 
@@ -122,16 +189,6 @@ public class MatchActivity extends AppCompatActivity
         public void onActivatePlayerClicked(Player player)
         {
             System.out.println("activated: " + player.toString());
-
-            Event event = new Event();
-            event.setDate(new Date());
-            event.setPlayerId(player.getId());
-            event.setMatchId(mMatch.getId());
-            event.setType("Activated Player : " + player.getFirstName());
-
-            mEventList.add(event);
-
-            mEventListAdapter.notifyDataSetChanged();
         }
 
         @Override

@@ -378,6 +378,32 @@ public class DatabaseAdapter
         return eventList;
     }
 
+    public List<Event> getEventList(Integer matchId) throws ParseException
+    {
+        List<Event> eventList = new ArrayList<>();
+
+        String whereClause = Event.COLUMN_MATCH_ID + " = " + matchId;
+        Cursor cursor = mSqlDatabase.query(Event.TABLE, null, whereClause, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst())
+        {
+            do
+            {
+                Event event = new Event();
+                event.setId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_ID)));
+                event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
+                event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
+                event.setType(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE)));
+                event.setDate(Util.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
+
+                eventList.add(event);
+            }
+            while (cursor.moveToNext());
+        }
+
+        return eventList;
+    }
+
     public Integer deleteEvent(Integer id)
     {
         String whereClause = Event.COLUMN_ID + " = " + id;
