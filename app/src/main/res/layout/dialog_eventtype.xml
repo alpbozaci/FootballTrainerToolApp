@@ -20,6 +20,20 @@
         android:text="ASSIST"/>
 
     <Button
+        android:id="@+id/button_eventtype_player_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="PLAYER IN"/>
+
+    <Button
+        android:id="@+id/button_eventtype_player_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="PLAYER_OUT"/>
+
+    <Button
         android:id="@+id/button_eventtype_yellow_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

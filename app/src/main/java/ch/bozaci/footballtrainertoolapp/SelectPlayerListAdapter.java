@@ -35,7 +35,7 @@ public class SelectPlayerListAdapter extends BaseAdapter
         mLayoutInflater = LayoutInflater.from(context);
     }
 
-    private class ViewHolder
+    public class ViewHolder
     {
         CheckBox checkBox;
         TextView textView;
@@ -90,13 +90,11 @@ public class SelectPlayerListAdapter extends BaseAdapter
             {
                 if (viewHolder.checkBox.isChecked())
                 {
-                    viewHolder.textView.setEnabled(true);
-                    mActivateDeactivatePlayerClickListener.onActivatePlayerClicked(player);
+                    mActivateDeactivatePlayerClickListener.onActivatePlayerClicked(player, viewHolder);
                 }
                 else
                 {
-                    viewHolder.textView.setEnabled(false);
-                    mActivateDeactivatePlayerClickListener.onDeactivatePlayerClicked(player);
+                    mActivateDeactivatePlayerClickListener.onDeactivatePlayerClicked(player, viewHolder);
                 }
             }
         });

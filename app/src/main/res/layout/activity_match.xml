@@ -45,7 +45,7 @@
 
                     <ListView
                         android:id="@+id/listview_select_player"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         />
 
@@ -58,7 +58,7 @@
                     android:orientation="vertical">
 
                     <TableLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/holo_orange_light">
 
@@ -69,48 +69,15 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_span="2"
-                                android:text="@string/hometeam"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_span="2"
+                                android:layout_weight="1"
                                 android:text="@string/guestteam"
-                                />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <Button
-                                android:id="@+id/button_goal_hometeam"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="GOAL"
-                                />
-
-                            <TextView
-                                android:id="@+id/textview_score_hometeam"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="0"
-                                />
-
-                            <TextView
-                                android:id="@+id/textview_score_guestteam"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="0"
                                 />
 
                             <Button
                                 android:id="@+id/button_goal_guestteam"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 android:text="GOAL"
                                 />
 
@@ -119,7 +86,7 @@
                     </TableLayout>
 
                     <TableLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/holo_blue_dark">
 
@@ -127,12 +94,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                            <TextView
-                                android:id="@+id/textview_timer"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_span="2"
-                                android:text="25"
+                            <Chronometer
+                                android:id="@+id/chronometer_minutes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 />
 
                         </TableRow>
@@ -145,7 +110,7 @@
                                 android:id="@+id/button_start_timer"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Play"
+                                android:text="Start"
                                 />
 
                             <Button
@@ -153,6 +118,64 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:text="Pause"
+                                />
+
+                            <Button
+                                android:id="@+id/button_stop_timer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Stop"
+                                />
+
+                        </TableRow>
+
+                    </TableLayout>
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/holo_green_light">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="@string/hometeam"
+                                />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="@string/guestteam"
+                                />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textview_score_hometeam"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:inputType="numberDecimal"
+                                android:text="0"
+                                />
+
+                            <TextView
+                                android:id="@+id/textview_score_guestteam"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:inputType="numberDecimal"
+                                android:text="0"
                                 />
 
                         </TableRow>

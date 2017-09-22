@@ -19,14 +19,17 @@ public class EventListAdapter extends BaseAdapter
     private List<Event> mEventList;
     private LayoutInflater mLayoutInflater;
     private MatchActivity.MyEventClickListener mEventClickListener;
+    private MatchActivity.MyDeleteEventLongClickListener mEventLongClickListener;
 
     public EventListAdapter(
             Context context,
             List<Event> eventList,
-            MatchActivity.MyEventClickListener eventClickListener)
+            MatchActivity.MyEventClickListener eventClickListener,
+            MatchActivity.MyDeleteEventLongClickListener eventLongClickListener)
     {
         this.mEventList = eventList;
         this.mEventClickListener = eventClickListener;
+        this.mEventLongClickListener = eventLongClickListener;
 
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -75,7 +78,7 @@ public class EventListAdapter extends BaseAdapter
 
         if (event != null)
         {
-            viewHolder.textView.setText(event.getType());
+            viewHolder.textView.setText(event.toString());
         }
 
         viewHolder.textView.setOnClickListener(new View.OnClickListener()
@@ -84,6 +87,16 @@ public class EventListAdapter extends BaseAdapter
             public void onClick(View v)
             {
                 mEventClickListener.onEventClicked(event);
+            }
+        });
+
+        viewHolder.textView.setOnLongClickListener(new View.OnLongClickListener()
+        {
+            @Override
+            public boolean onLongClick(View v)
+            {
+                mEventLongClickListener.onLongEventClicked(event);
+                return true;
             }
         });
 

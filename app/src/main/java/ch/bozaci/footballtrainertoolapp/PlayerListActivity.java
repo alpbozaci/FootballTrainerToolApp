@@ -37,7 +37,7 @@ public class PlayerListActivity extends AppCompatActivity
         mAddButton.setOnClickListener(new AddPlayerButtonClickListener());
 
         mPlayerList = new ArrayList<>();
-        mPlayerListAdapter = new ArrayAdapter<Player>(this, R.layout.item_player, R.id.textview_player, mPlayerList);
+        mPlayerListAdapter = new ArrayAdapter<>(this, R.layout.item_player, R.id.textview_player, mPlayerList);
 
         mPlayerListView = (ListView) findViewById(R.id.listview_player);
         mPlayerListView.setAdapter(mPlayerListAdapter);
@@ -98,7 +98,7 @@ public class PlayerListActivity extends AppCompatActivity
         playerDialog.setContentView(R.layout.dialog_player);
         playerDialog.setTitle(R.string.add_player);
 
-        Button save     = (Button) playerDialog.findViewById(R.id.button_player_dialog_save);
+        Button save   = (Button) playerDialog.findViewById(R.id.button_player_dialog_save);
         Button cancel = (Button) playerDialog.findViewById(R.id.button_player_dialog_cancel);
 
         save.setOnClickListener(new View.OnClickListener()

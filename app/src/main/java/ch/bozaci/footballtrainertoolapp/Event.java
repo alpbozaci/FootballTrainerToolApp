@@ -17,13 +17,19 @@ public class Event implements Serializable
     public static final String COLUMN_TYPE      = "type";
     public static final String COLUMN_DATE      = "date";
 
+
     public static enum EventType
     {
-        GOAL("GOAL"),
-        ASSIST("ASSIST"),
-        YELLOW_CARD("YELLOW CARD"),
-        RED_CARD("RED CARD"),
-        INJURED("INJURED");
+        PLAYER_PRESENT("PLAYER PRESENT"),
+        PLAYER_ABSENT("PLAYER ABSENT"),
+        PLAYER_GOAL_HOMETEAM("PLAYER GOAL HOMETEAM"),
+        PLAYER_GOAL_GUESTTEAM("PLAYER GOAL GUESTTEAM"),
+        PLAYER_ASSIST("PLAYER ASSIST"),
+        PLAYER_IN("PLAYER IN"),
+        PLAYER_OUT("PLAYER OUT"),
+        PLAYER_YELLOW_CARD("PLAYER YELLOW CARD"),
+        PLAYER_RED_CARD("PLAYER RED CARD"),
+        PLAYER_INJURED("PLAYER INJURED");
 
         private String type;
 
@@ -92,5 +98,11 @@ public class Event implements Serializable
     public void setDate(Date date)
     {
         this.date = date;
+    }
+
+    @Override
+    public String toString()
+    {
+        return getType() + " : " + getDate();
     }
 }

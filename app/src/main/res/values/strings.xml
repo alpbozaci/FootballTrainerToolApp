@@ -15,7 +15,7 @@
     <string name="playernumber">Spieler Nummer</string>
     <string name="title_delete_player">Spieler löschen</string>
     <string name="message_delete_player">Wollen Sie diesen Spieler löschen</string>
-
+    <string name="message_delete_event">Wollen Sie diesen Event löschen</string>
 
     <string name="add_match">Match hinzufügen</string>
     <string name="edit_match">Match bearbeiten</string>
