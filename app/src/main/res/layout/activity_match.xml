@@ -185,6 +185,27 @@
 
                     </TableLayout>
 
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/holo_orange_light">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <Button
+                                android:id="@+id/button_stop_match"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="@string/stop_match"
+                                />
+
+                        </TableRow>
+
+                    </TableLayout>
+
                 </LinearLayout>
 
                 <LinearLayout

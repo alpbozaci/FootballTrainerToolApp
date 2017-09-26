@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class SelectPlayerListAdapter extends BaseAdapter
     {
         CheckBox checkBox;
         TextView textView;
+        ImageView imageView;
     }
 
     @Override
@@ -68,8 +70,9 @@ public class SelectPlayerListAdapter extends BaseAdapter
         {
             convertView = mLayoutInflater.inflate(R.layout.item_select_player, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkbox_select_player);
-            viewHolder.textView = (TextView) convertView.findViewById(R.id.textview_select_player);
+            viewHolder.checkBox  = (CheckBox)  convertView.findViewById(R.id.checkbox_select_player);
+            viewHolder.textView  = (TextView)  convertView.findViewById(R.id.textview_select_player);
+            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageview_match_picture);
             convertView.setTag(viewHolder);
         }
         else
@@ -80,6 +83,8 @@ public class SelectPlayerListAdapter extends BaseAdapter
         final Player player = (Player)getItem(position);
 
         viewHolder.textView.setText(player.toString());
+        viewHolder.imageView.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
+
         viewHolder.textView.setEnabled(false);
         viewHolder.checkBox.setChecked(false);
 

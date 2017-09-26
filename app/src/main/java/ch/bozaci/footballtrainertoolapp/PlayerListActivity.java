@@ -26,6 +26,8 @@ public class PlayerListActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    private int REQUEST_IMAGE_CAPTURE = 1;
+
     private FloatingActionButton mAddButton;
     private List<Player> mPlayerList;
     private ArrayAdapter<Player> mPlayerListAdapter;
@@ -45,6 +47,8 @@ public class PlayerListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
 
+        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
+
         mAddButton = (FloatingActionButton) findViewById(R.id.button_add_player);
         mAddButton.setOnClickListener(new AddPlayerButtonClickListener());
 
@@ -56,8 +60,6 @@ public class PlayerListActivity extends AppCompatActivity
 
         mPlayerListView.setOnItemClickListener(new PlayerClickListener());
         mPlayerListView.setOnItemLongClickListener(new PlayerLongClickListener());
-
-        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
         loadPlayerList();
     }
@@ -212,8 +214,13 @@ public class PlayerListActivity extends AppCompatActivity
         String firstName    = editTextFirstName.getText().toString();
         String lastName     = editTextLastName.getText().toString();
         String playerNumber = editTextPlayerNumber.getText().toString();
-        Bitmap bitmap       = ((BitmapDrawable)mImageViewPicture.getDrawable()).getBitmap();
-        byte[] picture = PictureUtil.convertBitmapToByteArray(bitmap);
+
+        byte[] picture = new byte[0];
+        if (mImageViewPicture.getDrawable() != null)
+        {
+            Bitmap bitmap = ((BitmapDrawable)mImageViewPicture.getDrawable()).getBitmap();
+            picture = PictureUtil.convertBitmapToByteArray(bitmap);
+        }
 
         player.setFirstName(firstName);
         player.setLastName(lastName);
@@ -225,8 +232,6 @@ public class PlayerListActivity extends AppCompatActivity
 
     private void handleTakePicture()
     {
-        int REQUEST_IMAGE_CAPTURE = 1;
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null)
         {
@@ -237,8 +242,6 @@ public class PlayerListActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        int REQUEST_IMAGE_CAPTURE = 1;
-
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)

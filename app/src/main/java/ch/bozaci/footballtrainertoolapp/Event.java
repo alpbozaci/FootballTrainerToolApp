@@ -20,16 +20,18 @@ public class Event implements Serializable
 
     public static enum EventType
     {
-        PLAYER_PRESENT("PLAYER PRESENT"),
-        PLAYER_ABSENT("PLAYER ABSENT"),
-        PLAYER_GOAL_OWNTEAM("PLAYER GOAL OWN TEAM"),
-        PLAYER_GOAL_OPPOSINGTEAM("PLAYER GOAL OPPOSING TEAM"),
-        PLAYER_ASSIST("PLAYER ASSIST"),
-        PLAYER_IN("PLAYER IN"),
-        PLAYER_OUT("PLAYER OUT"),
-        PLAYER_YELLOW_CARD("PLAYER YELLOW CARD"),
-        PLAYER_RED_CARD("PLAYER RED CARD"),
-        PLAYER_INJURED("PLAYER INJURED");
+        OWN_PLAYER_PRESENT("PLAYER PRESENT"),
+        OWN_PLAYER_ABSENT("PLAYER ABSENT"),
+        OWN_PLAYER_GOAL("PLAYER GOAL"),
+        OWN_PLAYER_OWNGOAL("PLAYER OWNGOAL"),
+        OWN_PLAYER_ASSIST("PLAYER ASSIST"),
+        OWN_PLAYER_IN("PLAYER IN"),
+        OWN_PLAYER_OUT("PLAYER OUT"),
+        OWN_PLAYER_YELLOW_CARD("PLAYER YELLOW CARD"),
+        OWN_PLAYER_RED_CARD("PLAYER RED CARD"),
+        OWN_PLAYER_INJURED("PLAYER INJURED"),
+
+        OPPOSING_TEAM_GOAL("OPPOSING PLAYER GOAL");
 
         private String type;
 
@@ -49,6 +51,9 @@ public class Event implements Serializable
     private Integer playerId;
     private String type;
     private Date date;
+
+    private Match match;
+    private Player player;
 
     public Integer getId()
     {
@@ -100,9 +105,30 @@ public class Event implements Serializable
         this.date = date;
     }
 
+    public Match getMatch()
+    {
+        return match;
+    }
+
+    public void setMatch(Match match)
+    {
+        this.match = match;
+    }
+
+    public Player getPlayer()
+    {
+        return player;
+    }
+
+    public void setPlayer(Player player)
+    {
+        this.player = player;
+    }
+
     @Override
     public String toString()
     {
         return getType() + " : " + getDate();
     }
+
 }

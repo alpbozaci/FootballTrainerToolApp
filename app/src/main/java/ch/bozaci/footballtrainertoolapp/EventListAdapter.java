@@ -79,7 +79,7 @@ public class EventListAdapter extends BaseAdapter
 
         if (event != null)
         {
-            viewHolder.textViewEventType.setText(event.getType());
+            viewHolder.textViewEventType.setText(getGuiPresentation(event));
             viewHolder.textViewEventDate.setText(DateUtil.dateFormat.format(event.getDate()));
         }
 
@@ -103,5 +103,60 @@ public class EventListAdapter extends BaseAdapter
         });
 
         return convertView;
+    }
+
+    private String getGuiPresentation(Event event)
+    {
+        String eventType = event.getType();
+        String playerName = event.getPlayer().getFirstName() + " " + event.getPlayer().getLastName();
+
+        if (eventType.equals(Event.EventType.OWN_PLAYER_PRESENT.getType()))
+        {
+            return "SPIELER AKTIVIERT: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_ABSENT.getType()))
+        {
+            return "SPIELER DEAKTIVIERT: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_GOAL.getType()))
+        {
+            return "SPIELER SCHIESST GOAL: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_OWNGOAL.getType()))
+        {
+            return "SPIELER SCHIESST EIGENGOAL: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_ASSIST.getType()))
+        {
+            return "SPIELER ASSISTIERT: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_IN.getType()))
+        {
+            return "SPIELER EINGEWECHSELT: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_OUT.getType()))
+        {
+            return "SPIELER AUSGEWECHSELT: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_YELLOW_CARD.getType()))
+        {
+            return "SPIELER GELBE KARTE: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_RED_CARD.getType()))
+        {
+            return "SPIELER ROTE KARTE: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_INJURED.getType()))
+        {
+            return "SPIELER VERLETZT: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OPPOSING_TEAM_GOAL.getType()))
+        {
+            return "GEGENMANNSCHAFT SCHIESST GOAL";
+        }
+        else
+        {
+            return "?";
+        }
     }
 }

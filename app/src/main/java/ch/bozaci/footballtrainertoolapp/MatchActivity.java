@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -62,17 +61,17 @@ public class MatchActivity extends AppCompatActivity
         tabHost.setup();
 
         TabHost.TabSpec tab1 = tabHost.newTabSpec("TAB 1");
-        tab1.setIndicator("Spieler Event");
+        tab1.setIndicator(getString(R.string.player_event));
         tab1.setContent(R.id.tab1);
         tabHost.addTab(tab1);
 
         TabHost.TabSpec tab2 = tabHost.newTabSpec("TAB 2");
-        tab2.setIndicator("Match Event");
+        tab2.setIndicator(getString(R.string.match_event));
         tab2.setContent(R.id.tab2);
         tabHost.addTab(tab2);
 
         TabHost.TabSpec tab3 = tabHost.newTabSpec("TAB 3");
-        tab3.setIndicator("Verlauf");
+        tab3.setIndicator(getString(R.string.history));
         tab3.setContent(R.id.tab3);
         tabHost.addTab(tab3);
 
@@ -91,6 +90,8 @@ public class MatchActivity extends AppCompatActivity
         Button startTimerButton = (Button)findViewById(R.id.button_start_timer);
         Button pauseTimerButton = (Button)findViewById(R.id.button_pause_timer);
         Button stopTimerButton  = (Button)findViewById(R.id.button_stop_timer);
+        Button stopMatchButton  = (Button)findViewById(R.id.button_stop_match);
+
         mTimerMinTextView = (TextView)findViewById(R.id.textview_match_timer_min);
         mTimerSecTextView = (TextView)findViewById(R.id.textview_match_timer_sec);
 
@@ -102,6 +103,7 @@ public class MatchActivity extends AppCompatActivity
         startTimerButton.setOnClickListener(new MyStartTimerClickListener());
         pauseTimerButton.setOnClickListener(new MyPauseTimerClickListener());
         stopTimerButton.setOnClickListener(new MyStopTimerClickListener());
+        stopMatchButton.setOnClickListener(new MyStopMatchClickListener());
 
         //TAB 3
         mEventList = new ArrayList<>();
@@ -175,6 +177,9 @@ public class MatchActivity extends AppCompatActivity
         event.setDate(new Date());
         event.setType(eventType.getType());
 
+        event.setPlayer(player);
+        event.setMatch(mMatch);
+
         return event;
     }
 
@@ -229,11 +234,11 @@ public class MatchActivity extends AppCompatActivity
 
         for (Event event : mEventList)
         {
-            if (event.getType().equals(Event.EventType.PLAYER_GOAL_OWNTEAM.getType()))
+            if (event.getType().equals(Event.EventType.OWN_PLAYER_GOAL.getType()))
             {
                 scoreOwnTeam ++;
             }
-            if (event.getType().equals(Event.EventType.PLAYER_GOAL_OPPOSINGTEAM.getType()))
+            if (event.getType().equals(Event.EventType.OPPOSING_TEAM_GOAL.getType()))
             {
                 scoreOpposingTeam ++;
             }
@@ -295,14 +300,14 @@ public class MatchActivity extends AppCompatActivity
         @Override
         public void onActivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
         {
-            handleAddEvent(player, Event.EventType.PLAYER_PRESENT);
+            handleAddEvent(player, Event.EventType.OWN_PLAYER_PRESENT);
             viewHolder.textView.setEnabled(true);
         }
 
         @Override
         public void onDeactivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
         {
-            handleAddEvent(player, Event.EventType.PLAYER_ABSENT);
+            handleAddEvent(player, Event.EventType.OWN_PLAYER_ABSENT);
             viewHolder.textView.setEnabled(false);
         }
     }
@@ -353,7 +358,7 @@ public class MatchActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.PLAYER_GOAL_OWNTEAM);
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_GOAL);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -363,7 +368,7 @@ public class MatchActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.PLAYER_ASSIST);
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_ASSIST);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -379,7 +384,7 @@ public class MatchActivity extends AppCompatActivity
         {
             Player guestPlayer = new Player();
             guestPlayer.setId(null);
-            handleAddEvent(guestPlayer, Event.EventType.PLAYER_GOAL_OPPOSINGTEAM);
+            handleAddEvent(guestPlayer, Event.EventType.OPPOSING_TEAM_GOAL);
         }
     }
 
@@ -408,6 +413,14 @@ public class MatchActivity extends AppCompatActivity
         {
             mTimerThread.interrupt();
             mElapsedTimeInSeconds = 0;
+        }
+    }
+
+    class MyStopMatchClickListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
         }
     }
 

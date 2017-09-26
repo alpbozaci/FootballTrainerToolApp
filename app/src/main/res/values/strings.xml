@@ -29,4 +29,10 @@
     <string name="homegame">Heimspiel</string>
     <string name="awaygame">Auswärtsspiel</string>
 
+    <string name="player_event">Spieler Event</string>
+    <string name="match_event">Match Event</string>
+    <string name="history">Verlauf</string>
+    <string name="stop_match">Match beenden</string>
+    <string name="own_player_present">Spieler aktiviert</string>
+
 </resources>
