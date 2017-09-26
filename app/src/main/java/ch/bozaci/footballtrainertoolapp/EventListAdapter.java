@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -36,7 +35,8 @@ public class EventListAdapter extends BaseAdapter
 
     private class ViewHolder
     {
-        TextView textView;
+        TextView textViewEventType;
+        TextView textViewEventDate;
     }
 
     @Override
@@ -66,7 +66,8 @@ public class EventListAdapter extends BaseAdapter
         {
             convertView = mLayoutInflater.inflate(R.layout.item_event, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.textView = (TextView) convertView.findViewById(R.id.textview_event);
+            viewHolder.textViewEventType = (TextView) convertView.findViewById(R.id.textview_event_type);
+            viewHolder.textViewEventDate = (TextView) convertView.findViewById(R.id.textview_event_date);
             convertView.setTag(viewHolder);
         }
         else
@@ -78,10 +79,11 @@ public class EventListAdapter extends BaseAdapter
 
         if (event != null)
         {
-            viewHolder.textView.setText(event.toString());
+            viewHolder.textViewEventType.setText(event.getType());
+            viewHolder.textViewEventDate.setText(DateUtil.dateFormat.format(event.getDate()));
         }
 
-        viewHolder.textView.setOnClickListener(new View.OnClickListener()
+        viewHolder.textViewEventType.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -90,7 +92,7 @@ public class EventListAdapter extends BaseAdapter
             }
         });
 
-        viewHolder.textView.setOnLongClickListener(new View.OnLongClickListener()
+        viewHolder.textViewEventType.setOnLongClickListener(new View.OnLongClickListener()
         {
             @Override
             public boolean onLongClick(View v)

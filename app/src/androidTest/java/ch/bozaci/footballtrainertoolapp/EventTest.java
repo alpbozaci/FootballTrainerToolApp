@@ -43,7 +43,7 @@ public class EventTest
     @Test
     public void testAddPlayerDB() throws Exception
     {
-        dbAdapter.deleteEvents();
+        dbAdapter.deleteEventList();
 
         Event event1 = new Event();
         event1.setMatchId(1);
@@ -70,7 +70,7 @@ public class EventTest
     @Test
     public void testDeletePlayerDB() throws Exception
     {
-        dbAdapter.deleteEvents();
+        dbAdapter.deleteEventList();
 
         Event event1 = new Event();
         event1.setMatchId(1);

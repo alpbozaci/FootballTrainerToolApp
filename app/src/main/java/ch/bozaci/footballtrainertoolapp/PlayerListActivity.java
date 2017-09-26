@@ -2,6 +2,10 @@ package ch.bozaci.footballtrainertoolapp;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -25,7 +30,14 @@ public class PlayerListActivity extends AppCompatActivity
     private List<Player> mPlayerList;
     private ArrayAdapter<Player> mPlayerListAdapter;
     private ListView mPlayerListView;
+    private ImageView mImageViewPicture;
     private DatabaseAdapter databaseAdapter;
+
+    private enum DialogMode
+    {
+        ADD,
+        EDIT;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,7 +79,7 @@ public class PlayerListActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            showAddPlayerDialog();
+            showPlayerDialog(DialogMode.ADD, new Player());
         }
     }
 
@@ -77,7 +89,7 @@ public class PlayerListActivity extends AppCompatActivity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             Player player = mPlayerList.get(position);
-            showEditPlayerDialog(player);
+            showPlayerDialog(DialogMode.EDIT, player);
         }
     }
 
@@ -92,63 +104,62 @@ public class PlayerListActivity extends AppCompatActivity
         }
     }
 
-    private void showAddPlayerDialog()
+    private void showPlayerDialog(final DialogMode dialogMode, final Player player)
     {
         final Dialog playerDialog = new Dialog(this);
         playerDialog.setContentView(R.layout.dialog_player);
-        playerDialog.setTitle(R.string.add_player);
 
+        mImageViewPicture = (ImageView) playerDialog.findViewById(R.id.imageview_picture);
+
+        if (dialogMode == DialogMode.ADD)
+        {
+            playerDialog.setTitle(R.string.title_add_player);
+        }
+        if (dialogMode == DialogMode.EDIT)
+        {
+            playerDialog.setTitle(R.string.title_edit_player);
+
+            EditText editTextFirstName    = (EditText) playerDialog.findViewById(R.id.edittext_player_firstname);
+            EditText editTextLastName     = (EditText) playerDialog.findViewById(R.id.edittext_player_lastname);
+            EditText editTextPlayerNumber = (EditText) playerDialog.findViewById(R.id.edittext_player_number);
+
+            editTextFirstName.setText(player.getFirstName());
+            editTextLastName.setText(player.getLastName());
+            editTextPlayerNumber.setText(player.getPlayerNumber().toString());
+
+            Bitmap bitmap = PictureUtil.convertByteArrayToBitmap(player.getPicture());
+            mImageViewPicture.setImageBitmap(bitmap);
+        }
+
+        Button camera = (Button) playerDialog.findViewById(R.id.button_camera);
         Button save   = (Button) playerDialog.findViewById(R.id.button_player_dialog_save);
         Button cancel = (Button) playerDialog.findViewById(R.id.button_player_dialog_cancel);
+
+        camera.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                handleTakePicture();
+            }
+        });
 
         save.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Player player = new Player();
                 fillPlayerValuesFromDialog(playerDialog, player);
-                addPlayer(player);
-                playerDialog.dismiss();
-            }
-        });
 
-        cancel.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                playerDialog.dismiss();
-            }
-        });
+                if (dialogMode == DialogMode.ADD)
+                {
+                    addPlayer(player);
+                }
+                if (dialogMode == DialogMode.EDIT)
+                {
+                    updatePlayer(player);
+                }
 
-        playerDialog.show();
-    }
-
-    private void showEditPlayerDialog(final Player player)
-    {
-        final Dialog playerDialog = new Dialog(this);
-        playerDialog.setContentView(R.layout.dialog_player);
-        playerDialog.setTitle(R.string.edit_player);
-
-        EditText editTextFirstName    = (EditText) playerDialog.findViewById(R.id.edittext_player_firstname);
-        EditText editTextLastName     = (EditText) playerDialog.findViewById(R.id.edittext_player_lastname);
-        EditText editTextPlayerNumber = (EditText) playerDialog.findViewById(R.id.edittext_player_number);
-
-        editTextFirstName.setText(player.getFirstName());
-        editTextLastName.setText(player.getLastName());
-        editTextPlayerNumber.setText(player.getPlayerNumber().toString());
-
-        Button ok     = (Button) playerDialog.findViewById(R.id.button_player_dialog_save);
-        Button cancel = (Button) playerDialog.findViewById(R.id.button_player_dialog_cancel);
-
-        ok.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                fillPlayerValuesFromDialog(playerDialog, player);
-                updatePlayer(player);
                 playerDialog.dismiss();
             }
         });
@@ -201,12 +212,42 @@ public class PlayerListActivity extends AppCompatActivity
         String firstName    = editTextFirstName.getText().toString();
         String lastName     = editTextLastName.getText().toString();
         String playerNumber = editTextPlayerNumber.getText().toString();
+        Bitmap bitmap       = ((BitmapDrawable)mImageViewPicture.getDrawable()).getBitmap();
+        byte[] picture = PictureUtil.convertBitmapToByteArray(bitmap);
 
         player.setFirstName(firstName);
         player.setLastName(lastName);
         player.setPlayerNumber(Integer.valueOf(playerNumber));
+        player.setPicture(picture);
 
         return player;
+    }
+
+    private void handleTakePicture()
+    {
+        int REQUEST_IMAGE_CAPTURE = 1;
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+        {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        int REQUEST_IMAGE_CAPTURE = 1;
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+        {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap)extras.get("data");
+
+            mImageViewPicture.setImageBitmap(imageBitmap);
+        }
     }
 
     private void addPlayer(Player player)
@@ -229,4 +270,6 @@ public class PlayerListActivity extends AppCompatActivity
         Log.i(LOG_TAG, "player deleted: " + player.toString());
         loadPlayerList();
     }
+
+
 }

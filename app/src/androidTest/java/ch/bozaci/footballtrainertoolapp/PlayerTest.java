@@ -42,7 +42,7 @@ public class PlayerTest
     @Test
     public void testAddPlayerDB() throws Exception
     {
-        dbAdapter.deletePlayers();
+        dbAdapter.deletePlayerList();
 
         Player player1 = new Player();
         player1.setFirstName("Sinan");
@@ -73,7 +73,7 @@ public class PlayerTest
     @Test
     public void testUpdatePlayerDB() throws Exception
     {
-        dbAdapter.deletePlayers();
+        dbAdapter.deletePlayerList();
 
         Player player = new Player();
         player.setFirstName("Sinan");
@@ -98,7 +98,7 @@ public class PlayerTest
     @Test
     public void testDeletePlayerDB() throws Exception
     {
-        dbAdapter.deletePlayers();
+        dbAdapter.deletePlayerList();
 
         Player player1 = new Player();
         player1.setFirstName("Sinan");

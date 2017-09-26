@@ -11,23 +11,56 @@ public class Match implements Serializable
 {
     public static final String TABLE  = "match";
 
-    public static final String COLUMN_ID                = "id";
-    public static final String COLUMN_HOMETEAM          = "hometeam";
-    public static final String COLUMN_GUESTTEAM         = "guestteam";
-    public static final String COLUMN_DATE              = "date";
-    public static final String COLUMN_TYPE              = "type";
-    public static final String COLUMN_TEAM_ID           = "team_id";
-    public static final String COLUMN_SCORE_HOMETEAM    = "score_hometeam";
-    public static final String COLUMN_SCORE_GUESTTEAM   = "score_guestteam";
+    public static final String COLUMN_ID              = "id";
+    public static final String COLUMN_HOMETEAM        = "hometeam";
+    public static final String COLUMN_GUESTTEAM       = "guestteam";
+    public static final String COLUMN_DATE            = "date";
+    public static final String COLUMN_TYPE            = "type";
+    public static final String COLUMN_LOCATION_TYPE   = "location_type";
+
+
+    public static enum MatchType
+    {
+        CHAMPIONSSHIP("CHAMPIONSSHIP"),
+        TEST("TEST");
+
+        private String type;
+
+        MatchType(String type)
+        {
+            this.type = type;
+        }
+
+        public String getType()
+        {
+            return type;
+        }
+    }
+
+    public static enum LocationType
+    {
+        HOME_GAME("HOME GAME"),
+        AWAY_GAME("AWAY GAME");
+
+        private String type;
+
+        LocationType(String type)
+        {
+            this.type = type;
+        }
+
+        public String getType()
+        {
+            return type;
+        }
+    }
 
     private Integer id;
     private String homeTeam;
     private String guestTeam;
     private Date date;
     private String type;
-    private Integer teamId;
-    private Integer scoreHomeTeam;
-    private Integer scoreGuestTeam;
+    private String locationType;
 
     public Integer getId()
     {
@@ -79,40 +112,20 @@ public class Match implements Serializable
         this.type = type;
     }
 
-    public Integer getTeamId()
+    public String getLocationType()
     {
-        return teamId;
+        return locationType;
     }
 
-    public void setTeamId(Integer teamId)
+    public void setLocationType(String locationType)
     {
-        this.teamId = teamId;
-    }
-
-    public Integer getScoreHomeTeam()
-    {
-        return scoreHomeTeam;
-    }
-
-    public void setScoreHomeTeam(Integer scoreHomeTeam)
-    {
-        this.scoreHomeTeam = scoreHomeTeam;
-    }
-
-    public Integer getScoreGuestTeam()
-    {
-        return scoreGuestTeam;
-    }
-
-    public void setScoreGuestTeam(Integer scoreGuestTeam)
-    {
-        this.scoreGuestTeam = scoreGuestTeam;
+        this.locationType = locationType;
     }
 
     @Override
     public String toString()
     {
-        return Util.dateFormat.format(date) + System.getProperty("line.separator") + homeTeam + " - " + guestTeam + System.getProperty("line.separator") + type;
+        return DateUtil.dateFormat.format(date) + System.getProperty("line.separator") + homeTeam + " - " + guestTeam + System.getProperty("line.separator") + type;
     }
 
 }

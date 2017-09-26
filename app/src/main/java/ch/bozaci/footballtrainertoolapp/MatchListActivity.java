@@ -17,7 +17,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,9 +28,6 @@ import java.util.List;
 public class MatchListActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-
-    private final String MATCH_TYPE_CHAMPIONSHIP = "CHAMPIONSHIP";
-    private final String MATCH_TYPE_TEST         = "TEST";
 
     private FloatingActionButton mAddButton;
     private List<Match> mMatchList;
@@ -62,14 +61,22 @@ public class MatchListActivity extends AppCompatActivity
 
     private void loadMatchList()
     {
-        mMatchList.clear();
-        List<Match> dbMatchList = databaseAdapter.getMatchList();
-
-        for (Match match : dbMatchList)
+        try
         {
-            mMatchList.add(match);
+            mMatchList.clear();
+            List<Match> dbMatchList = databaseAdapter.getMatchList();
+            for (Match match : dbMatchList)
+            {
+                mMatchList.add(match);
+            }
+            mMatchListAdapter.notifyDataSetChanged();
         }
-        mMatchListAdapter.notifyDataSetChanged();
+        catch (ParseException ex)
+        {
+            String errText = "Wrong date format: " + ex.getMessage();
+            Log.e(LOG_TAG, errText);
+            Toast.makeText(this, errText, Toast.LENGTH_LONG);
+        }
     }
 
     class AddMatchClickListener implements View.OnClickListener
@@ -112,7 +119,7 @@ public class MatchListActivity extends AppCompatActivity
     {
         final Dialog matchDialog = new Dialog(this);
         matchDialog.setContentView(R.layout.dialog_match);
-        matchDialog.setTitle(R.string.add_match);
+        matchDialog.setTitle(R.string.title_add_match);
 
         Button save   = (Button) matchDialog.findViewById(R.id.button_match_dialog_save);
         Button delete = (Button) matchDialog.findViewById(R.id.button_match_dialog_delete);
@@ -148,18 +155,30 @@ public class MatchListActivity extends AppCompatActivity
     {
         final Dialog matchDialog = new Dialog(this);
         matchDialog.setContentView(R.layout.dialog_match);
-        matchDialog.setTitle(R.string.add_match);
+        matchDialog.setTitle(R.string.title_add_match);
 
         EditText editTextHometeam  = (EditText)matchDialog.findViewById(R.id.edittext_match_hometeam);
         EditText editTextGuestteam = (EditText)matchDialog.findViewById(R.id.edittext_match_guestteam);
+        RadioButton radioButtonMatchLocationTypeHomeGame = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_locationtype_homegame);
+        RadioButton radioButtonMatchLocationTypeAwayGame = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_locationtype_awaygame);
         RadioButton radioButtonMatchTypeChampionship = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_type_championship);
         RadioButton radioButtonMatchTypeTest         = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_type_test);
-        DatePicker datePicker      = (DatePicker)matchDialog.findViewById(R.id.datepicker_match_date);
-        TimePicker timePicker      = (TimePicker)matchDialog.findViewById(R.id.timepicker_match_time);
+        DatePicker datePicker = (DatePicker)matchDialog.findViewById(R.id.datepicker_match_date);
+        TimePicker timePicker = (TimePicker)matchDialog.findViewById(R.id.timepicker_match_time);
 
         editTextHometeam.setText(match.getHomeTeam());
         editTextGuestteam.setText(match.getGuestTeam());
-        if (match.getType().equals(MATCH_TYPE_CHAMPIONSHIP))
+
+        if (match.getLocationType().equals(Match.LocationType.HOME_GAME))
+        {
+            radioButtonMatchLocationTypeHomeGame.setChecked(true);
+        }
+        else
+        {
+            radioButtonMatchLocationTypeAwayGame.setChecked(true);
+        }
+
+        if (match.getType().equals(Match.MatchType.CHAMPIONSSHIP.getType()))
         {
             radioButtonMatchTypeChampionship.setChecked(true);
         }
@@ -243,6 +262,8 @@ public class MatchListActivity extends AppCompatActivity
     {
         EditText editTextHometeam  = (EditText)matchDialog.findViewById(R.id.edittext_match_hometeam);
         EditText editTextGuestteam = (EditText)matchDialog.findViewById(R.id.edittext_match_guestteam);
+        RadioButton radioButtonMatchLocationTypeHomeGame = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_locationtype_homegame);
+        RadioButton radioButtonMatchLocationTypeAwayGame = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_locationtype_awaygame);
         RadioButton radioButtonMatchTypeChampionship = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_type_championship);
         RadioButton radioButtonMatchTypeTest         = (RadioButton)matchDialog.findViewById(R.id.radiobutton_match_type_test);
         DatePicker datePicker      = (DatePicker)matchDialog.findViewById(R.id.datepicker_match_date);
@@ -250,23 +271,34 @@ public class MatchListActivity extends AppCompatActivity
 
         String homeTeam = editTextHometeam.getText().toString();
         String guestTeam = editTextGuestteam.getText().toString();
-        String matchType;
 
-        if (radioButtonMatchTypeChampionship.isChecked())
+        Match.LocationType locationType;
+        if (radioButtonMatchLocationTypeHomeGame.isChecked())
         {
-            matchType = MATCH_TYPE_CHAMPIONSHIP;
+            locationType = Match.LocationType.HOME_GAME;
         }
         else
         {
-            matchType = MATCH_TYPE_TEST;
+            locationType = Match.LocationType.AWAY_GAME;
         }
 
-        Date date = Util.getDate(datePicker, timePicker);
+        Match.MatchType matchType;
+        if (radioButtonMatchTypeChampionship.isChecked())
+        {
+            matchType = Match.MatchType.CHAMPIONSSHIP;
+        }
+        else
+        {
+            matchType = Match.MatchType.TEST;
+        }
+
+        Date date = DateUtil.getDate(datePicker, timePicker);
 
         match.setHomeTeam(homeTeam);
         match.setGuestTeam(guestTeam);
         match.setDate(date);
-        match.setType(matchType);
+        match.setType(matchType.getType());
+        match.setLocationType(locationType.getType());
 
         Log.v(LOG_TAG, "match: " + match.toString());
     }

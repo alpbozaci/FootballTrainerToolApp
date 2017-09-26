@@ -42,7 +42,26 @@
 
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#DD3">
+
+            <RadioButton
+                android:id="@+id/radiobutton_match_locationtype_homegame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/homegame"/>
+
+            <RadioButton
+                android:id="@+id/radiobutton_match_locationtype_awaygame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/awaygame"/>
+        </RadioGroup>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#BB3">
 
             <RadioButton
                 android:id="@+id/radiobutton_match_type_championship"
@@ -60,7 +79,7 @@
         <DatePicker
             android:id="@+id/datepicker_match_date"
             android:layout_width="match_parent"
-            android:layout_height="162dp"
+            android:layout_height="wrap_content"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             />
@@ -68,7 +87,7 @@
         <TimePicker
             android:id="@+id/timepicker_match_time"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:timePickerMode="spinner"
             />
 

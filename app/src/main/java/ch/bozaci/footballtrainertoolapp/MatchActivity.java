@@ -3,7 +3,6 @@ package ch.bozaci.footballtrainertoolapp;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,8 +29,11 @@ public class MatchActivity extends AppCompatActivity
     private ListView mEventListView;
     private TextView mScoreHomeTeamTextView;
     private TextView mScoreGuestTeamTextView;
-    private Chronometer mChronometer;
+    private TextView mTimerMinTextView;
+    private TextView mTimerSecTextView;
     private Match mMatch;
+    private Thread mTimerThread;
+    private Integer mElapsedTimeInSeconds;
 
     private DatabaseAdapter databaseAdapter;
 
@@ -50,8 +52,10 @@ public class MatchActivity extends AppCompatActivity
             mMatch = (Match)bundle.getSerializable("match");
             System.out.println(mMatch.toString());
 
-            TextView textView = (TextView) findViewById(R.id.textview_started_match);
-            textView.setText(mMatch.getHomeTeam() + " - " + mMatch.getGuestTeam());
+            TextView homeTeam  = (TextView) findViewById(R.id.textview_hometeam);
+            TextView guestTeam = (TextView) findViewById(R.id.textview_guestteam);
+            homeTeam.setText(mMatch.getHomeTeam());
+            guestTeam.setText(mMatch.getGuestTeam());
         }
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabhost);
@@ -87,7 +91,11 @@ public class MatchActivity extends AppCompatActivity
         Button startTimerButton = (Button)findViewById(R.id.button_start_timer);
         Button pauseTimerButton = (Button)findViewById(R.id.button_pause_timer);
         Button stopTimerButton  = (Button)findViewById(R.id.button_stop_timer);
-        mChronometer = (Chronometer)findViewById(R.id.chronometer_minutes);
+        mTimerMinTextView = (TextView)findViewById(R.id.textview_match_timer_min);
+        mTimerSecTextView = (TextView)findViewById(R.id.textview_match_timer_sec);
+
+        mTimerThread = new Thread(timer);
+        mElapsedTimeInSeconds = new Integer(0);
 
         goalGuestTeamAddButton.setOnClickListener(new MyAddGoalGuestTeamClickListener());
 
@@ -100,7 +108,36 @@ public class MatchActivity extends AppCompatActivity
         mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener(), new MyDeleteEventLongClickListener());
         mEventListView = (ListView) findViewById(R.id.listview_event);
         mEventListView.setAdapter(mEventListAdapter);
+
     }
+
+    Runnable timer = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            while(! Thread.currentThread().isInterrupted())
+            {
+                try
+                {
+                    Thread.sleep(1000);
+                    runOnUiThread(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            updateTimer();
+                        }
+                    });
+                }
+                catch (InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+        }
+    };
 
     private void loadDBPlayerList()
     {
@@ -187,23 +224,40 @@ public class MatchActivity extends AppCompatActivity
 
     private void updateGUI()
     {
-        Integer scoreHomeTeam = 0;
-        Integer scoreGuestTeam = 0;
+        Integer scoreOwnTeam = 0;
+        Integer scoreOpposingTeam = 0;
 
         for (Event event : mEventList)
         {
-            if (event.getType().equals(Event.EventType.PLAYER_GOAL_HOMETEAM.getType()))
+            if (event.getType().equals(Event.EventType.PLAYER_GOAL_OWNTEAM.getType()))
             {
-                scoreHomeTeam ++;
+                scoreOwnTeam ++;
             }
-            if (event.getType().equals(Event.EventType.PLAYER_GOAL_GUESTTEAM.getType()))
+            if (event.getType().equals(Event.EventType.PLAYER_GOAL_OPPOSINGTEAM.getType()))
             {
-                scoreGuestTeam ++;
+                scoreOpposingTeam ++;
             }
         }
 
-        mScoreHomeTeamTextView.setText(String.valueOf(scoreHomeTeam));
-        mScoreGuestTeamTextView.setText(String.valueOf(scoreGuestTeam));
+        if (mMatch.getLocationType().equals(Match.LocationType.HOME_GAME.getType()))
+        {
+            mScoreHomeTeamTextView.setText(String.valueOf(scoreOwnTeam));
+            mScoreGuestTeamTextView.setText(String.valueOf(scoreOpposingTeam));
+        }
+        else
+        {
+            mScoreHomeTeamTextView.setText(String.valueOf(scoreOpposingTeam));
+            mScoreGuestTeamTextView.setText(String.valueOf(scoreOwnTeam));
+        }
+    }
+
+    private void updateTimer()
+    {
+        mElapsedTimeInSeconds ++;
+        Integer min = mElapsedTimeInSeconds / 60;
+        Integer sec = mElapsedTimeInSeconds % 60;
+        mTimerMinTextView.setText(String.valueOf(min));
+        mTimerSecTextView.setText(String.valueOf(sec));
     }
 
     //---------------------------------------------------------------------------------------------
@@ -231,6 +285,10 @@ public class MatchActivity extends AppCompatActivity
         void onLongEventClicked(Event event);
     }
 
+    private interface TimerListener
+    {
+        void onTimerElapsed();
+    }
 
     class MyActivateDeactivatePlayerClickListener implements ActivateDeactivatePlayerClickListener
     {
@@ -295,7 +353,7 @@ public class MatchActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.PLAYER_GOAL_HOMETEAM);
+                    handleAddEvent(player, Event.EventType.PLAYER_GOAL_OWNTEAM);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -321,7 +379,7 @@ public class MatchActivity extends AppCompatActivity
         {
             Player guestPlayer = new Player();
             guestPlayer.setId(null);
-            handleAddEvent(guestPlayer, Event.EventType.PLAYER_GOAL_GUESTTEAM);
+            handleAddEvent(guestPlayer, Event.EventType.PLAYER_GOAL_OPPOSINGTEAM);
         }
     }
 
@@ -330,8 +388,7 @@ public class MatchActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            System.out.println("start timer clicked");
-            mChronometer.start();
+            mTimerThread.start();
         }
     }
 
@@ -340,8 +397,7 @@ public class MatchActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            System.out.println("pause timer clicked");
-            mChronometer.stop();
+            mTimerThread.interrupt();
         }
     }
 
@@ -350,9 +406,17 @@ public class MatchActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            System.out.println("stop timer clicked");
-            mChronometer.setBase(SystemClock.elapsedRealtime());
-            mChronometer.stop();
+            mTimerThread.interrupt();
+            mElapsedTimeInSeconds = 0;
+        }
+    }
+
+    class MyTimerListener implements TimerListener
+    {
+        @Override
+        public void onTimerElapsed()
+        {
+            updateTimer();
         }
     }
 

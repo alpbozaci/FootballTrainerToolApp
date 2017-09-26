@@ -6,26 +6,27 @@
     <string name="match_list">Match Liste</string>
     <string name="player_list">Spieler Liste</string>
 
+    <string name="title_add_player">Spieler hinzufügen</string>
+    <string name="title_edit_player">Spieler bearbeiten</string>
+    <string name="title_delete_player">Spieler löschen</string>
 
-    <string name="add_player">Spieler hinzufügen</string>
-    <string name="edit_player">Spieler bearbeiten</string>
+    <string name="title_add_match">Match hinzufügen</string>
+    <string name="title_edit_match">Match bearbeiten</string>
+    <string name="title_delete_match">Match löschen</string>
 
     <string name="firstname">Vorname</string>
     <string name="lastname">Nachname</string>
     <string name="playernumber">Spieler Nummer</string>
-    <string name="title_delete_player">Spieler löschen</string>
     <string name="message_delete_player">Wollen Sie diesen Spieler löschen</string>
     <string name="message_delete_event">Wollen Sie diesen Event löschen</string>
-
-    <string name="add_match">Match hinzufügen</string>
-    <string name="edit_match">Match bearbeiten</string>
 
     <string name="hometeam">Heim Mannschaft</string>
     <string name="guestteam">Gast Mannschaft</string>
     <string name="championship_play">Meisterschaftsspiel</string>
     <string name="testplay_play">Testspiel</string>
 
-    <string name="title_delete_match">Match löschen</string>
     <string name="message_delete_match">Wollen Sie diesen Match löschen</string>
+    <string name="homegame">Heimspiel</string>
+    <string name="awaygame">Auswärtsspiel</string>
 
 </resources>

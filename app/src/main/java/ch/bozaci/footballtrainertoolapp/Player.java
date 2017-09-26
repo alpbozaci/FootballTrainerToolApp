@@ -14,11 +14,13 @@ public class Player implements Serializable
     public static final String COLUMN_FIRSTNAME     = "firstname";
     public static final String COLUMN_LASTNAME      = "lastname";
     public static final String COLUMN_PLAYERNUMBER  = "playernumber";
+    public static final String COLUMN_PICTURE       = "picture";
 
     private Integer id;
     private String firstName;
     private String lastName;
     private Integer playerNumber;
+    private byte[] picture;
 
     public Integer getId()
     {
@@ -58,6 +60,16 @@ public class Player implements Serializable
     public void setPlayerNumber(Integer playerNumber)
     {
         this.playerNumber = playerNumber;
+    }
+
+    public byte[] getPicture()
+    {
+        return picture;
+    }
+
+    public void setPicture(byte[] picture)
+    {
+        this.picture = picture;
     }
 
     @Override

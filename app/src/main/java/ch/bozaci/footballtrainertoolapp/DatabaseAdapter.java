@@ -5,11 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +18,7 @@ public class DatabaseAdapter
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private int DATABASE_VERSION = 1;
+    private int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "footballtrainertoolapp";
 
     private Context mContext;
@@ -80,6 +77,7 @@ public class DatabaseAdapter
         contentValues.put(Player.COLUMN_FIRSTNAME, player.getFirstName());
         contentValues.put(Player.COLUMN_LASTNAME, player.getLastName());
         contentValues.put(Player.COLUMN_PLAYERNUMBER, player.getPlayerNumber());
+        contentValues.put(Player.COLUMN_PICTURE, player.getPicture());
 
         return (int)mSqlDatabase.insert(Player.TABLE, null, contentValues);
     }
@@ -98,6 +96,7 @@ public class DatabaseAdapter
             player.setFirstName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_FIRSTNAME)));
             player.setLastName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_LASTNAME)));
             player.setPlayerNumber(cursor.getInt(cursor.getColumnIndex(Player.COLUMN_PLAYERNUMBER)));
+            player.setPicture(cursor.getBlob(cursor.getColumnIndex(Player.COLUMN_PICTURE)));
         }
 
         return player;
@@ -118,6 +117,7 @@ public class DatabaseAdapter
                 player.setFirstName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_FIRSTNAME)));
                 player.setLastName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_LASTNAME)));
                 player.setPlayerNumber(cursor.getInt(cursor.getColumnIndex(Player.COLUMN_PLAYERNUMBER)));
+                player.setPicture(cursor.getBlob(cursor.getColumnIndex(Player.COLUMN_PICTURE)));
 
                 playerList.add(player);
             }
@@ -133,6 +133,7 @@ public class DatabaseAdapter
         contentValues.put(Player.COLUMN_FIRSTNAME, player.getFirstName());
         contentValues.put(Player.COLUMN_LASTNAME, player.getLastName());
         contentValues.put(Player.COLUMN_PLAYERNUMBER, player.getPlayerNumber());
+        contentValues.put(Player.COLUMN_PICTURE, player.getPicture());
 
         String whereClause = Player.COLUMN_ID + " = " + player.getId();
 
@@ -145,72 +146,9 @@ public class DatabaseAdapter
         return mSqlDatabase.delete(Player.TABLE, whereClause, null);
     }
 
-    public void deletePlayers()
+    public void deletePlayerList()
     {
         mSqlDatabase.delete(Player.TABLE, null, null);
-    }
-
-    //==============================================================================================
-
-    public void addTeam(Team team)
-    {
-        ContentValues contentValues = new ContentValues();
-
-        List<Player> playerList = team.getPlayerList();
-
-        for (Player player : playerList)
-        {
-            contentValues.put(Team.COLUMN_TEAM_ID, team.getTeamId());
-            contentValues.put(Team.COLUMN_PLAYER_ID, player.getId());
-
-            mSqlDatabase.insert(Team.TABLE, null, contentValues);
-        }
-    }
-
-    public Team getTeam(Integer team_id)
-    {
-        String query =
-                "SELECT * FROM " + Team.TABLE + " " +
-                        "JOIN " + Player.TABLE + " ON team.player_id = player.id " +
-                        "WHERE " + Team.COLUMN_TEAM_ID + " = " + team_id;
-
-        Cursor cursor = mSqlDatabase.rawQuery(query, null);
-
-        if (cursor != null && cursor.moveToFirst())
-        {
-            Team team = new Team();
-            List<Player> playerList = new ArrayList<>();
-
-            do
-            {
-                Player player = new Player();
-                player.setId(cursor.getInt(cursor.getColumnIndex(Player.COLUMN_ID)));
-                player.setFirstName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_FIRSTNAME)));
-                player.setLastName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_LASTNAME)));
-                player.setPlayerNumber(cursor.getInt(cursor.getColumnIndex(Player.COLUMN_PLAYERNUMBER)));
-
-                playerList.add(player);
-            }
-            while (cursor.moveToNext());
-
-            team.setTeamId(team_id);
-            team.setPlayerList(playerList);
-
-            return team;
-        }
-
-        return null;
-    }
-
-    public Integer deleteTeam(Integer team_id)
-    {
-        String whereClause = Team.COLUMN_TEAM_ID + " = " + team_id;
-        return mSqlDatabase.delete(Team.TABLE, whereClause, null);
-    }
-
-    public void deleteTeams()
-    {
-        mSqlDatabase.delete(Team.TABLE, null, null);
     }
 
     //==============================================================================================
@@ -221,11 +159,9 @@ public class DatabaseAdapter
 
         contentValues.put(Match.COLUMN_HOMETEAM, match.getHomeTeam());
         contentValues.put(Match.COLUMN_GUESTTEAM, match.getGuestTeam());
-        contentValues.put(Match.COLUMN_DATE, Util.dateFormat.format(match.getDate()));
+        contentValues.put(Match.COLUMN_DATE, DateUtil.dateFormat.format(match.getDate()));
         contentValues.put(Match.COLUMN_TYPE, match.getType());
-        contentValues.put(Match.COLUMN_TEAM_ID, match.getTeamId());
-        contentValues.put(Match.COLUMN_SCORE_HOMETEAM, match.getScoreHomeTeam());
-        contentValues.put(Match.COLUMN_SCORE_GUESTTEAM, match.getScoreGuestTeam());
+        contentValues.put(Match.COLUMN_LOCATION_TYPE, match.getLocationType());
 
         return (int)mSqlDatabase.insert(Match.TABLE, null, contentValues);
     }
@@ -243,17 +179,15 @@ public class DatabaseAdapter
             match.setId(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_ID)));
             match.setHomeTeam(cursor.getString(cursor.getColumnIndex(Match.COLUMN_HOMETEAM)));
             match.setGuestTeam(cursor.getString(cursor.getColumnIndex(Match.COLUMN_GUESTTEAM)));
-            match.setDate(Util.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Match.COLUMN_DATE))));
+            match.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Match.COLUMN_DATE))));
             match.setType(cursor.getString(cursor.getColumnIndex(Match.COLUMN_TYPE)));
-            match.setTeamId(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_TEAM_ID)));
-            match.setScoreHomeTeam(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_SCORE_HOMETEAM)));
-            match.setScoreGuestTeam(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_SCORE_GUESTTEAM)));
+            match.setLocationType(cursor.getString(cursor.getColumnIndex(Match.COLUMN_LOCATION_TYPE)));
         }
 
         return match;
     }
 
-    public List<Match> getMatchList()
+    public List<Match> getMatchList() throws ParseException
     {
         List<Match> matchList = new ArrayList<>();
 
@@ -265,25 +199,14 @@ public class DatabaseAdapter
             do
             {
                 Match match = new Match();
-                try
-                {
-                    match.setId(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_ID)));
-                    match.setHomeTeam(cursor.getString(cursor.getColumnIndex(Match.COLUMN_HOMETEAM)));
-                    match.setGuestTeam(cursor.getString(cursor.getColumnIndex(Match.COLUMN_GUESTTEAM)));
-                    match.setDate(Util.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Match.COLUMN_DATE))));
-                    match.setType(cursor.getString(cursor.getColumnIndex(Match.COLUMN_TYPE)));
-                    match.setTeamId(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_TEAM_ID)));
-                    match.setScoreHomeTeam(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_SCORE_HOMETEAM)));
-                    match.setScoreGuestTeam(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_SCORE_GUESTTEAM)));
+                match.setId(cursor.getInt(cursor.getColumnIndex(Match.COLUMN_ID)));
+                match.setHomeTeam(cursor.getString(cursor.getColumnIndex(Match.COLUMN_HOMETEAM)));
+                match.setGuestTeam(cursor.getString(cursor.getColumnIndex(Match.COLUMN_GUESTTEAM)));
+                match.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Match.COLUMN_DATE))));
+                match.setType(cursor.getString(cursor.getColumnIndex(Match.COLUMN_TYPE)));
+                match.setLocationType(cursor.getString(cursor.getColumnIndex(Match.COLUMN_LOCATION_TYPE)));
 
-                    matchList.add(match);
-                }
-                catch (ParseException ex)
-                {
-                    String errText = "Wrong date format: " + cursor.getString(cursor.getColumnIndex(Match.COLUMN_DATE));
-                    Log.e(LOG_TAG, errText);
-                    Toast.makeText(mContext, errText, Toast.LENGTH_LONG);
-                }
+                matchList.add(match);
             }
             while (cursor.moveToNext());
         }
@@ -297,11 +220,9 @@ public class DatabaseAdapter
 
         contentValues.put(Match.COLUMN_HOMETEAM, match.getHomeTeam());
         contentValues.put(Match.COLUMN_GUESTTEAM, match.getGuestTeam());
-        contentValues.put(Match.COLUMN_DATE, Util.dateFormat.format(match.getDate()));
+        contentValues.put(Match.COLUMN_DATE, DateUtil.dateFormat.format(match.getDate()));
         contentValues.put(Match.COLUMN_TYPE, match.getType());
-        contentValues.put(Match.COLUMN_TEAM_ID, match.getTeamId());
-        contentValues.put(Match.COLUMN_SCORE_HOMETEAM, match.getScoreHomeTeam());
-        contentValues.put(Match.COLUMN_SCORE_GUESTTEAM, match.getScoreGuestTeam());
+        contentValues.put(Match.COLUMN_LOCATION_TYPE, match.getLocationType());
 
         String whereClause = Match.COLUMN_ID + " = " + match.getId();
 
@@ -314,7 +235,7 @@ public class DatabaseAdapter
         return mSqlDatabase.delete(Match.TABLE, whereClause, null);
     }
 
-    public void deleteMatchs()
+    public void deleteMatchList()
     {
         mSqlDatabase.delete(Match.TABLE, null, null);
     }
@@ -328,7 +249,7 @@ public class DatabaseAdapter
         contentValues.put(Event.COLUMN_MATCH_ID, event.getMatchId());
         contentValues.put(Event.COLUMN_PLAYER_ID, event.getPlayerId());
         contentValues.put(Event.COLUMN_TYPE, event.getType());
-        contentValues.put(Event.COLUMN_DATE, Util.dateFormat.format(event.getDate()));
+        contentValues.put(Event.COLUMN_DATE, DateUtil.dateFormat.format(event.getDate()));
 
         return (int)mSqlDatabase.insert(Event.TABLE, null, contentValues);
     }
@@ -347,7 +268,7 @@ public class DatabaseAdapter
             event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
             event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
             event.setType(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE)));
-            event.setDate(Util.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
+            event.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
         }
 
         return event;
@@ -368,7 +289,7 @@ public class DatabaseAdapter
                 event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
                 event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
                 event.setType(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE)));
-                event.setDate(Util.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
+                event.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
 
                 eventList.add(event);
             }
@@ -394,7 +315,7 @@ public class DatabaseAdapter
                 event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
                 event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
                 event.setType(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE)));
-                event.setDate(Util.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
+                event.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
 
                 eventList.add(event);
             }
@@ -410,7 +331,7 @@ public class DatabaseAdapter
         return mSqlDatabase.delete(Event.TABLE, whereClause, null);
     }
 
-    public void deleteEvents()
+    public void deleteEventList()
     {
         mSqlDatabase.delete(Event.TABLE, null, null);
     }
@@ -446,20 +367,12 @@ public class DatabaseAdapter
                         Player.COLUMN_ID            + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         Player.COLUMN_FIRSTNAME     + " TEXT, " +
                         Player.COLUMN_LASTNAME      + " TEXT, " +
-                        Player.COLUMN_PLAYERNUMBER  + " INTEGER" +
+                        Player.COLUMN_PLAYERNUMBER  + " INTEGER, " +
+                        Player.COLUMN_PICTURE       + " BLOB" +
                         ");"
                     ;
 
             String query2 =
-                    "CREATE TABLE IF NOT EXISTS " + Team.TABLE +
-                        "(" +
-                        Team.COLUMN_ID              + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        Team.COLUMN_TEAM_ID         + " INTEGER NOT NULL, " +
-                        Team.COLUMN_PLAYER_ID       + " INTEGER NOT NULL " +
-                        ");"
-                    ;
-
-            String query3 =
                     "CREATE TABLE IF NOT EXISTS " + Match.TABLE +
                         "(" +
                         Match.COLUMN_ID             + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -467,13 +380,11 @@ public class DatabaseAdapter
                         Match.COLUMN_GUESTTEAM      + " TEXT, " +
                         Match.COLUMN_DATE           + " DATE, " +
                         Match.COLUMN_TYPE           + " TEXT, " +
-                        Match.COLUMN_TEAM_ID        + " INTEGER, " +
-                        Match.COLUMN_SCORE_HOMETEAM + " INTEGER, " +
-                        Match.COLUMN_SCORE_GUESTTEAM + " INTEGER " +
+                        Match.COLUMN_LOCATION_TYPE  + " TEXT " +
                         ");"
                     ;
 
-            String query4 =
+            String query3 =
                     "CREATE TABLE IF NOT EXISTS " + Event.TABLE +
                         "(" +
                         Event.COLUMN_ID             + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -487,20 +398,17 @@ public class DatabaseAdapter
             db.execSQL(query1);
             db.execSQL(query2);
             db.execSQL(query3);
-            db.execSQL(query4);
         }
 
         public void dropAllTables(SQLiteDatabase db)
         {
             String query1 = "DROP TABLE IF EXISTS " + Player.TABLE;
-            String query2 = "DROP TABLE IF EXISTS " + Team.TABLE;
-            String query3 = "DROP TABLE IF EXISTS " + Match.TABLE;
-            String query4 = "DROP TABLE IF EXISTS " + Event.TABLE;
+            String query2 = "DROP TABLE IF EXISTS " + Match.TABLE;
+            String query3 = "DROP TABLE IF EXISTS " + Event.TABLE;
 
             db.execSQL(query1);
             db.execSQL(query2);
             db.execSQL(query3);
-            db.execSQL(query4);
         }
     }
 }

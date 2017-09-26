@@ -12,9 +12,6 @@ import org.junit.runner.RunWith;
 import java.util.Date;
 import java.util.List;
 
-import ch.bozaci.footballtrainertoolapp.DatabaseAdapter;
-import ch.bozaci.footballtrainertoolapp.Match;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -47,19 +44,21 @@ public class MatchTest
     @Test
     public void testAddMatchDB() throws Exception
     {
-        dbAdapter.deleteMatchs();
+        dbAdapter.deleteMatchList();
 
         Match match1 = new Match();
         match1.setHomeTeam("Dürrenast");
         match1.setGuestTeam("Steffisburg");
         match1.setDate(new Date());
         match1.setType("Match");
+        match1.setLocationType(Match.LocationType.HOME_GAME.getType());
 
         Match match2 = new Match();
         match2.setHomeTeam("Steffisburg");
         match2.setGuestTeam("Dürrenast");
         match2.setDate(new Date());
-        match1.setType("Match");
+        match2.setType("Match");
+        match2.setLocationType(Match.LocationType.AWAY_GAME.getType());
 
         Integer matchId1 = dbAdapter.addMatch(match1);
         Integer matchId2 = dbAdapter.addMatch(match2);
