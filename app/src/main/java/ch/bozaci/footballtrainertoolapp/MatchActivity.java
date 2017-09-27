@@ -61,19 +61,14 @@ public class MatchActivity extends AppCompatActivity
         tabHost.setup();
 
         TabHost.TabSpec tab1 = tabHost.newTabSpec("TAB 1");
-        tab1.setIndicator(getString(R.string.player_event));
+        tab1.setIndicator(getString(R.string.match_event));
         tab1.setContent(R.id.tab1);
         tabHost.addTab(tab1);
 
         TabHost.TabSpec tab2 = tabHost.newTabSpec("TAB 2");
-        tab2.setIndicator(getString(R.string.match_event));
+        tab2.setIndicator(getString(R.string.history));
         tab2.setContent(R.id.tab2);
         tabHost.addTab(tab2);
-
-        TabHost.TabSpec tab3 = tabHost.newTabSpec("TAB 3");
-        tab3.setIndicator(getString(R.string.history));
-        tab3.setContent(R.id.tab3);
-        tabHost.addTab(tab3);
 
         //TAB 1
         mPlayerList = new ArrayList<>();
@@ -82,7 +77,6 @@ public class MatchActivity extends AppCompatActivity
         mSelectPlayerListView = (ListView) findViewById(R.id.listview_select_player);
         mSelectPlayerListView.setAdapter(mSelectPlayerListAdapter);
 
-        //TAB 2
         mScoreHomeTeamTextView = (TextView) findViewById(R.id.textview_score_hometeam);
         mScoreGuestTeamTextView = (TextView) findViewById(R.id.textview_score_guestteam);
 
@@ -105,7 +99,7 @@ public class MatchActivity extends AppCompatActivity
         stopTimerButton.setOnClickListener(new MyStopTimerClickListener());
         stopMatchButton.setOnClickListener(new MyStopMatchClickListener());
 
-        //TAB 3
+        //TAB 2
         mEventList = new ArrayList<>();
         mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener(), new MyDeleteEventLongClickListener());
         mEventListView = (ListView) findViewById(R.id.listview_event);
@@ -261,8 +255,19 @@ public class MatchActivity extends AppCompatActivity
         mElapsedTimeInSeconds ++;
         Integer min = mElapsedTimeInSeconds / 60;
         Integer sec = mElapsedTimeInSeconds % 60;
-        mTimerMinTextView.setText(String.valueOf(min));
-        mTimerSecTextView.setText(String.valueOf(sec));
+
+        String formattedMin = String.format("%02d", min);
+        String formattedSec = String.format("%02d", sec);
+
+        mTimerMinTextView.setText(formattedMin);
+        mTimerSecTextView.setText(formattedSec);
+    }
+
+    private void resetTimer()
+    {
+        mElapsedTimeInSeconds = 0;
+        mTimerMinTextView.setText(String.format("%02d", 0));
+        mTimerSecTextView.setText(String.format("%02d", 0));
     }
 
     //---------------------------------------------------------------------------------------------
@@ -412,7 +417,7 @@ public class MatchActivity extends AppCompatActivity
         public void onClick(View v)
         {
             mTimerThread.interrupt();
-            mElapsedTimeInSeconds = 0;
+            resetTimer();
         }
     }
 

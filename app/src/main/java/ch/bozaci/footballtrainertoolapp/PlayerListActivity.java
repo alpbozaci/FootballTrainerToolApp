@@ -247,9 +247,9 @@ public class PlayerListActivity extends AppCompatActivity
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
         {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap)extras.get("data");
-
-            mImageViewPicture.setImageBitmap(imageBitmap);
+            Bitmap bitmap = (Bitmap)extras.get("data");
+            Bitmap.createScaledBitmap(bitmap, 300, 300, false);
+            mImageViewPicture.setImageBitmap(bitmap);
         }
     }
 
