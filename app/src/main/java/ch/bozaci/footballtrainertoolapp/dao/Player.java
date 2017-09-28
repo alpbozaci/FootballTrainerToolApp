@@ -1,4 +1,4 @@
-package ch.bozaci.footballtrainertoolapp;
+package ch.bozaci.footballtrainertoolapp.dao;
 
 import java.io.Serializable;
 

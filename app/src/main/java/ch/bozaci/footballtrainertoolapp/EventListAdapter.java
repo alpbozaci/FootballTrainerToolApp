@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.bozaci.footballtrainertoolapp.dao.Event;
+import ch.bozaci.footballtrainertoolapp.util.DateUtil;
+
 /**
  * Created by Alp.Bozaci on 29.08.2017.
  */

@@ -22,6 +22,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.bozaci.footballtrainertoolapp.dao.Player;
+import ch.bozaci.footballtrainertoolapp.util.PictureUtil;
+
 public class PlayerListActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -273,6 +276,5 @@ public class PlayerListActivity extends AppCompatActivity
         Log.i(LOG_TAG, "player deleted: " + player.toString());
         loadPlayerList();
     }
-
 
 }

@@ -2,7 +2,6 @@ package ch.bozaci.footballtrainertoolapp;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import ch.bozaci.footballtrainertoolapp.dao.Match;
+import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
 public class MatchListActivity extends AppCompatActivity
 {
@@ -94,7 +96,7 @@ public class MatchListActivity extends AppCompatActivity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             Match match = mMatchList.get(position);
-            showEditOrDeleteMatchDialog(match);
+            showEditMatchDialog(match);
         }
     }
 
@@ -107,11 +109,16 @@ public class MatchListActivity extends AppCompatActivity
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
             Match match = mMatchList.get(position);
+            showConfirmDeleteMatchDialog(match);
+            return true;
+            /*
+            Match match = mMatchList.get(position);
             Intent intent = new Intent(MatchListActivity.this, MatchActivity.class);
             intent.putExtra("match", match);
             startActivity(intent);
 
             return true;
+            */
         }
     }
 
@@ -122,7 +129,6 @@ public class MatchListActivity extends AppCompatActivity
         matchDialog.setTitle(R.string.title_add_match);
 
         Button save   = (Button) matchDialog.findViewById(R.id.button_match_dialog_save);
-        Button delete = (Button) matchDialog.findViewById(R.id.button_match_dialog_delete);
         Button cancel = (Button) matchDialog.findViewById(R.id.button_match_dialog_cancel);
 
         save.setOnClickListener(new View.OnClickListener()
@@ -137,8 +143,6 @@ public class MatchListActivity extends AppCompatActivity
             }
         });
 
-        delete.setEnabled(false);
-
         cancel.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -151,7 +155,7 @@ public class MatchListActivity extends AppCompatActivity
         matchDialog.show();
     }
 
-    private void showEditOrDeleteMatchDialog(final Match match)
+    private void showEditMatchDialog(final Match match)
     {
         final Dialog matchDialog = new Dialog(this);
         matchDialog.setContentView(R.layout.dialog_match);
@@ -195,7 +199,6 @@ public class MatchListActivity extends AppCompatActivity
         timePicker.setMinute(cal.get(Calendar.MINUTE));
 
         Button save   = (Button) matchDialog.findViewById(R.id.button_match_dialog_save);
-        Button delete = (Button) matchDialog.findViewById(R.id.button_match_dialog_delete);
         Button cancel = (Button) matchDialog.findViewById(R.id.button_match_dialog_cancel);
 
         save.setOnClickListener(new View.OnClickListener()
@@ -205,16 +208,6 @@ public class MatchListActivity extends AppCompatActivity
             {
                 fillMatchValuesFromDialog(matchDialog, match);
                 updateMatch(match);
-                matchDialog.dismiss();
-            }
-        });
-
-        delete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                showConfirmDeleteMatchDialog(match);
                 matchDialog.dismiss();
             }
         });

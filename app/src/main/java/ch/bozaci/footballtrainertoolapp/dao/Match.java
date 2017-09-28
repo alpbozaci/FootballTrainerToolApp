@@ -1,7 +1,9 @@
-package ch.bozaci.footballtrainertoolapp;
+package ch.bozaci.footballtrainertoolapp.dao;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
 /**
  * Created by Alp.Bozaci on 23.08.2017.

@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ch.bozaci.footballtrainertoolapp.dao.Event;
+import ch.bozaci.footballtrainertoolapp.dao.Match;
+import ch.bozaci.footballtrainertoolapp.dao.Player;
+
 public class MatchActivity extends AppCompatActivity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();

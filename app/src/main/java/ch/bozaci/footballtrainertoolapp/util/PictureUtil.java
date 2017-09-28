@@ -1,4 +1,4 @@
-package ch.bozaci.footballtrainertoolapp;
+package ch.bozaci.footballtrainertoolapp.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

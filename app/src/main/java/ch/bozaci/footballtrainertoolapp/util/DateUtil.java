@@ -1,4 +1,4 @@
-package ch.bozaci.footballtrainertoolapp;
+package ch.bozaci.footballtrainertoolapp.util;
 
 import android.widget.DatePicker;
 import android.widget.TimePicker;
