@@ -48,7 +48,7 @@ public class MatchListActivity extends AppCompatActivity
         mAddButton.setOnClickListener(new AddMatchClickListener());
 
         mMatchList = new ArrayList<>();
-        mMatchListAdapter = new ArrayAdapter<Match>(this, R.layout.item_match, R.id.textview_match, mMatchList);
+        mMatchListAdapter = new ArrayAdapter<>(this, R.layout.item_match, R.id.textview_match, mMatchList);
 
         mMatchListView = (ListView) findViewById(R.id.listview_match);
         mMatchListView.setAdapter(mMatchListAdapter);
@@ -111,14 +111,6 @@ public class MatchListActivity extends AppCompatActivity
             Match match = mMatchList.get(position);
             showConfirmDeleteMatchDialog(match);
             return true;
-            /*
-            Match match = mMatchList.get(position);
-            Intent intent = new Intent(MatchListActivity.this, MatchActivity.class);
-            intent.putExtra("match", match);
-            startActivity(intent);
-
-            return true;
-            */
         }
     }
 

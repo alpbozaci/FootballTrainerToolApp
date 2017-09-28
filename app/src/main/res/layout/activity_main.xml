@@ -32,4 +32,16 @@
         android:gravity="center"
         />
 
+    <Button
+        android:id="@+id/button_start_match"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#555"
+        android:text="@string/start_match"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:fontFamily="monospace"
+        android:gravity="center"
+        />
+
 </LinearLayout>

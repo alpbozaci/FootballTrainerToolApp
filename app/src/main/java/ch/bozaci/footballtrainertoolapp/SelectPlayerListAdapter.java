@@ -75,6 +75,10 @@ public class SelectPlayerListAdapter extends BaseAdapter
             viewHolder.checkBox  = (CheckBox)  convertView.findViewById(R.id.checkbox_select_player);
             viewHolder.textView  = (TextView)  convertView.findViewById(R.id.textview_select_player);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageview_match_picture);
+
+            viewHolder.textView.setEnabled(false);
+            viewHolder.checkBox.setChecked(false);
+
             convertView.setTag(viewHolder);
         }
         else
@@ -87,8 +91,6 @@ public class SelectPlayerListAdapter extends BaseAdapter
         viewHolder.textView.setText(player.toString());
         viewHolder.imageView.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
 
-        viewHolder.textView.setEnabled(false);
-        viewHolder.checkBox.setChecked(false);
 
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener()
         {

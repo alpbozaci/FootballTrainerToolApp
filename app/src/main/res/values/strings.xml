@@ -5,6 +5,7 @@
 
     <string name="match_list">Match Liste</string>
     <string name="player_list">Spieler Liste</string>
+    <string name="start_match">Match starten</string>
 
     <string name="title_add_player">Spieler hinzufügen</string>
     <string name="title_edit_player">Spieler bearbeiten</string>
