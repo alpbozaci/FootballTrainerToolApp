@@ -8,78 +8,6 @@
     android:orientation="vertical"
     tools:context="ch.bozaci.footballtrainertoolapp.MatchActivity">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#555555"
-        android:layout_margin="5px">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/textview_hometeam"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:gravity="center"
-                android:fontFamily="monospace"
-                android:text="-"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                />
-
-            <TextView
-                android:id="@+id/textview_guestteam"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:gravity="center"
-                android:fontFamily="monospace"
-                android:text="-"
-                android:textColor="#fff"
-                android:textSize="18sp"
-                />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/textview_score_hometeam"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:gravity="center"
-                android:fontFamily="monospace"
-                android:inputType="numberDecimal"
-                android:text="0"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                />
-
-            <TextView
-                android:id="@+id/textview_score_guestteam"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:gravity="center"
-                android:fontFamily="monospace"
-                android:inputType="numberDecimal"
-                android:text="0"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                />
-
-        </TableRow>
-
-    </TableLayout>
-
     <TabHost
         android:id="@+id/tabhost"
         android:layout_width="match_parent"
@@ -111,13 +39,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:background="#aa0000"
                     android:weightSum="100">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="60"
+                        android:layout_weight="55"
                         android:layout_margin="5px"
                         android:paddingBottom="0px">
 
@@ -125,16 +52,16 @@
                             android:id="@+id/listview_select_player"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#f0f0f0"
+                            android:background="#e0e0e0"
                             />
                     </LinearLayout>
 
                     <TableLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:background="#aa0000"
+                        android:background="#f0f0f0"
                         android:layout_margin="5px"
-                        android:layout_weight="40">
+                        android:layout_weight="45">
 
                         <TableRow
                             android:layout_width="match_parent"
@@ -166,6 +93,72 @@
 
                         <TableRow
                             android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:weightSum="100"
+                            android:background="#000000">
+
+                            <TextView
+                                android:id="@+id/textview_hometeam"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="50"
+                                android:fontFamily="monospace"
+                                android:gravity="center"
+                                android:text="-"
+                                android:textColor="#dddddd"
+                                android:textSize="18sp"
+                                />
+
+                            <TextView
+                                android:id="@+id/textview_guestteam"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="50"
+                                android:gravity="center"
+                                android:fontFamily="monospace"
+                                android:text="-"
+                                android:textColor="#dddddd"
+                                android:textSize="18sp"
+                                />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:weightSum="100"
+                            android:background="#000000">
+
+                            <TextView
+                                android:id="@+id/textview_score_hometeam"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="50"
+                                android:gravity="center"
+                                android:fontFamily="monospace"
+                                android:inputType="numberDecimal"
+                                android:text="0"
+                                android:textColor="#ffdd00"
+                                android:textSize="22sp"
+                                />
+
+                            <TextView
+                                android:id="@+id/textview_score_guestteam"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="50"
+                                android:gravity="center"
+                                android:fontFamily="monospace"
+                                android:inputType="numberDecimal"
+                                android:text="0"
+                                android:textColor="#ffdd00"
+                                android:textSize="22sp"
+                                />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:weightSum="100"
                             android:background="#000000"
@@ -175,7 +168,7 @@
                                 android:id="@+id/textview_match_timer_min"
                                 android:layout_width="0px"
                                 android:layout_height="match_parent"
-                                android:background="#555"
+                                android:background="#000000"
                                 android:text="00"
                                 android:textColor="#fff"
                                 android:textSize="20sp"
@@ -188,7 +181,7 @@
                                 android:id="@+id/textview_match_timer_sec"
                                 android:layout_width="0px"
                                 android:layout_height="match_parent"
-                                android:background="#555"
+                                android:background="#000000"
                                 android:text="00"
                                 android:textColor="#fff"
                                 android:textSize="20sp"
