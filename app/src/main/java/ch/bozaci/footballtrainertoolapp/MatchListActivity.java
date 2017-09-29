@@ -165,7 +165,7 @@ public class MatchListActivity extends AppCompatActivity
         editTextHometeam.setText(match.getHomeTeam());
         editTextGuestteam.setText(match.getGuestTeam());
 
-        if (match.getLocationType().equals(Match.LocationType.HOME_GAME))
+        if (match.getLocationType().equals(Match.LocationType.HOME_GAME.getType()))
         {
             radioButtonMatchLocationTypeHomeGame.setChecked(true);
         }
