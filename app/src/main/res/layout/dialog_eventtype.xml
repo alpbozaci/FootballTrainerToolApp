@@ -10,48 +10,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="GOAL"/>
+        android:text="@string/eventtype_goal"/>
 
     <Button
         android:id="@+id/button_eventtype_assist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="ASSIST"/>
+        android:text="@string/eventtype_assist"/>
+
+    <Button
+        android:id="@+id/button_eventtype_fault"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/eventtype_fault"/>
 
     <Button
         android:id="@+id/button_eventtype_player_in"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="PLAYER IN"/>
+        android:text="@string/eventtype_player_in"/>
 
     <Button
         android:id="@+id/button_eventtype_player_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="PLAYER OUT"/>
+        android:text="@string/eventtype_player_out"/>
 
     <Button
         android:id="@+id/button_eventtype_yellow_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="YELLOW CARD"/>
+        android:text="@string/eventtype_yellow_card"/>
 
     <Button
         android:id="@+id/button_eventtype_red_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="RED CARD"/>
+        android:text="@string/eventtype_red_card"/>
 
     <Button
         android:id="@+id/button_eventtype_injured"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="INJURED"/>
+        android:text="@string/eventtype_injured"/>
 
 </LinearLayout>

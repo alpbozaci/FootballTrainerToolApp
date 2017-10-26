@@ -1,5 +1,6 @@
 package ch.bozaci.footballtrainertoolapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends Activity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private Button mMatchListButton;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         mMatchListButton = (Button) findViewById(R.id.button_match_list);

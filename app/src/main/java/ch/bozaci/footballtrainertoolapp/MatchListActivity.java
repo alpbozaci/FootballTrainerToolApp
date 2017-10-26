@@ -1,5 +1,6 @@
 package ch.bozaci.footballtrainertoolapp;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ import java.util.List;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
-public class MatchListActivity extends AppCompatActivity
+public class MatchListActivity extends Activity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 

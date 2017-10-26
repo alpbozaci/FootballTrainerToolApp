@@ -5,43 +5,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="50dp"
     android:orientation="vertical"
+    android:weightSum="100"
+    android:background="#440000"
     tools:context="ch.bozaci.footballtrainertoolapp.MainActivity">
 
     <Button
         android:id="@+id/button_match_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#555"
+        android:layout_height="match_parent"
+        android:layout_margin="5px"
+        android:background="@drawable/button_style"
+        android:fontFamily="monospace"
+        android:gravity="center"
         android:text="@string/match_list"
         android:textColor="#fff"
         android:textSize="20sp"
-        android:fontFamily="monospace"
-        android:gravity="center"
+        android:layout_weight="33"
         />
 
     <Button
         android:id="@+id/button_player_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#555"
+        android:layout_height="match_parent"
+        android:layout_margin="5px"
+        android:background="@drawable/button_style"
         android:text="@string/player_list"
         android:textColor="#fff"
         android:textSize="20sp"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:layout_weight="33"
         />
 
     <Button
         android:id="@+id/button_start_match"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#555"
+        android:layout_height="match_parent"
+        android:layout_margin="5px"
+        android:background="#aaaa55"
         android:text="@string/start_match"
         android:textColor="#fff"
         android:textSize="20sp"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:layout_weight="33"
+
         />
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package ch.bozaci.footballtrainertoolapp;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,7 +26,7 @@ import java.util.List;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
 import ch.bozaci.footballtrainertoolapp.util.PictureUtil;
 
-public class PlayerListActivity extends AppCompatActivity
+public class PlayerListActivity extends Activity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 

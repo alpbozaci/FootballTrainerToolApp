@@ -15,9 +15,12 @@
     <string name="title_edit_match">Match bearbeiten</string>
     <string name="title_delete_match">Match löschen</string>
 
+    <string name="title_delete_event">Event löschen</string>
+
     <string name="firstname">Vorname</string>
     <string name="lastname">Nachname</string>
     <string name="playernumber">Spieler Nummer</string>
+
     <string name="message_delete_player">Wollen Sie diesen Spieler löschen</string>
     <string name="message_delete_event">Wollen Sie diesen Event löschen</string>
 
@@ -35,5 +38,14 @@
     <string name="history">Verlauf</string>
     <string name="stop_match">Match beenden</string>
     <string name="own_player_present">Spieler aktiviert</string>
+
+    <string name="eventtype_goal">GOAL</string>
+    <string name="eventtype_assist">ASSIST</string>
+    <string name="eventtype_fault">FEHLER</string>
+    <string name="eventtype_player_in">SPIELER REIN</string>
+    <string name="eventtype_player_out">SPIELER RAUS</string>
+    <string name="eventtype_yellow_card">GELBE KARTE</string>
+    <string name="eventtype_red_card">ROTE KARTE</string>
+    <string name="eventtype_injured">VERLETZT</string>
 
 </resources>

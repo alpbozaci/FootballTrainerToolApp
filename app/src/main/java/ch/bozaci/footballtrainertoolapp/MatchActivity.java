@@ -1,5 +1,6 @@
 package ch.bozaci.footballtrainertoolapp;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -20,7 +22,7 @@ import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
 
-public class MatchActivity extends AppCompatActivity
+public class MatchActivity extends Activity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -197,7 +199,7 @@ public class MatchActivity extends AppCompatActivity
     private void deleteEvent(final Event event)
     {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(getString(R.string.title_delete_player));
+        alertDialog.setTitle(getString(R.string.title_delete_event));
         alertDialog.setMessage(getString(R.string.message_delete_event));
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener()
         {
@@ -341,9 +343,9 @@ public class MatchActivity extends AppCompatActivity
 
     class MyPlayerClickListener implements PlayerClickListener
     {
-        private AppCompatActivity mActivity;
+        private Activity mActivity;
 
-        public MyPlayerClickListener(AppCompatActivity activity)
+        public MyPlayerClickListener(Activity activity)
         {
             this.mActivity = activity;
         }
@@ -356,6 +358,7 @@ public class MatchActivity extends AppCompatActivity
 
             Button goalButton       = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_goal);
             Button assistButton     = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_assist);
+            Button faultButton      = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_fault);
             Button playerInButton   = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_player_in);
             Button playerOutButton  = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_player_out);
             Button yellowCardButton = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_yellow_card);
@@ -378,6 +381,66 @@ public class MatchActivity extends AppCompatActivity
                 public void onClick(View v)
                 {
                     handleAddEvent(player, Event.EventType.OWN_PLAYER_ASSIST);
+                    eventTypeDialog.dismiss();
+                }
+            });
+
+            faultButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_FAULT);
+                    eventTypeDialog.dismiss();
+                }
+            });
+
+            playerInButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_IN);
+                    eventTypeDialog.dismiss();
+                }
+            });
+
+            playerOutButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_OUT);
+                    eventTypeDialog.dismiss();
+                }
+            });
+
+            yellowCardButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_YELLOW_CARD);
+                    eventTypeDialog.dismiss();
+                }
+            });
+
+            redCardButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_RED_CARD);
+                    eventTypeDialog.dismiss();
+                }
+            });
+
+            injuredButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    handleAddEvent(player, Event.EventType.OWN_PLAYER_INJURED);
                     eventTypeDialog.dismiss();
                 }
             });

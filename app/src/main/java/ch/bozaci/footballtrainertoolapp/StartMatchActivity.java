@@ -1,5 +1,6 @@
 package ch.bozaci.footballtrainertoolapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,7 @@ import java.util.List;
 
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 
-public class StartMatchActivity extends AppCompatActivity
+public class StartMatchActivity extends Activity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
