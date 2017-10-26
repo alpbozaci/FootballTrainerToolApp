@@ -125,13 +125,13 @@ public class EventListAdapter extends BaseAdapter
         {
             return "SPIELER SCHIESST GOAL: " + playerName;
         }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_OWNGOAL.getType()))
-        {
-            return "SPIELER SCHIESST EIGENGOAL: " + playerName;
-        }
         else if (eventType.equals(Event.EventType.OWN_PLAYER_ASSIST.getType()))
         {
             return "SPIELER ASSISTIERT: " + playerName;
+        }
+        else if (eventType.equals(Event.EventType.OWN_PLAYER_FAULT.getType()))
+        {
+            return "SPIELER FEHLER: " + playerName;
         }
         else if (eventType.equals(Event.EventType.OWN_PLAYER_IN.getType()))
         {

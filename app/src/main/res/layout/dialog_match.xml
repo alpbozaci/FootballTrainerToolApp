@@ -4,11 +4,12 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:tools="http://schemas.android.com/tools"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#eeeeee">
 
         <TextView
             android:id="@+id/textview_match_hometeam"
@@ -43,7 +44,8 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#DD3">
+            android:background="#dddddd"
+            android:layout_margin="2dp">
 
             <RadioButton
                 android:id="@+id/radiobutton_match_locationtype_homegame"
@@ -61,7 +63,8 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#BB3">
+            android:background="#dddddd"
+            android:layout_margin="2dp">
 
             <RadioButton
                 android:id="@+id/radiobutton_match_type_championship"
@@ -79,7 +82,9 @@
         <DatePicker
             android:id="@+id/datepicker_match_date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="140dp"
+            android:layout_margin="10dp"
+            android:background="#ffffff"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             />
@@ -87,8 +92,10 @@
         <TimePicker
             android:id="@+id/timepicker_match_time"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="140dp"
             android:timePickerMode="spinner"
+            android:layout_margin="10dp"
+            android:background="#ffffff"
             />
 
         <Button

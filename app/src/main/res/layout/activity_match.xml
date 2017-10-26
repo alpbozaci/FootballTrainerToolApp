@@ -52,7 +52,6 @@
                             android:id="@+id/listview_select_player"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#e0e0e0"
                             />
                     </LinearLayout>
 
@@ -61,13 +60,13 @@
                         android:layout_height="0dp"
                         android:layout_margin="5px"
                         android:layout_weight="45"
-                        android:background="#f0f0f0">
+                        android:background="#eeeeee">
 
                         <TableRow
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="3px"
-                            android:background="#000000"
+                            android:background="#cccccc"
                             android:weightSum="100">
 
                             <TextView
@@ -77,8 +76,9 @@
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:text="@string/guestteam"
-                                android:textColor="#ffffff"
+                                android:textColor="#000000"
                                 android:textSize="14sp"
+                                android:textStyle="bold"
                                 />
 
                             <Button
@@ -95,7 +95,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="3px"
-                            android:background="#000000"
+                            android:background="#cccccc"
                             android:weightSum="100">
 
                             <TextView
@@ -106,8 +106,9 @@
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:text="-"
-                                android:textColor="#dddddd"
+                                android:textColor="#000000"
                                 android:textSize="18sp"
+                                android:textStyle="bold"
                                 />
 
                             <TextView
@@ -118,8 +119,9 @@
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:text="-"
-                                android:textColor="#dddddd"
+                                android:textColor="#000000"
                                 android:textSize="18sp"
+                                android:textStyle="bold"
                                 />
 
                         </TableRow>
@@ -128,7 +130,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="3px"
-                            android:background="#000000"
+                            android:background="#cccccc"
                             android:weightSum="100">
 
                             <TextView
@@ -137,13 +139,14 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:layout_weight="48"
-                                android:background="#334455"
+                                android:background="#bbbbbb"
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text="0"
                                 android:textColor="#ffdd00"
                                 android:textSize="22sp"
+                                android:textStyle="bold"
                                 />
 
                             <TextView
@@ -154,7 +157,7 @@
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text=":"
-                                android:textColor="#ffdd00"
+                                android:textColor="#000000"
                                 android:textSize="22sp"
                                 />
 
@@ -164,13 +167,14 @@
                                 android:layout_height="match_parent"
                                 android:layout_margin="5dp"
                                 android:layout_weight="48"
-                                android:background="#334455"
+                                android:background="#bbbbbb"
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text="0"
                                 android:textColor="#ffdd00"
                                 android:textSize="22sp"
+                                android:textStyle="bold"
                                 />
 
                         </TableRow>
@@ -179,7 +183,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="3px"
-                            android:background="#000000"
+                            android:background="#cccccc"
                             android:weightSum="100">
 
                             <TextView
@@ -188,7 +192,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="11"
                                 android:layout_margin="5dp"
-                                android:background="#334455"
+                                android:background="#bbbbbb"
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:text="00"
@@ -200,11 +204,10 @@
                                 android:layout_width="0px"
                                 android:layout_height="match_parent"
                                 android:layout_weight="3"
-                                android:background="#000000"
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:text=":"
-                                android:textColor="#fff"
+                                android:textColor="#000000"
                                 android:textSize="20sp"
                                 />
 
@@ -214,7 +217,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="11"
                                 android:layout_margin="5dp"
-                                android:background="#334455"
+                                android:background="#bbbbbb"
                                 android:fontFamily="monospace"
                                 android:gravity="center"
                                 android:text="00"
@@ -252,13 +255,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="3px"
-                            android:background="#000000">
+                            android:weightSum="100"
+                            android:background="#cccccc">
 
                             <Button
                                 android:id="@+id/button_stop_match"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1"
+                                android:layout_weight="100"
                                 android:text="@string/stop_match"
                                 />
 
@@ -276,8 +280,8 @@
 
                     <ListView
                         android:id="@+id/listview_event"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         />
 
                 </LinearLayout>

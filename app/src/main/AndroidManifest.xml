@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="ch.bozaci.footballtrainertoolapp">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,10 +25,6 @@
         </activity>
         <activity android:name=".PlayerListActivity">
         </activity>
-
-        <uses-permission android:name="android.permission.CAMERA"/>
-
-        <uses-feature android:name="android.hardware.CAMERA"/>
 
         <activity android:name=".StartMatchActivity">
         </activity>
