@@ -31,7 +31,11 @@ public class Event implements Serializable
         OWN_PLAYER_RED_CARD("PLAYER RED CARD"),
         OWN_PLAYER_INJURED("PLAYER INJURED"),
 
-        OPPOSING_TEAM_GOAL("OPPOSING PLAYER GOAL");
+        OPPOSING_TEAM_GOAL("OPPOSING PLAYER GOAL"),
+
+        MATCH_START("MATCH START"),
+        MATCH_PAUSE("MATCH PAUSE"),
+        MATCH_FINISH("MATCH FINISH");
 
         private String type;
 

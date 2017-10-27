@@ -91,7 +91,6 @@ public class SelectPlayerListAdapter extends BaseAdapter
         viewHolder.textView.setText(player.toString());
         viewHolder.imageView.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
 
-
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener()
         {
             @Override

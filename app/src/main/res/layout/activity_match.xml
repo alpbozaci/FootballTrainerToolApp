@@ -53,6 +53,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             />
+
                     </LinearLayout>
 
                     <TableLayout
@@ -107,7 +108,7 @@
                                 android:gravity="center"
                                 android:text="-"
                                 android:textColor="#000000"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:textStyle="bold"
                                 />
 
@@ -120,7 +121,7 @@
                                 android:gravity="center"
                                 android:text="-"
                                 android:textColor="#000000"
-                                android:textSize="18sp"
+                                android:textSize="16sp"
                                 android:textStyle="bold"
                                 />
 
@@ -144,8 +145,8 @@
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text="0"
-                                android:textColor="#ffdd00"
-                                android:textSize="22sp"
+                                android:textColor="#551133"
+                                android:textSize="20sp"
                                 android:textStyle="bold"
                                 />
 
@@ -157,8 +158,8 @@
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text=":"
-                                android:textColor="#000000"
-                                android:textSize="22sp"
+                                android:textColor="#551133"
+                                android:textSize="20sp"
                                 />
 
                             <TextView
@@ -172,8 +173,8 @@
                                 android:gravity="center"
                                 android:inputType="numberDecimal"
                                 android:text="0"
-                                android:textColor="#ffdd00"
-                                android:textSize="22sp"
+                                android:textColor="#551133"
+                                android:textSize="20sp"
                                 android:textStyle="bold"
                                 />
 
@@ -226,44 +227,27 @@
                                 />
 
                             <Button
-                                android:id="@+id/button_start_timer"
+                                android:id="@+id/button_start_match"
                                 android:layout_width="0px"
                                 android:layout_height="match_parent"
                                 android:layout_weight="25"
-                                android:text="Start"
+                                android:text="@string/start_match"
                                 />
 
                             <Button
-                                android:id="@+id/button_pause_timer"
+                                android:id="@+id/button_pause_match"
                                 android:layout_width="0px"
                                 android:layout_height="match_parent"
                                 android:layout_weight="25"
-                                android:text="Pause"
+                                android:text="@string/pause_match"
                                 />
 
                             <Button
-                                android:id="@+id/button_stop_timer"
+                                android:id="@+id/button_finish_match"
                                 android:layout_width="0px"
                                 android:layout_height="match_parent"
                                 android:layout_weight="25"
-                                android:text="Stop"
-                                />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="3px"
-                            android:weightSum="100"
-                            android:background="#cccccc">
-
-                            <Button
-                                android:id="@+id/button_stop_match"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="100"
-                                android:text="@string/stop_match"
+                                android:text="@string/finish_match"
                                 />
 
                         </TableRow>

@@ -14,15 +14,17 @@
         <Button
             android:id="@+id/button_eventtype_goal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableRight="@drawable/goal"
             android:text="@string/eventtype_goal"/>
 
         <Button
             android:id="@+id/button_eventtype_assist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:drawableRight="@drawable/assist"
             android:text="@string/eventtype_assist"/>
 
         <Button
@@ -30,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableRight="@drawable/error"
             android:text="@string/eventtype_fault"/>
 
         <Button
@@ -37,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableRight="@drawable/player_change"
             android:text="@string/eventtype_player_in"/>
 
         <Button
@@ -44,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableRight="@drawable/player_change"
             android:text="@string/eventtype_player_out"/>
 
         <Button
@@ -51,6 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableRight="@drawable/yellow_card"
             android:text="@string/eventtype_yellow_card"/>
 
         <Button
@@ -58,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableRight="@drawable/red_card"
             android:text="@string/eventtype_red_card"/>
 
         <Button
@@ -65,6 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableRight="@drawable/injured"
             android:text="@string/eventtype_injured"/>
 
     </LinearLayout>

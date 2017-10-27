@@ -5,14 +5,13 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,18 +26,35 @@ public class MatchActivity extends Activity
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private List<Player> mPlayerList;
+    private List<Player> mSelectedPlayerList;
+    private List<Player> mNotSelectedPlayerList;
     private List<Event> mEventList;
+    private List<SelectPlayerListAdapter.ViewHolder> mViewHolderList;
+
     private SelectPlayerListAdapter mSelectPlayerListAdapter;
     private EventListAdapter mEventListAdapter;
+
     private ListView mSelectPlayerListView;
     private ListView mEventListView;
+
     private TextView mScoreHomeTeamTextView;
     private TextView mScoreGuestTeamTextView;
-    private TextView mTimerMinTextView;
-    private TextView mTimerSecTextView;
-    private Match mMatch;
+    private TextView mFullTimerMinTextView;
+    private TextView mFullTimerSecTextView;
+    private TextView mPartTimerMinTextView;
+    private TextView mPartTimerSecTextView;
+
+    private Button mGoalGuestTeamButton;
+    private Button mStartMatchButton;
+    private Button mPauseMatchButton;
+    private Button mFinishMatchButton;
+
+    private Integer mElapsedFullTimeInSeconds;
+    private Integer mElapsedPartTimeInSeconds;
+
     private Thread mTimerThread;
-    private Integer mElapsedTimeInSeconds;
+
+    private Match mMatch;
 
     private DatabaseAdapter databaseAdapter;
 
@@ -77,40 +93,46 @@ public class MatchActivity extends Activity
         tabHost.addTab(tab2);
 
         //TAB 1
+        mTimerThread = new Thread(timer);
+
         mPlayerList = new ArrayList<>();
+        mSelectedPlayerList = new ArrayList<>();
+        mNotSelectedPlayerList = new ArrayList<>();
+        mViewHolderList = new ArrayList<>();
+
         loadDBPlayerList();
         mSelectPlayerListAdapter = new SelectPlayerListAdapter(this, mPlayerList, new MyPlayerClickListener(this), new MyActivateDeactivatePlayerClickListener());
         mSelectPlayerListView = (ListView) findViewById(R.id.listview_select_player);
         mSelectPlayerListView.setAdapter(mSelectPlayerListAdapter);
 
-        mScoreHomeTeamTextView = (TextView) findViewById(R.id.textview_score_hometeam);
+        mScoreHomeTeamTextView  = (TextView) findViewById(R.id.textview_score_hometeam);
         mScoreGuestTeamTextView = (TextView) findViewById(R.id.textview_score_guestteam);
 
-        Button goalGuestTeamAddButton = (Button)findViewById(R.id.button_goal_guestteam);
-        Button startTimerButton = (Button)findViewById(R.id.button_start_timer);
-        Button pauseTimerButton = (Button)findViewById(R.id.button_pause_timer);
-        Button stopTimerButton  = (Button)findViewById(R.id.button_stop_timer);
-        Button stopMatchButton  = (Button)findViewById(R.id.button_stop_match);
+        mFullTimerMinTextView = (TextView)findViewById(R.id.textview_match_timer_min);
+        mFullTimerSecTextView = (TextView)findViewById(R.id.textview_match_timer_sec);
 
-        mTimerMinTextView = (TextView)findViewById(R.id.textview_match_timer_min);
-        mTimerSecTextView = (TextView)findViewById(R.id.textview_match_timer_sec);
+        mGoalGuestTeamButton = (Button)findViewById(R.id.button_goal_guestteam);
+        mGoalGuestTeamButton.setEnabled(false);
+        mGoalGuestTeamButton.setOnClickListener(new MyGoalGuestTeamClickListener());
 
-        mTimerThread = new Thread(timer);
-        mElapsedTimeInSeconds = new Integer(0);
+        mStartMatchButton  = (Button)findViewById(R.id.button_start_match);
+        mPauseMatchButton  = (Button)findViewById(R.id.button_pause_match);
+        mFinishMatchButton = (Button)findViewById(R.id.button_finish_match);
 
-        goalGuestTeamAddButton.setOnClickListener(new MyAddGoalGuestTeamClickListener());
+        mPauseMatchButton.setEnabled(false);
+        mFinishMatchButton.setEnabled(false);
 
-        startTimerButton.setOnClickListener(new MyStartTimerClickListener());
-        pauseTimerButton.setOnClickListener(new MyPauseTimerClickListener());
-        stopTimerButton.setOnClickListener(new MyStopTimerClickListener());
-        stopMatchButton.setOnClickListener(new MyStopMatchClickListener());
+        mStartMatchButton.setOnClickListener(new MyStartMatchClickListener());
+        mPauseMatchButton.setOnClickListener(new MyPauseMatchClickListener());
+        mFinishMatchButton.setOnClickListener(new MyFinishMatchClickListener());
+
+        resetTimer();
 
         //TAB 2
         mEventList = new ArrayList<>();
         mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener(), new MyDeleteEventLongClickListener());
         mEventListView = (ListView) findViewById(R.id.listview_event);
         mEventListView.setAdapter(mEventListAdapter);
-
     }
 
     Runnable timer = new Runnable()
@@ -256,24 +278,112 @@ public class MatchActivity extends Activity
         }
     }
 
-    private void updateTimer()
-    {
-        mElapsedTimeInSeconds ++;
-        Integer min = mElapsedTimeInSeconds / 60;
-        Integer sec = mElapsedTimeInSeconds % 60;
-
-        String formattedMin = String.format("%02d", min);
-        String formattedSec = String.format("%02d", sec);
-
-        mTimerMinTextView.setText(formattedMin);
-        mTimerSecTextView.setText(formattedSec);
-    }
-
     private void resetTimer()
     {
-        mElapsedTimeInSeconds = 0;
-        mTimerMinTextView.setText(String.format("%02d", 0));
-        mTimerSecTextView.setText(String.format("%02d", 0));
+        mElapsedFullTimeInSeconds = 0;
+        mElapsedPartTimeInSeconds = 0;
+        mFullTimerMinTextView.setText(String.format("%02d", 0));
+        mFullTimerSecTextView.setText(String.format("%02d", 0));
+        //mPartTimerMinTextView.setText(String.format("%02d", 0));
+        //mPartTimerSecTextView.setText(String.format("%02d", 0));
+    }
+
+    private void updateTimer()
+    {
+        mElapsedFullTimeInSeconds++;
+        mElapsedPartTimeInSeconds++;
+
+        Integer minFullTime = mElapsedFullTimeInSeconds / 60;
+        Integer secFullTime = mElapsedFullTimeInSeconds % 60;
+        Integer minPartTime = mElapsedPartTimeInSeconds / 60;
+        Integer secPartTime = mElapsedPartTimeInSeconds % 60;
+
+        String formattedMinFullTime = String.format("%02d", minFullTime);
+        String formattedSecFullTime = String.format("%02d", secFullTime);
+        String formattedMinPartTime = String.format("%02d", minPartTime);
+        String formattedSecPartTime = String.format("%02d", secPartTime);
+
+        mFullTimerMinTextView.setText(formattedMinFullTime);
+        mFullTimerSecTextView.setText(formattedSecFullTime);
+        //mPartTimerMinTextView.setText(formattedMinPartTime);
+        //mPartTimerSecTextView.setText(formattedSecPartTime);
+    }
+
+    private void changeGuiElementsOnStartMatch()
+    {
+        if (mViewHolderList.isEmpty())
+        {
+            Toast.makeText(this, "No player selected", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
+        {
+            viewHolder.textView.setEnabled(true);
+            viewHolder.checkBox.setEnabled(false);
+        }
+
+        // remove all players from gui list which are not selected
+        for (Player player : mPlayerList)
+        {
+            boolean found = false;
+            for (Player selectedPlayer : mSelectedPlayerList)
+            {
+                if (player.getId() == selectedPlayer.getId())
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (! found)
+            {
+                mNotSelectedPlayerList.add(player);
+            }
+        }
+
+        for (Player p : mNotSelectedPlayerList)
+        {
+            System.out.println(p.getFirstName());
+        }
+
+        mSelectPlayerListAdapter.notifyDataSetChanged();
+
+        mGoalGuestTeamButton.setEnabled(true);
+        mStartMatchButton.setEnabled(false);
+        mPauseMatchButton.setEnabled(true);
+        mFinishMatchButton.setEnabled(true);
+
+        mTimerThread.start();
+    }
+
+    private void changeGuiElementsOnPauseMatch()
+    {
+        for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
+        {
+            viewHolder.textView.setEnabled(false);
+        }
+
+        mGoalGuestTeamButton.setEnabled(false);
+        mStartMatchButton.setEnabled(true);
+        mPauseMatchButton.setEnabled(false);
+        mFinishMatchButton.setEnabled(false);
+
+        mTimerThread.interrupt();
+    }
+
+    private void changeGuiElementsOnFinishMatch()
+    {
+        for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
+        {
+            viewHolder.textView.setEnabled(false);
+        }
+
+        mGoalGuestTeamButton.setEnabled(false);
+        mStartMatchButton.setEnabled(false);
+        mPauseMatchButton.setEnabled(false);
+        mFinishMatchButton.setEnabled(false);
+
+        mTimerThread.interrupt();
     }
 
     //---------------------------------------------------------------------------------------------
@@ -301,9 +411,31 @@ public class MatchActivity extends Activity
         void onLongEventClicked(Event event);
     }
 
-    private interface TimerListener
+    class MyStartMatchClickListener implements View.OnClickListener
     {
-        void onTimerElapsed();
+        @Override
+        public void onClick(View v)
+        {
+            changeGuiElementsOnStartMatch();
+        }
+    }
+
+    class MyPauseMatchClickListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+            changeGuiElementsOnPauseMatch();
+        }
+    }
+
+    class MyFinishMatchClickListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+            changeGuiElementsOnFinishMatch();
+        }
     }
 
     class MyActivateDeactivatePlayerClickListener implements ActivateDeactivatePlayerClickListener
@@ -312,32 +444,16 @@ public class MatchActivity extends Activity
         public void onActivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
         {
             handleAddEvent(player, Event.EventType.OWN_PLAYER_PRESENT);
-            viewHolder.textView.setEnabled(true);
+            mViewHolderList.add(viewHolder);
+            mSelectedPlayerList.add(player);
         }
 
         @Override
         public void onDeactivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
         {
             handleAddEvent(player, Event.EventType.OWN_PLAYER_ABSENT);
-            viewHolder.textView.setEnabled(false);
-        }
-    }
-
-    class MyGoalHomeTeamClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-
-        }
-    }
-
-    class MyAssistClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-
+            mViewHolderList.remove(viewHolder);
+            mSelectedPlayerList.remove(player);
         }
     }
 
@@ -449,7 +565,7 @@ public class MatchActivity extends Activity
         }
     }
 
-    class MyAddGoalGuestTeamClickListener implements View.OnClickListener
+    class MyGoalGuestTeamClickListener implements View.OnClickListener
     {
         @Override
         public void onClick(View v)
@@ -457,51 +573,6 @@ public class MatchActivity extends Activity
             Player guestPlayer = new Player();
             guestPlayer.setId(null);
             handleAddEvent(guestPlayer, Event.EventType.OPPOSING_TEAM_GOAL);
-        }
-    }
-
-    class MyStartTimerClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-            mTimerThread.start();
-        }
-    }
-
-    class MyPauseTimerClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-            mTimerThread.interrupt();
-        }
-    }
-
-    class MyStopTimerClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-            mTimerThread.interrupt();
-            resetTimer();
-        }
-    }
-
-    class MyStopMatchClickListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-        }
-    }
-
-    class MyTimerListener implements TimerListener
-    {
-        @Override
-        public void onTimerElapsed()
-        {
-            updateTimer();
         }
     }
 

@@ -157,6 +157,18 @@ public class EventListAdapter extends BaseAdapter
         {
             return "GEGENMANNSCHAFT SCHIESST GOAL";
         }
+        else if (eventType.equals(Event.EventType.MATCH_START.getType()))
+        {
+            return "MATCH START";
+        }
+        else if (eventType.equals(Event.EventType.MATCH_PAUSE.getType()))
+        {
+            return "MATCH PAUSE";
+        }
+        else if (eventType.equals(Event.EventType.MATCH_FINISH.getType()))
+        {
+            return "MATCH ENDE";
+        }
         else
         {
             return "?";

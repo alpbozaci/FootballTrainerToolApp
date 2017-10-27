@@ -5,7 +5,7 @@
 
     <string name="match_list">Match Liste</string>
     <string name="player_list">Spieler Liste</string>
-    <string name="start_match">Match starten</string>
+    <string name="start_match_list">Match starten</string>
 
     <string name="title_add_player">Spieler hinzufügen</string>
     <string name="title_edit_player">Spieler bearbeiten</string>
@@ -36,7 +36,11 @@
     <string name="player_event">Spieler Event</string>
     <string name="match_event">Match Event</string>
     <string name="history">Verlauf</string>
-    <string name="stop_match">Match beenden</string>
+
+    <string name="start_match">Match Start</string>
+    <string name="pause_match">Match Pause</string>
+    <string name="finish_match">Match Ende</string>
+
     <string name="own_player_present">Spieler aktiviert</string>
 
     <string name="eventtype_goal">GOAL</string>
