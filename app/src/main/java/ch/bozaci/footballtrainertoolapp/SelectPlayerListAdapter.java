@@ -9,7 +9,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.bozaci.footballtrainertoolapp.dao.Player;
 import ch.bozaci.footballtrainertoolapp.util.PictureUtil;
@@ -25,6 +27,8 @@ public class SelectPlayerListAdapter extends BaseAdapter
     private MatchActivity.MyPlayerClickListener mPlayerClickListener;
     private MatchActivity.MyActivateDeactivatePlayerClickListener mActivateDeactivatePlayerClickListener;
 
+    private Map<Player, ViewHolder> map;
+
     public SelectPlayerListAdapter(
             Context context,
             List<Player> playerList,
@@ -34,6 +38,7 @@ public class SelectPlayerListAdapter extends BaseAdapter
         this.mPlayerList = playerList;
         this.mPlayerClickListener = playerClickListener;
         this.mActivateDeactivatePlayerClickListener = activateDeactivatePlayerClickListener;
+        map = new HashMap<>();
 
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -67,6 +72,7 @@ public class SelectPlayerListAdapter extends BaseAdapter
     public View getView(int position, View convertView, ViewGroup parent)
     {
         final ViewHolder viewHolder;
+        final Player player = (Player)getItem(position);
 
         if (convertView == null)
         {
@@ -80,13 +86,14 @@ public class SelectPlayerListAdapter extends BaseAdapter
             viewHolder.checkBox.setChecked(false);
 
             convertView.setTag(viewHolder);
+
+            map.put(player, viewHolder);
         }
         else
         {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        final Player player = (Player)getItem(position);
 
         viewHolder.textView.setText(player.toString());
         viewHolder.imageView.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
@@ -117,5 +124,10 @@ public class SelectPlayerListAdapter extends BaseAdapter
         });
 
         return convertView;
+    }
+
+    public ViewHolder getViewHolder(Player player)
+    {
+        return map.get(player);
     }
 }

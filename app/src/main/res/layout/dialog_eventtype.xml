@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/player_change"
+            android:drawableRight="@drawable/player_in"
             android:text="@string/eventtype_player_in"/>
 
         <Button
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/player_change"
+            android:drawableRight="@drawable/player_out"
             android:text="@string/eventtype_player_out"/>
 
         <Button
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/injured"
+            android:drawableRight="@drawable/first_aid_kit"
             android:text="@string/eventtype_injured"/>
 
     </LinearLayout>

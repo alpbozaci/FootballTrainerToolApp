@@ -62,6 +62,8 @@ public class MatchActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.i(LOG_TAG, "onCreate()");
+
         setContentView(R.layout.activity_match);
 
         databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
@@ -135,6 +137,29 @@ public class MatchActivity extends Activity
         mEventListView.setAdapter(mEventListAdapter);
     }
 
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.i(LOG_TAG, "onResume()");
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        Log.i(LOG_TAG, "onPause()");
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.i(LOG_TAG, "onDestroy()");
+    }
+
+
     Runnable timer = new Runnable()
     {
         @Override
@@ -174,6 +199,16 @@ public class MatchActivity extends Activity
         }
     }
 
+    private void handleAddNoPlayerEvent(Event.EventType eventType)
+    {
+        handleAddEvent(null, eventType);
+    }
+
+    private void handleAddPlayerEvent(Player player, Event.EventType eventType)
+    {
+        handleAddEvent(player, eventType);
+    }
+
     private void handleAddEvent(Player player, Event.EventType eventType)
     {
         Log.i(LOG_TAG, "ADD EVENT: " + eventType.getType());
@@ -194,13 +229,23 @@ public class MatchActivity extends Activity
     private Event createEvent(Player player, Event.EventType eventType)
     {
         Event event = new Event();
+
+        event.setMatch(mMatch);
         event.setMatchId(mMatch.getId());
-        event.setPlayerId(player.getId());
+
+        if (player != null)
+        {
+            event.setPlayerId(player.getId());
+            event.setPlayer(player);
+        }
+        else
+        {
+            event.setPlayerId(null);
+            event.setPlayer(null);
+        }
+
         event.setDate(new Date());
         event.setType(eventType.getType());
-
-        event.setPlayer(player);
-        event.setMatch(mMatch);
 
         return event;
     }
@@ -316,14 +361,14 @@ public class MatchActivity extends Activity
             Toast.makeText(this, "No player selected", Toast.LENGTH_LONG).show();
             return;
         }
-
+        //------------------------------------------------------------------------------------------
         for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
         {
             viewHolder.textView.setEnabled(true);
             viewHolder.checkBox.setEnabled(false);
         }
-
-        // remove all players from gui list which are not selected
+        //------------------------------------------------------------------------------------------
+        // deactivate all players from gui list which are not selected
         for (Player player : mPlayerList)
         {
             boolean found = false;
@@ -341,18 +386,18 @@ public class MatchActivity extends Activity
             }
         }
 
-        for (Player p : mNotSelectedPlayerList)
+        for (Player player : mNotSelectedPlayerList)
         {
-            System.out.println(p.getFirstName());
+            SelectPlayerListAdapter.ViewHolder viewHolder = mSelectPlayerListAdapter.getViewHolder(player);
+            viewHolder.checkBox.setEnabled(false);
         }
 
-        mSelectPlayerListAdapter.notifyDataSetChanged();
-
+        //------------------------------------------------------------------------------------------
         mGoalGuestTeamButton.setEnabled(true);
         mStartMatchButton.setEnabled(false);
         mPauseMatchButton.setEnabled(true);
         mFinishMatchButton.setEnabled(true);
-
+        //------------------------------------------------------------------------------------------
         mTimerThread.start();
     }
 
@@ -417,6 +462,7 @@ public class MatchActivity extends Activity
         public void onClick(View v)
         {
             changeGuiElementsOnStartMatch();
+            handleAddNoPlayerEvent(Event.EventType.MATCH_START);
         }
     }
 
@@ -426,6 +472,7 @@ public class MatchActivity extends Activity
         public void onClick(View v)
         {
             changeGuiElementsOnPauseMatch();
+            handleAddNoPlayerEvent(Event.EventType.MATCH_PAUSE);
         }
     }
 
@@ -435,6 +482,7 @@ public class MatchActivity extends Activity
         public void onClick(View v)
         {
             changeGuiElementsOnFinishMatch();
+            handleAddNoPlayerEvent(Event.EventType.MATCH_FINISH);
         }
     }
 
@@ -443,7 +491,7 @@ public class MatchActivity extends Activity
         @Override
         public void onActivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
         {
-            handleAddEvent(player, Event.EventType.OWN_PLAYER_PRESENT);
+            handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_PRESENT);
             mViewHolderList.add(viewHolder);
             mSelectedPlayerList.add(player);
         }
@@ -451,7 +499,7 @@ public class MatchActivity extends Activity
         @Override
         public void onDeactivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
         {
-            handleAddEvent(player, Event.EventType.OWN_PLAYER_ABSENT);
+            handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_ABSENT);
             mViewHolderList.remove(viewHolder);
             mSelectedPlayerList.remove(player);
         }
@@ -486,7 +534,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_GOAL);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_GOAL);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -496,7 +544,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_ASSIST);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_ASSIST);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -506,7 +554,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_FAULT);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_FAULT);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -516,7 +564,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_IN);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_IN);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -526,7 +574,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_OUT);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_OUT);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -536,7 +584,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_YELLOW_CARD);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_YELLOW_CARD);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -546,7 +594,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_RED_CARD);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_RED_CARD);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -556,7 +604,7 @@ public class MatchActivity extends Activity
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddEvent(player, Event.EventType.OWN_PLAYER_INJURED);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_INJURED);
                     eventTypeDialog.dismiss();
                 }
             });
@@ -570,9 +618,7 @@ public class MatchActivity extends Activity
         @Override
         public void onClick(View v)
         {
-            Player guestPlayer = new Player();
-            guestPlayer.setId(null);
-            handleAddEvent(guestPlayer, Event.EventType.OPPOSING_TEAM_GOAL);
+            handleAddNoPlayerEvent(Event.EventType.OPPOSING_TEAM_GOAL);
         }
     }
 

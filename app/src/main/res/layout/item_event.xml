@@ -11,26 +11,14 @@
         android:id="@+id/textview_event_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradient_background_dark2light_gray"
+        android:background="@drawable/gradient_background_light2dark_gray"
         android:fontFamily="monospace"
-        android:gravity="center"
+        android:gravity="left"
         android:textColor="#000"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:textSize="10sp"
+        android:textStyle="normal"
         android:padding="10dp"
         />
 
-    <TextView
-        android:id="@+id/textview_event_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/gradient_background_light2dark_gray"
-        android:fontFamily="monospace"
-        android:gravity="center"
-        android:textColor="#000"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:padding="5dp"
-        />
 
 </LinearLayout>

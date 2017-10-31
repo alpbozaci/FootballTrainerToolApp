@@ -48,6 +48,15 @@ public class Event implements Serializable
         {
             return type;
         }
+
+        public static EventType fromString(String text) {
+            for (EventType et : EventType.values()) {
+                if (et.type.equalsIgnoreCase(text)) {
+                    return et;
+                }
+            }
+            return null;
+        }
     }
 
     private Integer id;

@@ -1,6 +1,7 @@
 package ch.bozaci.footballtrainertoolapp;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
 public class EventListAdapter extends BaseAdapter
 {
+    private Context mContext;
     private List<Event> mEventList;
     private LayoutInflater mLayoutInflater;
     private MatchActivity.MyEventClickListener mEventClickListener;
     private MatchActivity.MyDeleteEventLongClickListener mEventLongClickListener;
+
 
     public EventListAdapter(
             Context context,
@@ -29,6 +32,7 @@ public class EventListAdapter extends BaseAdapter
             MatchActivity.MyEventClickListener eventClickListener,
             MatchActivity.MyDeleteEventLongClickListener eventLongClickListener)
     {
+        this.mContext = context;
         this.mEventList = eventList;
         this.mEventClickListener = eventClickListener;
         this.mEventLongClickListener = eventLongClickListener;
@@ -39,7 +43,6 @@ public class EventListAdapter extends BaseAdapter
     private class ViewHolder
     {
         TextView textViewEventType;
-        TextView textViewEventDate;
     }
 
     @Override
@@ -70,7 +73,6 @@ public class EventListAdapter extends BaseAdapter
             convertView = mLayoutInflater.inflate(R.layout.item_event, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.textViewEventType = (TextView) convertView.findViewById(R.id.textview_event_type);
-            viewHolder.textViewEventDate = (TextView) convertView.findViewById(R.id.textview_event_date);
             convertView.setTag(viewHolder);
         }
         else
@@ -82,8 +84,10 @@ public class EventListAdapter extends BaseAdapter
 
         if (event != null)
         {
-            viewHolder.textViewEventType.setText(getGuiPresentation(event));
-            viewHolder.textViewEventDate.setText(DateUtil.dateFormat.format(event.getDate()));
+            String text = getText(event);
+            Drawable icon = getIcon(event);
+            viewHolder.textViewEventType.setText(text);
+            viewHolder.textViewEventType.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, icon, null);
         }
 
         viewHolder.textViewEventType.setOnClickListener(new View.OnClickListener()
@@ -108,70 +112,126 @@ public class EventListAdapter extends BaseAdapter
         return convertView;
     }
 
-    private String getGuiPresentation(Event event)
+    private Drawable getIcon(Event event)
     {
-        String eventType = event.getType();
-        String playerName = event.getPlayer().getFirstName() + " " + event.getPlayer().getLastName();
+        Event.EventType eventType = Event.EventType.fromString(event.getType());
 
-        if (eventType.equals(Event.EventType.OWN_PLAYER_PRESENT.getType()))
+        Drawable icon;
+        switch (eventType)
         {
-            return "SPIELER AKTIVIERT: " + playerName;
+            case OWN_PLAYER_PRESENT:
+                return null;
+            case OWN_PLAYER_ABSENT:
+                return null;
+            case OWN_PLAYER_GOAL:
+                return mContext.getResources().getDrawable(R.drawable.goal, null);
+            case OWN_PLAYER_ASSIST:
+                return mContext.getResources().getDrawable(R.drawable.assist, null);
+            case OWN_PLAYER_FAULT:
+                return mContext.getResources().getDrawable(R.drawable.error, null);
+            case OWN_PLAYER_IN:
+                return mContext.getResources().getDrawable(R.drawable.player_in, null);
+            case OWN_PLAYER_OUT:
+                return mContext.getResources().getDrawable(R.drawable.player_out, null);
+            case OWN_PLAYER_YELLOW_CARD:
+                return mContext.getResources().getDrawable(R.drawable.yellow_card, null);
+            case OWN_PLAYER_RED_CARD:
+                return mContext.getResources().getDrawable(R.drawable.red_card, null);
+            case OWN_PLAYER_INJURED:
+                return mContext.getResources().getDrawable(R.drawable.first_aid_kit, null);
+            case OPPOSING_TEAM_GOAL:
+                return mContext.getResources().getDrawable(R.drawable.goal, null);
+            case MATCH_START:
+                return null;
+            case MATCH_PAUSE:
+                return null;
+            case MATCH_FINISH:
+                return null;
+
+            default:
+                icon = null; break;
         }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_ABSENT.getType()))
+        return icon;
+    }
+
+    private String getText(Event event)
+    {
+        Event.EventType eventType = Event.EventType.fromString(event.getType());
+        String eventDate = DateUtil.dateFormat.format(event.getDate());
+
+        switch (eventType)
         {
-            return "SPIELER DEAKTIVIERT: " + playerName;
+            case OWN_PLAYER_PRESENT:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER AKTIVIERT: " + playerName + System.lineSeparator() + eventDate;
+            }
+
+            case OWN_PLAYER_ABSENT:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER DEAKTIVIERT: " + playerName + System.lineSeparator() + eventDate;
+            }
+
+            case OWN_PLAYER_GOAL:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER SCHIESST GOAL: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_ASSIST:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER ASSISTIERT: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_FAULT:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER FEHLER: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_IN:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER EINGEWECHSELT: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_OUT:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER AUSGEWECHSELT: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_YELLOW_CARD:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER GELBE KARTE: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_RED_CARD:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER ROTE KARTE: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_INJURED:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER VERLETZT: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OPPOSING_TEAM_GOAL:
+            {
+                return "GEGENMANNSCHAFT SCHIESST GOAL" + System.lineSeparator() + eventDate;
+            }
+            case MATCH_START:
+            {
+                return "MATCH START" + System.lineSeparator() + eventDate;
+            }
+            case MATCH_PAUSE:
+            {
+                return "MATCH PAUSE" + System.lineSeparator() + eventDate;
+            }
+            case MATCH_FINISH:
+            {
+                return "MATCH ENDE" + System.lineSeparator() + eventDate;
+            }
+            default:
+                return "?";
         }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_GOAL.getType()))
-        {
-            return "SPIELER SCHIESST GOAL: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_ASSIST.getType()))
-        {
-            return "SPIELER ASSISTIERT: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_FAULT.getType()))
-        {
-            return "SPIELER FEHLER: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_IN.getType()))
-        {
-            return "SPIELER EINGEWECHSELT: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_OUT.getType()))
-        {
-            return "SPIELER AUSGEWECHSELT: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_YELLOW_CARD.getType()))
-        {
-            return "SPIELER GELBE KARTE: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_RED_CARD.getType()))
-        {
-            return "SPIELER ROTE KARTE: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OWN_PLAYER_INJURED.getType()))
-        {
-            return "SPIELER VERLETZT: " + playerName;
-        }
-        else if (eventType.equals(Event.EventType.OPPOSING_TEAM_GOAL.getType()))
-        {
-            return "GEGENMANNSCHAFT SCHIESST GOAL";
-        }
-        else if (eventType.equals(Event.EventType.MATCH_START.getType()))
-        {
-            return "MATCH START";
-        }
-        else if (eventType.equals(Event.EventType.MATCH_PAUSE.getType()))
-        {
-            return "MATCH PAUSE";
-        }
-        else if (eventType.equals(Event.EventType.MATCH_FINISH.getType()))
-        {
-            return "MATCH ENDE";
-        }
-        else
-        {
-            return "?";
-        }
+
     }
 }

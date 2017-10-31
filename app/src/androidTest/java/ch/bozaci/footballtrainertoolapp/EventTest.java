@@ -16,6 +16,7 @@ import ch.bozaci.footballtrainertoolapp.dao.Event;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
@@ -100,4 +101,12 @@ public class EventTest
         assertEquals(0, dbAdapter.getEventList().size());
     }
 
+    @Test
+    public void testEventType()
+    {
+        Event.EventType eventType = Event.EventType.fromString("PLAYER PRESENT");
+
+        assertNotNull(eventType);
+        assertEquals(eventType, Event.EventType.OWN_PLAYER_PRESENT);
+    }
 }

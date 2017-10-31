@@ -151,9 +151,9 @@ public class DatabaseAdapter
         return mSqlDatabase.delete(Player.TABLE, whereClause, null);
     }
 
-    public void deletePlayerList()
+    public Integer deletePlayerList()
     {
-        mSqlDatabase.delete(Player.TABLE, null, null);
+        return mSqlDatabase.delete(Player.TABLE, null, null);
     }
 
     //==============================================================================================
@@ -240,9 +240,9 @@ public class DatabaseAdapter
         return mSqlDatabase.delete(Match.TABLE, whereClause, null);
     }
 
-    public void deleteMatchList()
+    public Integer deleteMatchList()
     {
-        mSqlDatabase.delete(Match.TABLE, null, null);
+       return mSqlDatabase.delete(Match.TABLE, null, null);
     }
 
     //==============================================================================================
@@ -336,9 +336,16 @@ public class DatabaseAdapter
         return mSqlDatabase.delete(Event.TABLE, whereClause, null);
     }
 
-    public void deleteEventList()
+    public Integer deleteEventList(Integer matchId)
     {
-        mSqlDatabase.delete(Event.TABLE, null, null);
+        String whereClause = Event.COLUMN_MATCH_ID + " = " + matchId;
+        return mSqlDatabase.delete(Event.TABLE, null, null);
+    }
+
+
+    public Integer deleteEventList()
+    {
+        return mSqlDatabase.delete(Event.TABLE, null, null);
     }
 
     //==============================================================================================

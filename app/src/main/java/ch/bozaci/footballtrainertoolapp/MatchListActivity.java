@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
@@ -101,9 +102,6 @@ public class MatchListActivity extends Activity
         }
     }
 
-    /**
-     * Start SelectPlayerListActivity
-     */
     class MatchLongClickListener implements AdapterView.OnItemLongClickListener
     {
         @Override
@@ -305,6 +303,8 @@ public class MatchListActivity extends Activity
 
     private void deleteMatch(Match match)
     {
+        Integer deletedCount = databaseAdapter.deleteEventList(match.getId());
+        Log.i(LOG_TAG, "events deleted: " + deletedCount);
         databaseAdapter.deleteMatch(match.getId());
         Log.i(LOG_TAG, "match deleted: " + match.toString());
         loadMatchList();
