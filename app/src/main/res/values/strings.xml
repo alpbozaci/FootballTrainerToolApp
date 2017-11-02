@@ -17,12 +17,15 @@
 
     <string name="title_delete_event">Event löschen</string>
 
+    <string name="title_finish_match">Match beenden</string>
+
     <string name="firstname">Vorname</string>
     <string name="lastname">Nachname</string>
     <string name="playernumber">Spieler Nummer</string>
 
     <string name="message_delete_player">Wollen Sie diesen Spieler löschen</string>
     <string name="message_delete_event">Wollen Sie diesen Event löschen</string>
+    <string name="message_save_match">Wollen Sie diesen Match speichern</string>
 
     <string name="hometeam">Heim Mannschaft</string>
     <string name="guestteam">Gast Mannschaft</string>

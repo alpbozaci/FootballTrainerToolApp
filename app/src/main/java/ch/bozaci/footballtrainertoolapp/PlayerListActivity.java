@@ -28,13 +28,13 @@ import ch.bozaci.footballtrainertoolapp.util.PictureUtil;
 
 public class PlayerListActivity extends Activity
 {
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = PlayerListActivity.class.getSimpleName();
 
     private int REQUEST_IMAGE_CAPTURE = 1;
 
     private FloatingActionButton mAddButton;
     private List<Player> mPlayerList;
-    private ArrayAdapter<Player> mPlayerListAdapter;
+    private PlayerListAdapter mPlayerListAdapter;
     private ListView mPlayerListView;
     private ImageView mImageViewPicture;
     private DatabaseAdapter databaseAdapter;
@@ -57,7 +57,7 @@ public class PlayerListActivity extends Activity
         mAddButton.setOnClickListener(new AddPlayerButtonClickListener());
 
         mPlayerList = new ArrayList<>();
-        mPlayerListAdapter = new ArrayAdapter<>(this, R.layout.item_player, R.id.textview_player, mPlayerList);
+        mPlayerListAdapter = new PlayerListAdapter(this, mPlayerList);
 
         mPlayerListView = (ListView) findViewById(R.id.listview_player);
         mPlayerListView.setAdapter(mPlayerListAdapter);
@@ -71,6 +71,7 @@ public class PlayerListActivity extends Activity
     private void loadPlayerList()
     {
         mPlayerList.clear();
+
         List<Player> dbPlayerList = databaseAdapter.getPlayerList();
 
         for (Player player : dbPlayerList)

@@ -20,7 +20,7 @@ import ch.bozaci.footballtrainertoolapp.dao.Match;
 
 public class StartMatchActivity extends Activity
 {
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = StartMatchActivity.class.getSimpleName();
 
     private List<Match> mMatchList;
     private ArrayAdapter<Match> mMatchListAdapter;

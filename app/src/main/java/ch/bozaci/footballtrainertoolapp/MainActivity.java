@@ -11,6 +11,7 @@ import android.widget.Button;
 public class MainActivity extends Activity
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     private Button mMatchListButton;
     private Button mPlayerListButton;
     private Button mStartMatchButton;
@@ -23,7 +24,7 @@ public class MainActivity extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        mMatchListButton = (Button) findViewById(R.id.button_match_list);
+        mMatchListButton  = (Button) findViewById(R.id.button_match_list);
         mPlayerListButton = (Button) findViewById(R.id.button_player_list);
         mStartMatchButton = (Button) findViewById(R.id.button_start_match);
 

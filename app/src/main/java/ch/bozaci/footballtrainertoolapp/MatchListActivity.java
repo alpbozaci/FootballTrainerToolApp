@@ -31,7 +31,7 @@ import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
 public class MatchListActivity extends Activity
 {
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MatchListActivity.class.getSimpleName();
 
     private FloatingActionButton mAddButton;
     private List<Match> mMatchList;
@@ -46,10 +46,12 @@ public class MatchListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_list);
 
+        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
+
         mAddButton = (FloatingActionButton) findViewById(R.id.button_add_match);
         mAddButton.setOnClickListener(new AddMatchClickListener());
 
-        mMatchList = new ArrayList<>();
+        loadMatchList();
         mMatchListAdapter = new ArrayAdapter<>(this, R.layout.item_match, R.id.textview_match, mMatchList);
 
         mMatchListView = (ListView) findViewById(R.id.listview_match);
@@ -57,23 +59,20 @@ public class MatchListActivity extends Activity
 
         mMatchListView.setOnItemClickListener(new MatchClickListener());
         mMatchListView.setOnItemLongClickListener(new MatchLongClickListener());
-
-        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
-
-        loadMatchList();
     }
 
     private void loadMatchList()
     {
         try
         {
-            mMatchList.clear();
+            mMatchList = new ArrayList<>();
+
             List<Match> dbMatchList = databaseAdapter.getMatchList();
             for (Match match : dbMatchList)
             {
                 mMatchList.add(match);
             }
-            mMatchListAdapter.notifyDataSetChanged();
+            //mMatchListAdapter.notifyDataSetChanged();
         }
         catch (ParseException ex)
         {

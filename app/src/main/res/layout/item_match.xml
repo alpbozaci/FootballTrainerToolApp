@@ -9,12 +9,11 @@
         android:id="@+id/textview_match"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradient_background_light2dark_gray"
         android:fontFamily="monospace"
         android:gravity="center"
-        android:textColor="#000"
+        android:textColor="#000000"
         android:textSize="14sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
         android:padding="10dp"
         />
 

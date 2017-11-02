@@ -23,7 +23,7 @@ import ch.bozaci.footballtrainertoolapp.dao.Player;
 
 public class MatchActivity extends Activity
 {
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MatchActivity.class.getSimpleName();
 
     private List<Player> mPlayerList;
     private List<Player> mSelectedPlayerList;
@@ -73,7 +73,6 @@ public class MatchActivity extends Activity
         if (bundle != null)
         {
             mMatch = (Match)bundle.getSerializable("match");
-            System.out.println(mMatch.toString());
 
             TextView homeTeam  = (TextView) findViewById(R.id.textview_hometeam);
             TextView guestTeam = (TextView) findViewById(R.id.textview_guestteam);
@@ -97,7 +96,6 @@ public class MatchActivity extends Activity
         //TAB 1
         mTimerThread = new Thread(timer);
 
-        mPlayerList = new ArrayList<>();
         mSelectedPlayerList = new ArrayList<>();
         mNotSelectedPlayerList = new ArrayList<>();
         mViewHolderList = new ArrayList<>();
@@ -139,6 +137,13 @@ public class MatchActivity extends Activity
 
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.i(LOG_TAG, "onStart()");
+    }
+
+    @Override
     protected void onResume()
     {
         super.onResume();
@@ -150,6 +155,13 @@ public class MatchActivity extends Activity
     {
         super.onPause();
         Log.i(LOG_TAG, "onPause()");
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        Log.i(LOG_TAG, "onStop()");
     }
 
     @Override
@@ -190,7 +202,8 @@ public class MatchActivity extends Activity
 
     private void loadDBPlayerList()
     {
-        mPlayerList.clear();
+        mPlayerList = new ArrayList<>();
+
         List<Player> dbPlayerList = databaseAdapter.getPlayerList();
 
         for (Player player : dbPlayerList)
@@ -222,8 +235,8 @@ public class MatchActivity extends Activity
     {
         Log.i(LOG_TAG, "DELETE EVENT: " + event.getType());
 
-        deleteEvent(event);
-        // call updateGUI() in deleteEvent method after confirm dialog is closed;
+        showDeleteEventDialog(event);
+        // call updateGUI() in showDeleteEventDialog method after confirm dialog is closed;
     }
 
     private Event createEvent(Player player, Event.EventType eventType)
@@ -250,10 +263,13 @@ public class MatchActivity extends Activity
         return event;
     }
 
-    private void addEventToDB(Event event)
+    private void saveMatchEvents()
     {
-        Log.i(LOG_TAG, "event added to db");
-        databaseAdapter.addEvent(event);
+        for (Event event : mEventList)
+        {
+            Log.i(LOG_TAG, "event added to db : " + event.getType());
+            databaseAdapter.addEvent(event);
+        }
     }
 
     private void addEventToList(Event event)
@@ -263,7 +279,14 @@ public class MatchActivity extends Activity
         mEventListAdapter.notifyDataSetChanged();
     }
 
-    private void deleteEvent(final Event event)
+    private void deleteEventFromList(Event event)
+    {
+        Log.i(LOG_TAG, "event deleted from list" );
+        mEventList.remove(event);
+        mEventListAdapter.notifyDataSetChanged();
+    }
+
+    private void showDeleteEventDialog(final Event event)
     {
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.title_delete_event));
@@ -273,12 +296,36 @@ public class MatchActivity extends Activity
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                Log.i(LOG_TAG, "event deleted from list" );
-                mEventList.remove(event);
-                mEventListAdapter.notifyDataSetChanged();
+                deleteEventFromList(event);
                 alertDialog.dismiss();
-
                 updateGUI();
+            }
+        });
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    private void showFinishMatchDialog()
+    {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.title_finish_match));
+        alertDialog.setMessage(getString(R.string.message_save_match));
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                saveMatchEvents();
+                alertDialog.dismiss();
             }
         });
 
@@ -364,7 +411,8 @@ public class MatchActivity extends Activity
         //------------------------------------------------------------------------------------------
         for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
         {
-            viewHolder.textView.setEnabled(true);
+            viewHolder.textViewPlayerName.setEnabled(true);
+            viewHolder.textViewPlayerNo.setEnabled(true);
             viewHolder.checkBox.setEnabled(false);
         }
         //------------------------------------------------------------------------------------------
@@ -405,7 +453,8 @@ public class MatchActivity extends Activity
     {
         for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
         {
-            viewHolder.textView.setEnabled(false);
+            viewHolder.textViewPlayerName.setEnabled(false);
+            viewHolder.textViewPlayerNo.setEnabled(false);
         }
 
         mGoalGuestTeamButton.setEnabled(false);
@@ -420,7 +469,8 @@ public class MatchActivity extends Activity
     {
         for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
         {
-            viewHolder.textView.setEnabled(false);
+            viewHolder.textViewPlayerName.setEnabled(false);
+            viewHolder.textViewPlayerNo.setEnabled(false);
         }
 
         mGoalGuestTeamButton.setEnabled(false);
@@ -483,6 +533,7 @@ public class MatchActivity extends Activity
         {
             changeGuiElementsOnFinishMatch();
             handleAddNoPlayerEvent(Event.EventType.MATCH_FINISH);
+            showFinishMatchDialog();
         }
     }
 

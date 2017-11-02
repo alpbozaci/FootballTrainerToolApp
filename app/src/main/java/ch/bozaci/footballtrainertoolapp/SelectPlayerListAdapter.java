@@ -46,8 +46,9 @@ public class SelectPlayerListAdapter extends BaseAdapter
     public class ViewHolder
     {
         CheckBox checkBox;
-        TextView textView;
-        ImageView imageView;
+        TextView textViewPlayerName;
+        TextView textViewPlayerNo;
+        ImageView imageViewPlayerPicture;
     }
 
     @Override
@@ -78,11 +79,12 @@ public class SelectPlayerListAdapter extends BaseAdapter
         {
             convertView = mLayoutInflater.inflate(R.layout.item_select_player, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.checkBox  = (CheckBox)  convertView.findViewById(R.id.checkbox_select_player);
-            viewHolder.textView  = (TextView)  convertView.findViewById(R.id.textview_select_player);
-            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageview_match_picture);
+            viewHolder.checkBox  = (CheckBox) convertView.findViewById(R.id.checkbox_select_player);
+            viewHolder.textViewPlayerName  = (TextView) convertView.findViewById(R.id.textview_select_player_name);
+            viewHolder.textViewPlayerName  = (TextView) convertView.findViewById(R.id.textview_select_player_no);
+            viewHolder.imageViewPlayerPicture = (ImageView) convertView.findViewById(R.id.imageview_select_player_picture);
 
-            viewHolder.textView.setEnabled(false);
+            viewHolder.textViewPlayerName.setEnabled(false);
             viewHolder.checkBox.setChecked(false);
 
             convertView.setTag(viewHolder);
@@ -95,8 +97,8 @@ public class SelectPlayerListAdapter extends BaseAdapter
         }
 
 
-        viewHolder.textView.setText(player.toString());
-        viewHolder.imageView.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
+        viewHolder.textViewPlayerName.setText(player.toString());
+        viewHolder.imageViewPlayerPicture.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
 
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener()
         {
@@ -114,7 +116,7 @@ public class SelectPlayerListAdapter extends BaseAdapter
             }
         });
 
-        viewHolder.textView.setOnClickListener(new View.OnClickListener()
+        viewHolder.textViewPlayerName.setOnClickListener(new View.OnClickListener()
         {
            @Override
            public void onClick(View v)
