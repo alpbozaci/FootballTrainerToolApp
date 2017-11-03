@@ -38,9 +38,20 @@ public class SelectPlayerListAdapter extends BaseAdapter
         this.mPlayerList = playerList;
         this.mPlayerClickListener = playerClickListener;
         this.mActivateDeactivatePlayerClickListener = activateDeactivatePlayerClickListener;
-        map = new HashMap<>();
 
         mLayoutInflater = LayoutInflater.from(context);
+
+        initViewHolder();
+    }
+
+    private void initViewHolder()
+    {
+        map = new HashMap<>();
+
+        for (Player player : mPlayerList)
+        {
+            map.put(player, new ViewHolder());
+        }
     }
 
     public class ViewHolder
@@ -77,27 +88,26 @@ public class SelectPlayerListAdapter extends BaseAdapter
 
         if (convertView == null)
         {
+            viewHolder = map.get(player);
+
             convertView = mLayoutInflater.inflate(R.layout.item_select_player, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.checkBox  = (CheckBox) convertView.findViewById(R.id.checkbox_select_player);
-            viewHolder.textViewPlayerName  = (TextView) convertView.findViewById(R.id.textview_select_player_name);
-            viewHolder.textViewPlayerName  = (TextView) convertView.findViewById(R.id.textview_select_player_no);
+            viewHolder.checkBox               = (CheckBox) convertView.findViewById(R.id.checkbox_select_player);
+            viewHolder.textViewPlayerName     = (TextView) convertView.findViewById(R.id.textview_select_player_name);
+            viewHolder.textViewPlayerNo       = (TextView) convertView.findViewById(R.id.textview_select_player_no);
             viewHolder.imageViewPlayerPicture = (ImageView) convertView.findViewById(R.id.imageview_select_player_picture);
 
             viewHolder.textViewPlayerName.setEnabled(false);
             viewHolder.checkBox.setChecked(false);
 
             convertView.setTag(viewHolder);
-
-            map.put(player, viewHolder);
         }
         else
         {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
-        viewHolder.textViewPlayerName.setText(player.toString());
+        viewHolder.textViewPlayerName.setText(player.getFirstName() + " " + player.getLastName());
+        viewHolder.textViewPlayerNo.setText("" + player.getPlayerNumber());
         viewHolder.imageViewPlayerPicture.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
 
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener()

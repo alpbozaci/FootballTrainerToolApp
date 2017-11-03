@@ -3,16 +3,21 @@ package ch.bozaci.footballtrainertoolapp;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +40,7 @@ public class MatchActivity extends Activity
     private EventListAdapter mEventListAdapter;
 
     private ListView mSelectPlayerListView;
+    private TableLayout mTableLayout;
     private ListView mEventListView;
 
     private TextView mScoreHomeTeamTextView;
@@ -102,8 +108,25 @@ public class MatchActivity extends Activity
 
         loadDBPlayerList();
         mSelectPlayerListAdapter = new SelectPlayerListAdapter(this, mPlayerList, new MyPlayerClickListener(this), new MyActivateDeactivatePlayerClickListener());
-        mSelectPlayerListView = (ListView) findViewById(R.id.listview_select_player);
-        mSelectPlayerListView.setAdapter(mSelectPlayerListAdapter);
+        //mSelectPlayerListView = (ListView) findViewById(R.id.listview_select_player);
+
+        mTableLayout = (TableLayout) findViewById(R.id.listview_select_player);
+        for (int i = 0; i < 2; i++)
+        {
+            TableRow row = new TableRow(this);
+
+            for (int y = 0; y < 1; y++)
+            {
+                //row.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+                TextView tv = new TextView(this);
+                Drawable drawable = getDrawable(R.drawable.trikot);
+                tv.setBackground(drawable);
+                row.addView(tv);
+            }
+            mTableLayout.addView(row);
+        }
+
+        //mSelectPlayerListView.setAdapter(mSelectPlayerListAdapter);
 
         mScoreHomeTeamTextView  = (TextView) findViewById(R.id.textview_score_hometeam);
         mScoreGuestTeamTextView = (TextView) findViewById(R.id.textview_score_guestteam);
@@ -405,7 +428,7 @@ public class MatchActivity extends Activity
     {
         if (mViewHolderList.isEmpty())
         {
-            Toast.makeText(this, "No player selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getText(R.string.player_list_empty), Toast.LENGTH_LONG).show();
             return;
         }
         //------------------------------------------------------------------------------------------

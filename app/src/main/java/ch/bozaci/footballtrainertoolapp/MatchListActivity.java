@@ -44,6 +44,8 @@ public class MatchListActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.i(LOG_TAG, "onCreate()");
+
         setContentView(R.layout.activity_match_list);
 
         databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
@@ -51,7 +53,7 @@ public class MatchListActivity extends Activity
         mAddButton = (FloatingActionButton) findViewById(R.id.button_add_match);
         mAddButton.setOnClickListener(new AddMatchClickListener());
 
-        loadMatchList();
+        mMatchList = new ArrayList<>();
         mMatchListAdapter = new ArrayAdapter<>(this, R.layout.item_match, R.id.textview_match, mMatchList);
 
         mMatchListView = (ListView) findViewById(R.id.listview_match);
@@ -59,20 +61,57 @@ public class MatchListActivity extends Activity
 
         mMatchListView.setOnItemClickListener(new MatchClickListener());
         mMatchListView.setOnItemLongClickListener(new MatchLongClickListener());
+
+        loadMatchList();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.i(LOG_TAG, "onStart()");
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.i(LOG_TAG, "onResume()");
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        Log.i(LOG_TAG, "onPause()");
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        Log.i(LOG_TAG, "onStop()");
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.i(LOG_TAG, "onDestroy()");
     }
 
     private void loadMatchList()
     {
+        mMatchList.clear();
+
         try
         {
-            mMatchList = new ArrayList<>();
-
             List<Match> dbMatchList = databaseAdapter.getMatchList();
             for (Match match : dbMatchList)
             {
                 mMatchList.add(match);
             }
-            //mMatchListAdapter.notifyDataSetChanged();
+            mMatchListAdapter.notifyDataSetChanged();
         }
         catch (ParseException ex)
         {

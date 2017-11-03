@@ -19,10 +19,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
 import ch.bozaci.footballtrainertoolapp.util.PictureUtil;
 
@@ -49,6 +52,8 @@ public class PlayerListActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.i(LOG_TAG, "onCreate()");
+
         setContentView(R.layout.activity_player_list);
 
         databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
@@ -66,6 +71,41 @@ public class PlayerListActivity extends Activity
         mPlayerListView.setOnItemLongClickListener(new PlayerLongClickListener());
 
         loadPlayerList();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.i(LOG_TAG, "onStart()");
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.i(LOG_TAG, "onResume()");
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        Log.i(LOG_TAG, "onPause()");
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        Log.i(LOG_TAG, "onStop()");
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.i(LOG_TAG, "onDestroy()");
     }
 
     private void loadPlayerList()
@@ -274,9 +314,26 @@ public class PlayerListActivity extends Activity
 
     private void deletePlayer(Player player)
     {
-        databaseAdapter.deletePlayer(player.getId());
-        Log.i(LOG_TAG, "player deleted: " + player.toString());
-        loadPlayerList();
+        // check if player has an registered event
+
+        try
+        {
+            List<Event> eventList = databaseAdapter.getEventList(player);
+            if (eventList.isEmpty())
+            {
+                databaseAdapter.deletePlayer(player.getId());
+                Log.i(LOG_TAG, "player deleted: " + player.toString());
+                loadPlayerList();
+            }
+            else
+            {
+                Toast.makeText(this,getResources().getText(R.string.delete_player_not_allowed), Toast.LENGTH_LONG).show();
+            }
+        }
+        catch (ParseException ex)
+        {
+            Log.e(LOG_TAG, "error reading events: " + ex.getMessage());
+        }
     }
 
 }

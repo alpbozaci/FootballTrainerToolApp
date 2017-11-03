@@ -304,11 +304,21 @@ public class DatabaseAdapter
         return eventList;
     }
 
-    public List<Event> getEventList(Integer matchId) throws ParseException
+    public List<Event> getEventList(Match match) throws ParseException
+    {
+        String whereClause = Event.COLUMN_MATCH_ID + " = " + match.getId();
+        return getEventList(whereClause);
+    }
+
+    public List<Event> getEventList(Player player) throws ParseException
+    {
+        String whereClause = Event.COLUMN_PLAYER_ID + " = " + player.getId();
+        return getEventList(whereClause);
+    }
+
+    private List<Event> getEventList(String whereClause) throws ParseException
     {
         List<Event> eventList = new ArrayList<>();
-
-        String whereClause = Event.COLUMN_MATCH_ID + " = " + matchId;
         Cursor cursor = mSqlDatabase.query(Event.TABLE, null, whereClause, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst())
