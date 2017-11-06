@@ -1,5 +1,7 @@
 package ch.bozaci.footballtrainertoolapp.dao;
 
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**

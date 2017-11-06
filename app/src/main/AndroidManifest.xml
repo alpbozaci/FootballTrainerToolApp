@@ -3,6 +3,7 @@
           package="ch.bozaci.footballtrainertoolapp">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+
     <uses-feature android:name="android.hardware.CAMERA"/>
 
     <application
@@ -25,8 +26,9 @@
         </activity>
         <activity android:name=".PlayerListActivity">
         </activity>
-
         <activity android:name=".StartMatchActivity">
+        </activity>
+        <activity android:name=".SelectPlayerActivity">
         </activity>
     </application>
 

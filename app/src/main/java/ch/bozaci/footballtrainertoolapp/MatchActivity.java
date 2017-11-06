@@ -30,11 +30,8 @@ public class MatchActivity extends Activity
 {
     private static final String LOG_TAG = MatchActivity.class.getSimpleName();
 
-    private List<Player> mPlayerList;
     private List<Player> mSelectedPlayerList;
-    private List<Player> mNotSelectedPlayerList;
     private List<Event> mEventList;
-    private List<SelectPlayerListAdapter.ViewHolder> mViewHolderList;
 
     private SelectPlayerListAdapter mSelectPlayerListAdapter;
     private EventListAdapter mEventListAdapter;
@@ -78,12 +75,15 @@ public class MatchActivity extends Activity
 
         if (bundle != null)
         {
-            mMatch = (Match)bundle.getSerializable("match");
+            mMatch = (Match)bundle.getSerializable(SelectPlayerActivity.CONST_INTENT_VALUE_MATCH);
 
             TextView homeTeam  = (TextView) findViewById(R.id.textview_hometeam);
             TextView guestTeam = (TextView) findViewById(R.id.textview_guestteam);
             homeTeam.setText(mMatch.getHomeTeam());
             guestTeam.setText(mMatch.getGuestTeam());
+
+            List<Integer> playerIdList = (ArrayList<Integer>)bundle.getSerializable(SelectPlayerActivity.CONST_INTENT_VALUE_PLAYER_ID_LIST);
+            loadDBPlayerList(playerIdList);
         }
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabhost);
@@ -102,27 +102,20 @@ public class MatchActivity extends Activity
         //TAB 1
         mTimerThread = new Thread(timer);
 
-        mSelectedPlayerList = new ArrayList<>();
-        mNotSelectedPlayerList = new ArrayList<>();
-        mViewHolderList = new ArrayList<>();
-
-        loadDBPlayerList();
-        mSelectPlayerListAdapter = new SelectPlayerListAdapter(this, mPlayerList, new MyPlayerClickListener(this), new MyActivateDeactivatePlayerClickListener());
+        mSelectPlayerListAdapter = new SelectPlayerListAdapter(this, mSelectedPlayerList, new MyPlayerClickListener(this));
         //mSelectPlayerListView = (ListView) findViewById(R.id.listview_select_player);
 
-        mTableLayout = (TableLayout) findViewById(R.id.listview_select_player);
-        for (int i = 0; i < 2; i++)
+        mTableLayout = (TableLayout) findViewById(R.id.listview_selected_player);
+        for (Player player : mSelectedPlayerList)
         {
             TableRow row = new TableRow(this);
 
-            for (int y = 0; y < 1; y++)
-            {
-                //row.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-                TextView tv = new TextView(this);
-                Drawable drawable = getDrawable(R.drawable.trikot);
-                tv.setBackground(drawable);
-                row.addView(tv);
-            }
+            //row.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+            TextView tv = new TextView(this);
+            tv.setText(player.getFirstName());
+            //Drawable drawable = getDrawable(R.drawable.trikot);
+            //tv.setBackground(drawable);
+            row.addView(tv);
             mTableLayout.addView(row);
         }
 
@@ -158,6 +151,16 @@ public class MatchActivity extends Activity
         mEventListView.setAdapter(mEventListAdapter);
     }
 
+    private void loadDBPlayerList(List<Integer> playerIdList)
+    {
+        mSelectedPlayerList = new ArrayList<>();
+
+        for (Integer playerId : playerIdList)
+        {
+            Player player = databaseAdapter.getPlayer(playerId);
+            mSelectedPlayerList.add(player);
+        }
+    }
 
     @Override
     protected void onStart()
@@ -222,18 +225,6 @@ public class MatchActivity extends Activity
             }
         }
     };
-
-    private void loadDBPlayerList()
-    {
-        mPlayerList = new ArrayList<>();
-
-        List<Player> dbPlayerList = databaseAdapter.getPlayerList();
-
-        for (Player player : dbPlayerList)
-        {
-            mPlayerList.add(player);
-        }
-    }
 
     private void handleAddNoPlayerEvent(Event.EventType eventType)
     {
@@ -426,43 +417,12 @@ public class MatchActivity extends Activity
 
     private void changeGuiElementsOnStartMatch()
     {
-        if (mViewHolderList.isEmpty())
-        {
-            Toast.makeText(this, getResources().getText(R.string.player_list_empty), Toast.LENGTH_LONG).show();
-            return;
-        }
-        //------------------------------------------------------------------------------------------
-        for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
-        {
-            viewHolder.textViewPlayerName.setEnabled(true);
-            viewHolder.textViewPlayerNo.setEnabled(true);
-            viewHolder.checkBox.setEnabled(false);
-        }
-        //------------------------------------------------------------------------------------------
-        // deactivate all players from gui list which are not selected
-        for (Player player : mPlayerList)
-        {
-            boolean found = false;
-            for (Player selectedPlayer : mSelectedPlayerList)
-            {
-                if (player.getId() == selectedPlayer.getId())
-                {
-                    found = true;
-                    break;
-                }
-            }
-            if (! found)
-            {
-                mNotSelectedPlayerList.add(player);
-            }
-        }
-
-        for (Player player : mNotSelectedPlayerList)
+        for (Player player : mSelectedPlayerList)
         {
             SelectPlayerListAdapter.ViewHolder viewHolder = mSelectPlayerListAdapter.getViewHolder(player);
-            viewHolder.checkBox.setEnabled(false);
+            viewHolder.textViewPlayerName.setEnabled(true);
+            viewHolder.textViewPlayerNo.setEnabled(true);
         }
-
         //------------------------------------------------------------------------------------------
         mGoalGuestTeamButton.setEnabled(true);
         mStartMatchButton.setEnabled(false);
@@ -474,12 +434,13 @@ public class MatchActivity extends Activity
 
     private void changeGuiElementsOnPauseMatch()
     {
-        for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
+        for (Player player : mSelectedPlayerList)
         {
+            SelectPlayerListAdapter.ViewHolder viewHolder = mSelectPlayerListAdapter.getViewHolder(player);
             viewHolder.textViewPlayerName.setEnabled(false);
             viewHolder.textViewPlayerNo.setEnabled(false);
         }
-
+        //------------------------------------------------------------------------------------------
         mGoalGuestTeamButton.setEnabled(false);
         mStartMatchButton.setEnabled(true);
         mPauseMatchButton.setEnabled(false);
@@ -490,8 +451,9 @@ public class MatchActivity extends Activity
 
     private void changeGuiElementsOnFinishMatch()
     {
-        for (SelectPlayerListAdapter.ViewHolder viewHolder : mViewHolderList)
+        for (Player player : mSelectedPlayerList)
         {
+            SelectPlayerListAdapter.ViewHolder viewHolder = mSelectPlayerListAdapter.getViewHolder(player);
             viewHolder.textViewPlayerName.setEnabled(false);
             viewHolder.textViewPlayerNo.setEnabled(false);
         }
@@ -511,12 +473,6 @@ public class MatchActivity extends Activity
     private interface PlayerClickListener
     {
         void onPlayerClicked(Player player);
-    }
-
-    private interface ActivateDeactivatePlayerClickListener
-    {
-        void onActivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder);
-        void onDeactivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder);
     }
 
     private interface EventClickListener
@@ -557,25 +513,6 @@ public class MatchActivity extends Activity
             changeGuiElementsOnFinishMatch();
             handleAddNoPlayerEvent(Event.EventType.MATCH_FINISH);
             showFinishMatchDialog();
-        }
-    }
-
-    class MyActivateDeactivatePlayerClickListener implements ActivateDeactivatePlayerClickListener
-    {
-        @Override
-        public void onActivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
-        {
-            handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_PRESENT);
-            mViewHolderList.add(viewHolder);
-            mSelectedPlayerList.add(player);
-        }
-
-        @Override
-        public void onDeactivatePlayerClicked(Player player, SelectPlayerListAdapter.ViewHolder viewHolder)
-        {
-            handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_ABSENT);
-            mViewHolderList.remove(viewHolder);
-            mSelectedPlayerList.remove(player);
         }
     }
 

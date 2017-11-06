@@ -110,7 +110,7 @@ public class StartMatchActivity extends Activity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             Match match = mMatchList.get(position);
-            Intent intent = new Intent(StartMatchActivity.this, MatchActivity.class);
+            Intent intent = new Intent(StartMatchActivity.this, SelectPlayerActivity.class);
             intent.putExtra("match", match);
             startActivity(intent);
         }
