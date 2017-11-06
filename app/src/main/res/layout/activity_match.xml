@@ -40,7 +40,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TableLayout
+                    <ListView
                         android:id="@+id/listview_selected_player"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

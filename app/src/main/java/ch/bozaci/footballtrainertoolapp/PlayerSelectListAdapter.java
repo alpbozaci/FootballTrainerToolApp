@@ -9,9 +9,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.bozaci.footballtrainertoolapp.dao.Player;
 import ch.bozaci.footballtrainertoolapp.util.PictureUtil;
@@ -20,29 +18,26 @@ import ch.bozaci.footballtrainertoolapp.util.PictureUtil;
  * Created by Alp.Bozaci on 29.08.2017.
  */
 
-public class SelectPlayerListAdapter extends BaseAdapter
+public class PlayerSelectListAdapter extends BaseAdapter
 {
     private List<Player> mPlayerList;
     private LayoutInflater mLayoutInflater;
-    private MatchActivity.MyPlayerClickListener mPlayerClickListener;
+    private PlayerSelectListActivity.MyActivateDeactivatePlayerClickListener mActivateDeactivatePlayerClickListener;
 
-    private Map<Player, ViewHolder> map;
-
-    public SelectPlayerListAdapter(
+    public PlayerSelectListAdapter(
             Context context,
             List<Player> playerList,
-            MatchActivity.MyPlayerClickListener playerClickListener)
+            PlayerSelectListActivity.MyActivateDeactivatePlayerClickListener activateDeactivatePlayerClickListener)
     {
         this.mPlayerList = playerList;
-        this.mPlayerClickListener = playerClickListener;
+        this.mActivateDeactivatePlayerClickListener = activateDeactivatePlayerClickListener;
 
         mLayoutInflater = LayoutInflater.from(context);
-
-        map = new HashMap<>();
     }
 
     public class ViewHolder
     {
+        CheckBox checkBox;
         TextView textViewPlayerName;
         TextView textViewPlayerNo;
         ImageView imageViewPlayerPicture;
@@ -76,12 +71,14 @@ public class SelectPlayerListAdapter extends BaseAdapter
         {
             viewHolder = new ViewHolder();
 
-            convertView = mLayoutInflater.inflate(R.layout.item_select_player, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.item_player_select, parent, false);
+            viewHolder.checkBox               = (CheckBox) convertView.findViewById(R.id.checkbox_select_player);
             viewHolder.textViewPlayerName     = (TextView) convertView.findViewById(R.id.textview_select_player_name);
             viewHolder.textViewPlayerNo       = (TextView) convertView.findViewById(R.id.textview_select_player_no);
             viewHolder.imageViewPlayerPicture = (ImageView) convertView.findViewById(R.id.imageview_select_player_picture);
 
             viewHolder.textViewPlayerName.setEnabled(false);
+            viewHolder.checkBox.setChecked(false);
 
             convertView.setTag(viewHolder);
         }
@@ -90,26 +87,28 @@ public class SelectPlayerListAdapter extends BaseAdapter
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        map.put(player, viewHolder);
-
         viewHolder.textViewPlayerName.setText(player.getFirstName() + " " + player.getLastName());
         viewHolder.textViewPlayerNo.setText("" + player.getPlayerNumber());
         viewHolder.imageViewPlayerPicture.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
 
-        viewHolder.textViewPlayerName.setOnClickListener(new View.OnClickListener()
+        viewHolder.checkBox.setOnClickListener(new View.OnClickListener()
         {
-           @Override
-           public void onClick(View v)
-           {
-               mPlayerClickListener.onPlayerClicked(player);
-           }
+            @Override
+            public void onClick(View v)
+            {
+                if (viewHolder.checkBox.isChecked())
+                {
+                    viewHolder.textViewPlayerName.setEnabled(true);
+                    mActivateDeactivatePlayerClickListener.onActivatePlayerClicked(player);
+                }
+                else
+                {
+                    viewHolder.textViewPlayerName.setEnabled(false);
+                    mActivateDeactivatePlayerClickListener.onDeactivatePlayerClicked(player);
+                }
+            }
         });
 
         return convertView;
-    }
-
-    public ViewHolder getViewHolder(Player player)
-    {
-        return map.get(player);
     }
 }

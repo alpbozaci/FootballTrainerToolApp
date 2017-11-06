@@ -2,8 +2,6 @@ package ch.bozaci.footballtrainertoolapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -110,7 +108,7 @@ public class StartMatchActivity extends Activity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             Match match = mMatchList.get(position);
-            Intent intent = new Intent(StartMatchActivity.this, SelectPlayerActivity.class);
+            Intent intent = new Intent(StartMatchActivity.this, PlayerSelectListActivity.class);
             intent.putExtra("match", match);
             startActivity(intent);
         }

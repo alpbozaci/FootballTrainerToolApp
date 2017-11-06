@@ -3,21 +3,17 @@ package ch.bozaci.footballtrainertoolapp;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +29,7 @@ public class MatchActivity extends Activity
     private List<Player> mSelectedPlayerList;
     private List<Event> mEventList;
 
-    private SelectPlayerListAdapter mSelectPlayerListAdapter;
+    private PlayerSelectedListAdapter mSelectedPlayerListAdapter;
     private EventListAdapter mEventListAdapter;
 
     private ListView mSelectPlayerListView;
@@ -75,14 +71,14 @@ public class MatchActivity extends Activity
 
         if (bundle != null)
         {
-            mMatch = (Match)bundle.getSerializable(SelectPlayerActivity.CONST_INTENT_VALUE_MATCH);
+            mMatch = (Match)bundle.getSerializable(PlayerSelectListActivity.CONST_INTENT_VALUE_MATCH);
 
             TextView homeTeam  = (TextView) findViewById(R.id.textview_hometeam);
             TextView guestTeam = (TextView) findViewById(R.id.textview_guestteam);
             homeTeam.setText(mMatch.getHomeTeam());
             guestTeam.setText(mMatch.getGuestTeam());
 
-            List<Integer> playerIdList = (ArrayList<Integer>)bundle.getSerializable(SelectPlayerActivity.CONST_INTENT_VALUE_PLAYER_ID_LIST);
+            List<Integer> playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.CONST_INTENT_VALUE_PLAYER_ID_LIST);
             loadDBPlayerList(playerIdList);
         }
 
@@ -102,24 +98,9 @@ public class MatchActivity extends Activity
         //TAB 1
         mTimerThread = new Thread(timer);
 
-        mSelectPlayerListAdapter = new SelectPlayerListAdapter(this, mSelectedPlayerList, new MyPlayerClickListener(this));
-        //mSelectPlayerListView = (ListView) findViewById(R.id.listview_select_player);
-
-        mTableLayout = (TableLayout) findViewById(R.id.listview_selected_player);
-        for (Player player : mSelectedPlayerList)
-        {
-            TableRow row = new TableRow(this);
-
-            //row.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-            TextView tv = new TextView(this);
-            tv.setText(player.getFirstName());
-            //Drawable drawable = getDrawable(R.drawable.trikot);
-            //tv.setBackground(drawable);
-            row.addView(tv);
-            mTableLayout.addView(row);
-        }
-
-        //mSelectPlayerListView.setAdapter(mSelectPlayerListAdapter);
+        mSelectedPlayerListAdapter = new PlayerSelectedListAdapter(this, mSelectedPlayerList, new MyPlayerClickListener(this));
+        mSelectPlayerListView = (ListView) findViewById(R.id.listview_selected_player);
+        mSelectPlayerListView.setAdapter(mSelectedPlayerListAdapter);
 
         mScoreHomeTeamTextView  = (TextView) findViewById(R.id.textview_score_hometeam);
         mScoreGuestTeamTextView = (TextView) findViewById(R.id.textview_score_guestteam);
@@ -419,7 +400,7 @@ public class MatchActivity extends Activity
     {
         for (Player player : mSelectedPlayerList)
         {
-            SelectPlayerListAdapter.ViewHolder viewHolder = mSelectPlayerListAdapter.getViewHolder(player);
+            PlayerSelectedListAdapter.ViewHolder viewHolder = mSelectedPlayerListAdapter.getViewHolder(player);
             viewHolder.textViewPlayerName.setEnabled(true);
             viewHolder.textViewPlayerNo.setEnabled(true);
         }
@@ -436,7 +417,7 @@ public class MatchActivity extends Activity
     {
         for (Player player : mSelectedPlayerList)
         {
-            SelectPlayerListAdapter.ViewHolder viewHolder = mSelectPlayerListAdapter.getViewHolder(player);
+            PlayerSelectedListAdapter.ViewHolder viewHolder = mSelectedPlayerListAdapter.getViewHolder(player);
             viewHolder.textViewPlayerName.setEnabled(false);
             viewHolder.textViewPlayerNo.setEnabled(false);
         }
@@ -453,7 +434,7 @@ public class MatchActivity extends Activity
     {
         for (Player player : mSelectedPlayerList)
         {
-            SelectPlayerListAdapter.ViewHolder viewHolder = mSelectPlayerListAdapter.getViewHolder(player);
+            PlayerSelectedListAdapter.ViewHolder viewHolder = mSelectedPlayerListAdapter.getViewHolder(player);
             viewHolder.textViewPlayerName.setEnabled(false);
             viewHolder.textViewPlayerNo.setEnabled(false);
         }

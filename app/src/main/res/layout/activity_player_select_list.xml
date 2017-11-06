@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ch.bozaci.footballtrainertoolapp.SelectPlayerActivity">
+    tools:context="ch.bozaci.footballtrainertoolapp.PlayerSelectListActivity">
 
     <ListView
         android:id="@+id/listview_select_player"
