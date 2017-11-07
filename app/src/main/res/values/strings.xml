@@ -44,12 +44,14 @@
     <string name="start_match">Match Start</string>
     <string name="pause_match">Match Pause</string>
     <string name="finish_match">Match Ende</string>
+    <string name="goal">GOAL</string>
 
     <string name="own_player_present">Spieler aktiviert</string>
 
     <string name="eventtype_goal">GOAL</string>
     <string name="eventtype_assist">ASSIST</string>
-    <string name="eventtype_fault">FEHLER</string>
+    <string name="eventtype_goodplay">GUTE AKTION</string>
+    <string name="eventtype_badplay">SCHLECHTE AKTION</string>
     <string name="eventtype_player_in">SPIELER REIN</string>
     <string name="eventtype_player_out">SPIELER RAUS</string>
     <string name="eventtype_yellow_card">GELBE KARTE</string>

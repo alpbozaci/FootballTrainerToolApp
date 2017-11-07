@@ -28,12 +28,20 @@
             android:text="@string/eventtype_assist"/>
 
         <Button
-            android:id="@+id/button_eventtype_fault"
+            android:id="@+id/button_eventtype_goodplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableRight="@drawable/error"
-            android:text="@string/eventtype_fault"/>
+            android:drawableRight="@drawable/thumb_up"
+            android:text="@string/eventtype_goodplay"/>
+
+        <Button
+            android:id="@+id/button_eventtype_badplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/thumb_down"
+            android:text="@string/eventtype_badplay"/>
 
         <Button
             android:id="@+id/button_eventtype_player_in"

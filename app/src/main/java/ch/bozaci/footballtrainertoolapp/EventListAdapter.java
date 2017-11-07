@@ -127,8 +127,10 @@ public class EventListAdapter extends BaseAdapter
                 return mContext.getResources().getDrawable(R.drawable.goal, null);
             case OWN_PLAYER_ASSIST:
                 return mContext.getResources().getDrawable(R.drawable.assist, null);
-            case OWN_PLAYER_FAULT:
-                return mContext.getResources().getDrawable(R.drawable.error, null);
+            case OWN_PLAYER_GOODPLAY:
+                return mContext.getResources().getDrawable(R.drawable.thumb_up, null);
+            case OWN_PLAYER_BADPLAY:
+                return mContext.getResources().getDrawable(R.drawable.thumb_down, null);
             case OWN_PLAYER_IN:
                 return mContext.getResources().getDrawable(R.drawable.player_in, null);
             case OWN_PLAYER_OUT:
@@ -164,13 +166,13 @@ public class EventListAdapter extends BaseAdapter
             case OWN_PLAYER_PRESENT:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER AKTIVIERT: " + playerName + System.lineSeparator() + eventDate;
+                return "SPIELER ANWESEND: " + playerName + System.lineSeparator() + eventDate;
             }
 
             case OWN_PLAYER_ABSENT:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER DEAKTIVIERT: " + playerName + System.lineSeparator() + eventDate;
+                return "SPIELER ABWESEND: " + playerName + System.lineSeparator() + eventDate;
             }
 
             case OWN_PLAYER_GOAL:
@@ -183,10 +185,15 @@ public class EventListAdapter extends BaseAdapter
                 String playerName = event.getPlayer().toString();
                 return "SPIELER ASSISTIERT: " + playerName + System.lineSeparator() + eventDate;
             }
-            case OWN_PLAYER_FAULT:
+            case OWN_PLAYER_GOODPLAY:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER FEHLER: " + playerName + System.lineSeparator() + eventDate;
+                return "SPIELER GUTER AKTION: " + playerName + System.lineSeparator() + eventDate;
+            }
+            case OWN_PLAYER_BADPLAY:
+            {
+                String playerName = event.getPlayer().toString();
+                return "SPIELER SCHLECHTE AKTION: " + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_IN:
             {

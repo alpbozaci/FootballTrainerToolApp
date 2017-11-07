@@ -19,10 +19,11 @@ public class PlayerSelectListActivity extends Activity
 {
     private static final String LOG_TAG = MatchActivity.class.getSimpleName();
 
+    private Match mMatch;
     private List<Player> mPlayerList;
     private List<Integer> mSelectedPlayerIdList;
+    private List<Integer> mUnselectedPlayerIdList;
     private PlayerSelectListAdapter mSelectPlayerAdapter;
-    private Match mMatch;
     private DatabaseAdapter databaseAdapter;
 
     public static final String CONST_INTENT_VALUE_MATCH = "match";
@@ -45,6 +46,7 @@ public class PlayerSelectListActivity extends Activity
 
         mPlayerList = new ArrayList<>();
         mSelectedPlayerIdList = new ArrayList<>();
+        mUnselectedPlayerIdList = new ArrayList<>();
 
         loadDBPlayerList();
 
@@ -63,7 +65,39 @@ public class PlayerSelectListActivity extends Activity
         for (Player player : dbPlayerList)
         {
             mPlayerList.add(player);
+            handlePlayerUnselected(player);
         }
+    }
+
+    private void handlePlayerSelected(Player player)
+    {
+        mSelectedPlayerIdList.add(player.getId());
+        mUnselectedPlayerIdList.remove(player.getId());
+        debug();
+    }
+
+    private void handlePlayerUnselected(Player player)
+    {
+        mSelectedPlayerIdList.remove(player.getId());
+        mUnselectedPlayerIdList.add(player.getId());
+        debug();
+    }
+
+    private void debug()
+    {
+        for (Integer i : mSelectedPlayerIdList)
+        {
+            System.out.print(i);
+            System.out.print("-");
+        }
+        System.out.println();
+
+        for (Integer i : mUnselectedPlayerIdList)
+        {
+            System.out.print(i);
+            System.out.print("-");
+        }
+        System.out.println();
     }
 
     private interface ActivateDeactivatePlayerClickListener
@@ -78,14 +112,14 @@ public class PlayerSelectListActivity extends Activity
         public void onActivatePlayerClicked(Player player)
         {
             Log.i(LOG_TAG, "selected: " + player.getFirstName());
-            mSelectedPlayerIdList.add(player.getId());
+            handlePlayerSelected(player);
         }
 
         @Override
         public void onDeactivatePlayerClicked(Player player)
         {
             Log.i(LOG_TAG, "deselected: " + player.getFirstName());
-            mSelectedPlayerIdList.remove(player.getId());
+            handlePlayerUnselected(player);
         }
     }
 

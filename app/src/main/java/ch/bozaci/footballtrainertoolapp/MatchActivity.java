@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -105,8 +104,10 @@ public class MatchActivity extends Activity
         mScoreHomeTeamTextView  = (TextView) findViewById(R.id.textview_score_hometeam);
         mScoreGuestTeamTextView = (TextView) findViewById(R.id.textview_score_guestteam);
 
-        mFullTimerMinTextView = (TextView)findViewById(R.id.textview_match_timer_min);
-        mFullTimerSecTextView = (TextView)findViewById(R.id.textview_match_timer_sec);
+        mFullTimerMinTextView = (TextView)findViewById(R.id.textview_match_fulltimer_min);
+        mFullTimerSecTextView = (TextView)findViewById(R.id.textview_match_fulltimer_sec);
+        mPartTimerMinTextView = (TextView)findViewById(R.id.textview_match_parttimer_min);
+        mPartTimerSecTextView = (TextView)findViewById(R.id.textview_match_parttimer_sec);
 
         mGoalGuestTeamButton = (Button)findViewById(R.id.button_goal_guestteam);
         mGoalGuestTeamButton.setEnabled(false);
@@ -130,17 +131,8 @@ public class MatchActivity extends Activity
         mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener(), new MyDeleteEventLongClickListener());
         mEventListView = (ListView) findViewById(R.id.listview_event);
         mEventListView.setAdapter(mEventListAdapter);
-    }
 
-    private void loadDBPlayerList(List<Integer> playerIdList)
-    {
-        mSelectedPlayerList = new ArrayList<>();
-
-        for (Integer playerId : playerIdList)
-        {
-            Player player = databaseAdapter.getPlayer(playerId);
-            mSelectedPlayerList.add(player);
-        }
+        addPlayerSelectedEvent();
     }
 
     @Override
@@ -206,6 +198,18 @@ public class MatchActivity extends Activity
             }
         }
     };
+
+
+    private void loadDBPlayerList(List<Integer> playerIdList)
+    {
+        mSelectedPlayerList = new ArrayList<>();
+
+        for (Integer playerId : playerIdList)
+        {
+            Player player = databaseAdapter.getPlayer(playerId);
+            mSelectedPlayerList.add(player);
+        }
+    }
 
     private void handleAddNoPlayerEvent(Event.EventType eventType)
     {
@@ -279,6 +283,14 @@ public class MatchActivity extends Activity
         Log.i(LOG_TAG, "event deleted from list" );
         mEventList.remove(event);
         mEventListAdapter.notifyDataSetChanged();
+    }
+
+    private void addPlayerSelectedEvent()
+    {
+        for (Player player : mSelectedPlayerList)
+        {
+            handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_PRESENT);
+        }
     }
 
     private void showDeleteEventDialog(final Event event)
@@ -367,12 +379,22 @@ public class MatchActivity extends Activity
 
     private void resetTimer()
     {
+        resetFullTimer();
+        resetPartTimer();
+    }
+
+    private void resetFullTimer()
+    {
         mElapsedFullTimeInSeconds = 0;
-        mElapsedPartTimeInSeconds = 0;
         mFullTimerMinTextView.setText(String.format("%02d", 0));
         mFullTimerSecTextView.setText(String.format("%02d", 0));
-        //mPartTimerMinTextView.setText(String.format("%02d", 0));
-        //mPartTimerSecTextView.setText(String.format("%02d", 0));
+    }
+
+    private void resetPartTimer()
+    {
+        mElapsedPartTimeInSeconds = 0;
+        mPartTimerMinTextView.setText(String.format("%02d", 0));
+        mPartTimerSecTextView.setText(String.format("%02d", 0));
     }
 
     private void updateTimer()
@@ -392,8 +414,8 @@ public class MatchActivity extends Activity
 
         mFullTimerMinTextView.setText(formattedMinFullTime);
         mFullTimerSecTextView.setText(formattedSecFullTime);
-        //mPartTimerMinTextView.setText(formattedMinPartTime);
-        //mPartTimerSecTextView.setText(formattedSecPartTime);
+        mPartTimerMinTextView.setText(formattedMinPartTime);
+        mPartTimerSecTextView.setText(formattedSecPartTime);
     }
 
     private void changeGuiElementsOnStartMatch()
@@ -426,8 +448,10 @@ public class MatchActivity extends Activity
         mStartMatchButton.setEnabled(true);
         mPauseMatchButton.setEnabled(false);
         mFinishMatchButton.setEnabled(false);
-
+        //------------------------------------------------------------------------------------------
         mTimerThread.interrupt();
+        //------------------------------------------------------------------------------------------
+        resetPartTimer();
     }
 
     private void changeGuiElementsOnFinishMatch()
@@ -438,13 +462,15 @@ public class MatchActivity extends Activity
             viewHolder.textViewPlayerName.setEnabled(false);
             viewHolder.textViewPlayerNo.setEnabled(false);
         }
-
+        //------------------------------------------------------------------------------------------
         mGoalGuestTeamButton.setEnabled(false);
         mStartMatchButton.setEnabled(false);
         mPauseMatchButton.setEnabled(false);
         mFinishMatchButton.setEnabled(false);
-
+        //------------------------------------------------------------------------------------------
         mTimerThread.interrupt();
+        //------------------------------------------------------------------------------------------
+        resetPartTimer();
     }
 
     //---------------------------------------------------------------------------------------------
@@ -514,7 +540,8 @@ public class MatchActivity extends Activity
 
             Button goalButton       = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_goal);
             Button assistButton     = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_assist);
-            Button faultButton      = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_fault);
+            Button goodPlayButton   = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_goodplay);
+            Button badPlayButton    = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_badplay);
             Button playerInButton   = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_player_in);
             Button playerOutButton  = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_player_out);
             Button yellowCardButton = (Button) eventTypeDialog.findViewById(R.id.button_eventtype_yellow_card);
@@ -541,12 +568,22 @@ public class MatchActivity extends Activity
                 }
             });
 
-            faultButton.setOnClickListener(new View.OnClickListener()
+            goodPlayButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
-                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_FAULT);
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_GOODPLAY);
+                    eventTypeDialog.dismiss();
+                }
+            });
+
+            badPlayButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_BADPLAY);
                     eventTypeDialog.dismiss();
                 }
             });
