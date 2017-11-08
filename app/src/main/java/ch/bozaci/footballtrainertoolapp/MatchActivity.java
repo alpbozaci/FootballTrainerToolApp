@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +27,7 @@ public class MatchActivity extends Activity
     private static final String LOG_TAG = MatchActivity.class.getSimpleName();
 
     private List<Player> mSelectedPlayerList;
+    private List<Player> mUnselectedPlayerList;
     private List<Event> mEventList;
 
     private PlayerSelectedListAdapter mSelectedPlayerListAdapter;
@@ -68,18 +70,27 @@ public class MatchActivity extends Activity
 
         Bundle bundle = getIntent().getExtras();
 
-        if (bundle != null)
+        if (bundle == null)
         {
-            mMatch = (Match)bundle.getSerializable(PlayerSelectListActivity.CONST_INTENT_VALUE_MATCH);
-
-            TextView homeTeam  = (TextView) findViewById(R.id.textview_hometeam);
-            TextView guestTeam = (TextView) findViewById(R.id.textview_guestteam);
-            homeTeam.setText(mMatch.getHomeTeam());
-            guestTeam.setText(mMatch.getGuestTeam());
-
-            List<Integer> playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.CONST_INTENT_VALUE_PLAYER_ID_LIST);
-            loadDBPlayerList(playerIdList);
+            Toast.makeText(this, "Error: no parameter", Toast.LENGTH_LONG);
+            return;
         }
+
+        mMatch = (Match)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_MATCH);
+
+        TextView homeTeam  = (TextView) findViewById(R.id.textview_hometeam);
+        TextView guestTeam = (TextView) findViewById(R.id.textview_guestteam);
+        homeTeam.setText(mMatch.getHomeTeam());
+        guestTeam.setText(mMatch.getGuestTeam());
+
+        mSelectedPlayerList = new ArrayList<>();
+        mUnselectedPlayerList = new ArrayList<>();
+
+        List<Integer> playerIdList;
+        playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
+        loadDBPlayerList(playerIdList, mSelectedPlayerList);
+        playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_UNSElECTED_PLAYER_ID_LIST);
+        loadDBPlayerList(playerIdList, mUnselectedPlayerList);
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabhost);
         tabHost.setup();
@@ -132,7 +143,8 @@ public class MatchActivity extends Activity
         mEventListView = (ListView) findViewById(R.id.listview_event);
         mEventListView.setAdapter(mEventListAdapter);
 
-        addPlayerSelectedEvent();
+        addPlayerEvent(mSelectedPlayerList, Event.EventType.OWN_PLAYER_PRESENT);
+        addPlayerEvent(mUnselectedPlayerList, Event.EventType.OWN_PLAYER_ABSENT);
     }
 
     @Override
@@ -199,15 +211,12 @@ public class MatchActivity extends Activity
         }
     };
 
-
-    private void loadDBPlayerList(List<Integer> playerIdList)
+    private void loadDBPlayerList(List<Integer> playerIdList, List<Player> playerList)
     {
-        mSelectedPlayerList = new ArrayList<>();
-
         for (Integer playerId : playerIdList)
         {
             Player player = databaseAdapter.getPlayer(playerId);
-            mSelectedPlayerList.add(player);
+            playerList.add(player);
         }
     }
 
@@ -285,11 +294,11 @@ public class MatchActivity extends Activity
         mEventListAdapter.notifyDataSetChanged();
     }
 
-    private void addPlayerSelectedEvent()
+    private void addPlayerEvent(List<Player> playerList, Event.EventType eventType)
     {
-        for (Player player : mSelectedPlayerList)
+        for (Player player : playerList)
         {
-            handleAddPlayerEvent(player, Event.EventType.OWN_PLAYER_PRESENT);
+            handleAddPlayerEvent(player, eventType);
         }
     }
 

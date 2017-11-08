@@ -26,8 +26,9 @@ public class PlayerSelectListActivity extends Activity
     private PlayerSelectListAdapter mSelectPlayerAdapter;
     private DatabaseAdapter databaseAdapter;
 
-    public static final String CONST_INTENT_VALUE_MATCH = "match";
-    public static final String CONST_INTENT_VALUE_PLAYER_ID_LIST = "playerIdList";
+    public static final String INTENTVALUE_MATCH = "match";
+    public static final String INTENTVALUE_SElECTED_PLAYER_ID_LIST = "selectedPlayerIdList";
+    public static final String INTENTVALUE_UNSElECTED_PLAYER_ID_LIST = "unselectedPlayerIdList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,31 +74,12 @@ public class PlayerSelectListActivity extends Activity
     {
         mSelectedPlayerIdList.add(player.getId());
         mUnselectedPlayerIdList.remove(player.getId());
-        debug();
     }
 
     private void handlePlayerUnselected(Player player)
     {
         mSelectedPlayerIdList.remove(player.getId());
         mUnselectedPlayerIdList.add(player.getId());
-        debug();
-    }
-
-    private void debug()
-    {
-        for (Integer i : mSelectedPlayerIdList)
-        {
-            System.out.print(i);
-            System.out.print("-");
-        }
-        System.out.println();
-
-        for (Integer i : mUnselectedPlayerIdList)
-        {
-            System.out.print(i);
-            System.out.print("-");
-        }
-        System.out.println();
     }
 
     private interface ActivateDeactivatePlayerClickListener
@@ -135,8 +117,9 @@ public class PlayerSelectListActivity extends Activity
             }
 
             Intent intent = new Intent(PlayerSelectListActivity.this, MatchActivity.class);
-            intent.putExtra(CONST_INTENT_VALUE_MATCH, mMatch);
-            intent.putIntegerArrayListExtra(CONST_INTENT_VALUE_PLAYER_ID_LIST, (ArrayList)mSelectedPlayerIdList);
+            intent.putExtra(INTENTVALUE_MATCH, mMatch);
+            intent.putIntegerArrayListExtra(INTENTVALUE_SElECTED_PLAYER_ID_LIST, (ArrayList)mSelectedPlayerIdList);
+            intent.putIntegerArrayListExtra(INTENTVALUE_UNSElECTED_PLAYER_ID_LIST, (ArrayList)mUnselectedPlayerIdList);
 
             startActivity(intent);
         }
