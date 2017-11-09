@@ -16,12 +16,13 @@ import java.util.List;
 
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 
-public class StartMatchActivity extends Activity
+public class MatchSelectListActivity extends Activity
 {
-    private static final String LOG_TAG = StartMatchActivity.class.getSimpleName();
+    private static final String LOG_TAG = MatchSelectListActivity.class.getSimpleName();
 
     private List<Match> mMatchList;
-    private ArrayAdapter<Match> mMatchListAdapter;
+    //private ArrayAdapter<Match> mMatchListAdapter;
+    private MatchSelectListAdapter mSelectMatchAdapter;
     private ListView mMatchListView;
 
     private DatabaseAdapter databaseAdapter;
@@ -32,15 +33,17 @@ public class StartMatchActivity extends Activity
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "onCreate()");
 
-        setContentView(R.layout.activity_start_match);
+        setContentView(R.layout.activity_match_select_list);
 
         mMatchList = new ArrayList<>();
-        mMatchListAdapter = new ArrayAdapter<>(this, R.layout.item_match, R.id.textview_match, mMatchList);
+        //mMatchListAdapter = new ArrayAdapter<>(this, R.layout.item_match, R.id.textview_match, mMatchList);
+
+        mSelectMatchAdapter = new MatchSelectListAdapter(this, mMatchList);
 
         mMatchListView = (ListView) findViewById(R.id.listview_match);
-        mMatchListView.setAdapter(mMatchListAdapter);
+        mMatchListView.setAdapter(mSelectMatchAdapter);
 
-        mMatchListView.setOnItemClickListener(new StartMatchActivity.MatchClickListener());
+        mMatchListView.setOnItemClickListener(new MatchSelectListActivity.MatchClickListener());
 
         databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
@@ -92,7 +95,7 @@ public class StartMatchActivity extends Activity
             {
                 mMatchList.add(match);
             }
-            mMatchListAdapter.notifyDataSetChanged();
+            mSelectMatchAdapter.notifyDataSetChanged();
         }
         catch (ParseException ex)
         {
@@ -108,7 +111,7 @@ public class StartMatchActivity extends Activity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             Match match = mMatchList.get(position);
-            Intent intent = new Intent(StartMatchActivity.this, PlayerSelectListActivity.class);
+            Intent intent = new Intent(MatchSelectListActivity.this, PlayerSelectListActivity.class);
             intent.putExtra("match", match);
             startActivity(intent);
         }

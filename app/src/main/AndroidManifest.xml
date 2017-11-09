@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".PlayerListActivity">
         </activity>
-        <activity android:name=".StartMatchActivity">
+        <activity android:name=".MatchSelectListActivity">
         </activity>
         <activity android:name=".PlayerSelectListActivity">
         </activity>
