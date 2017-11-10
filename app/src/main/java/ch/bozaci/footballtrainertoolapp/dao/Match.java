@@ -2,6 +2,7 @@ package ch.bozaci.footballtrainertoolapp.dao;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
@@ -64,6 +65,8 @@ public class Match implements Serializable
     private String type;
     private String locationType;
 
+    private List<Event> eventList;
+
     public Integer getId()
     {
         return id;
@@ -122,6 +125,16 @@ public class Match implements Serializable
     public void setLocationType(String locationType)
     {
         this.locationType = locationType;
+    }
+
+    public List<Event> getEventList()
+    {
+        return eventList;
+    }
+
+    public void setEventList(List<Event> eventList)
+    {
+        this.eventList = eventList;
     }
 
     @Override

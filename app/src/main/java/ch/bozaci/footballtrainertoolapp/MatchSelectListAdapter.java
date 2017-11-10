@@ -1,6 +1,7 @@
 package ch.bozaci.footballtrainertoolapp;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import ch.bozaci.footballtrainertoolapp.dao.Player;
 
 public class MatchSelectListAdapter extends BaseAdapter
 {
+    private Context mContext;
     private List<Match> mMatchList;
     private LayoutInflater mLayoutInflater;
     private MatchActivity.MyPlayerClickListener mPlayerClickListener;
@@ -26,6 +28,7 @@ public class MatchSelectListAdapter extends BaseAdapter
             Context context,
             List<Match> matchList)
     {
+        this.mContext = context;
         this.mMatchList = matchList;
 
         mLayoutInflater = LayoutInflater.from(context);
@@ -76,10 +79,34 @@ public class MatchSelectListAdapter extends BaseAdapter
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+
         viewHolder.textViewMatchInfo.setText(match.toString());
         viewHolder.textViewMatchScore.setText(" - : - ");
+        if (hasWon(match))
+        {
+            viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_green, null));
+        }
+        else
+        {
+            viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_red, null));
+        }
 
         return convertView;
+    }
+
+    public Boolean hasWon(Match match)
+    {
+        System.out.println(match.getEventList().size());
+        
+        if (match.getLocationType().equals(Match.LocationType.HOME_GAME.getType()))
+        {
+            // home team
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }

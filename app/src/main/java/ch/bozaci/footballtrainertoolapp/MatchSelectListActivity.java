@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 
 public class MatchSelectListActivity extends Activity
@@ -21,7 +22,6 @@ public class MatchSelectListActivity extends Activity
     private static final String LOG_TAG = MatchSelectListActivity.class.getSimpleName();
 
     private List<Match> mMatchList;
-    //private ArrayAdapter<Match> mMatchListAdapter;
     private MatchSelectListAdapter mSelectMatchAdapter;
     private ListView mMatchListView;
 
@@ -36,8 +36,6 @@ public class MatchSelectListActivity extends Activity
         setContentView(R.layout.activity_match_select_list);
 
         mMatchList = new ArrayList<>();
-        //mMatchListAdapter = new ArrayAdapter<>(this, R.layout.item_match, R.id.textview_match, mMatchList);
-
         mSelectMatchAdapter = new MatchSelectListAdapter(this, mMatchList);
 
         mMatchListView = (ListView) findViewById(R.id.listview_match);
@@ -93,6 +91,8 @@ public class MatchSelectListActivity extends Activity
             List<Match> dbMatchList = databaseAdapter.getMatchList();
             for (Match match : dbMatchList)
             {
+                List<Event> eventList = databaseAdapter.getEventList(match);
+                match.setEventList(eventList);
                 mMatchList.add(match);
             }
             mSelectMatchAdapter.notifyDataSetChanged();
