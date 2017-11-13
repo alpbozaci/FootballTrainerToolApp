@@ -253,7 +253,7 @@ public class DatabaseAdapter
 
         contentValues.put(Event.COLUMN_MATCH_ID, event.getMatchId());
         contentValues.put(Event.COLUMN_PLAYER_ID, event.getPlayerId());
-        contentValues.put(Event.COLUMN_TYPE, event.getType());
+        contentValues.put(Event.COLUMN_TYPE, String.valueOf(event.getType()));
         contentValues.put(Event.COLUMN_DATE, DateUtil.dateFormat.format(event.getDate()));
 
         return (int)mSqlDatabase.insert(Event.TABLE, null, contentValues);
@@ -272,7 +272,7 @@ public class DatabaseAdapter
             event.setId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_ID)));
             event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
             event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
-            event.setType(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE)));
+            event.setType(Event.EventType.valueOf(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE))));
             event.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
         }
 
@@ -293,7 +293,7 @@ public class DatabaseAdapter
                 event.setId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_ID)));
                 event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
                 event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
-                event.setType(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE)));
+                event.setType(Event.EventType.valueOf(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE))));
                 event.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
 
                 eventList.add(event);
@@ -329,7 +329,7 @@ public class DatabaseAdapter
                 event.setId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_ID)));
                 event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
                 event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
-                event.setType(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE)));
+                event.setType(Event.EventType.valueOf(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE))));
                 event.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
 
                 eventList.add(event);

@@ -12,12 +12,15 @@
         android:id="@+id/listview_select_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="5"
         />
 
     <Button
         android:id="@+id/button_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/next"/>
+        android:text="@string/next"
+        android:layout_weight="1"
+        />
 
 </LinearLayout>

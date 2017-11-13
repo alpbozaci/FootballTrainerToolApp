@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
 
@@ -79,33 +80,54 @@ public class MatchSelectListAdapter extends BaseAdapter
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-
-        viewHolder.textViewMatchInfo.setText(match.toString());
-        viewHolder.textViewMatchScore.setText(" - : - ");
-        if (hasWon(match))
-        {
-            viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_green, null));
-        }
-        else
-        {
-            viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_red, null));
-        }
+        fillData(viewHolder, match);
 
         return convertView;
     }
 
-    public Boolean hasWon(Match match)
+    private void fillData(ViewHolder viewHolder, Match match)
     {
-        System.out.println(match.getEventList().size());
-        
-        if (match.getLocationType().equals(Match.LocationType.HOME_GAME.getType()))
+        viewHolder.textViewMatchInfo.setText(match.toString());
+
+        // match has not played yet
+        if(match.getEventList().isEmpty())
         {
-            // home team
-            return true;
+            viewHolder.textViewMatchScore.setText(" - : - ");
         }
         else
         {
-            return false;
+            Integer myTeamScore = new Integer(0);
+            Integer otherTeamScore = new Integer(0);
+
+            for (Event event : match.getEventList())
+            {
+                if (event.getType().equals(Event.EventType.OWN_PLAYER_GOAL))
+                {
+                    myTeamScore++;
+                }
+                if (event.getType().equals(Event.EventType.OPPOSING_TEAM_GOAL))
+                {
+                    otherTeamScore++;
+                }
+            }
+
+            if (match.getLocationType().equals(Match.LocationType.HOME_GAME.getType()))
+            {
+                viewHolder.textViewMatchScore.setText(myTeamScore + " : " + otherTeamScore);
+            }
+            else
+            {
+                viewHolder.textViewMatchScore.setText(otherTeamScore + " : " + myTeamScore);
+            }
+
+            if (myTeamScore > otherTeamScore)
+            {
+                viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_green, null));
+            }
+            else
+            {
+                viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_red, null));
+            }
         }
     }
 

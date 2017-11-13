@@ -232,7 +232,7 @@ public class MatchActivity extends Activity
 
     private void handleAddEvent(Player player, Event.EventType eventType)
     {
-        Log.i(LOG_TAG, "ADD EVENT: " + eventType.getType());
+        Log.i(LOG_TAG, "ADD EVENT: " + eventType);
 
         Event event = createEvent(player, eventType);
         addEventToList(event);
@@ -266,7 +266,7 @@ public class MatchActivity extends Activity
         }
 
         event.setDate(new Date());
-        event.setType(eventType.getType());
+        event.setType(eventType);
 
         return event;
     }
@@ -364,11 +364,11 @@ public class MatchActivity extends Activity
 
         for (Event event : mEventList)
         {
-            if (event.getType().equals(Event.EventType.OWN_PLAYER_GOAL.getType()))
+            if (event.getType().equals(Event.EventType.OWN_PLAYER_GOAL))
             {
                 scoreOwnTeam ++;
             }
-            if (event.getType().equals(Event.EventType.OPPOSING_TEAM_GOAL.getType()))
+            if (event.getType().equals(Event.EventType.OPPOSING_TEAM_GOAL))
             {
                 scoreOpposingTeam ++;
             }

@@ -46,19 +46,25 @@
     <string name="finish_match">Match Ende</string>
     <string name="goal">GOAL</string>
 
-    <string name="own_player_present">Spieler aktiviert</string>
+    <string name="eventtype_own_player_present">ANWESEND</string>
+    <string name="eventtype_own_player_absent">ABWESEND</string>
+    <string name="eventtype_own_player_goal">GOAL</string>
+    <string name="eventtype_own_player_assist">ASSIST</string>
+    <string name="eventtype_own_player_goodplay">GUTE AKTION</string>
+    <string name="eventtype_own_player_badplay">SCHLECHTE AKTION</string>
+    <string name="eventtype_own_player_in">SPIELER REIN</string>
+    <string name="eventtype_own_player_out">SPIELER RAUS</string>
+    <string name="eventtype_own_player_yellow_card">GELBE KARTE</string>
+    <string name="eventtype_own_player_red_card">ROTE KARTE</string>
+    <string name="eventtype_own_player_injured">VERLETZT</string>
+    <string name="eventtype_opposing_team_goal">GEGNER GOAL</string>
+    <string name="eventtype_match_start">MATCH BEGINN</string>
+    <string name="eventtype_match_pause">MATCH PAUSE</string>
+    <string name="eventtype_match_finish">MATCH ENDE</string>
 
-    <string name="eventtype_goal">GOAL</string>
-    <string name="eventtype_assist">ASSIST</string>
-    <string name="eventtype_goodplay">GUTE AKTION</string>
-    <string name="eventtype_badplay">SCHLECHTE AKTION</string>
-    <string name="eventtype_player_in">SPIELER REIN</string>
-    <string name="eventtype_player_out">SPIELER RAUS</string>
-    <string name="eventtype_yellow_card">GELBE KARTE</string>
-    <string name="eventtype_red_card">ROTE KARTE</string>
-    <string name="eventtype_injured">VERLETZT</string>
 
     <string name="player_list_empty">Keine Spieler ausgewählt</string>
     <string name="delete_player_not_allowed">Spieler kann nicht gelöscht werden, da ein Spieler-Ereignis vorhanden ist!</string>
+
 
 </resources>

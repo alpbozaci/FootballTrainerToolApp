@@ -20,50 +20,29 @@ public class Event implements Serializable
 
     public static enum EventType
     {
-        OWN_PLAYER_PRESENT("PLAYER PRESENT"),
-        OWN_PLAYER_ABSENT("PLAYER ABSENT"),
-        OWN_PLAYER_GOAL("PLAYER GOAL"),
-        OWN_PLAYER_ASSIST("PLAYER ASSIST"),
-        OWN_PLAYER_GOODPLAY("PLAYER GOOD PLAY"),
-        OWN_PLAYER_BADPLAY("PLAYER BAD PLAY"),
-        OWN_PLAYER_IN("PLAYER IN"),
-        OWN_PLAYER_OUT("PLAYER OUT"),
-        OWN_PLAYER_YELLOW_CARD("PLAYER YELLOW CARD"),
-        OWN_PLAYER_RED_CARD("PLAYER RED CARD"),
-        OWN_PLAYER_INJURED("PLAYER INJURED"),
+        OWN_PLAYER_PRESENT,
+        OWN_PLAYER_ABSENT,
+        OWN_PLAYER_GOAL,
+        OWN_PLAYER_ASSIST,
+        OWN_PLAYER_GOODPLAY,
+        OWN_PLAYER_BADPLAY,
+        OWN_PLAYER_IN,
+        OWN_PLAYER_OUT,
+        OWN_PLAYER_YELLOW_CARD,
+        OWN_PLAYER_RED_CARD,
+        OWN_PLAYER_INJURED,
 
-        OPPOSING_TEAM_GOAL("OPPOSING PLAYER GOAL"),
+        OPPOSING_TEAM_GOAL,
 
-        MATCH_START("MATCH START"),
-        MATCH_PAUSE("MATCH PAUSE"),
-        MATCH_FINISH("MATCH FINISH");
-
-        private String type;
-
-        EventType(String type)
-        {
-            this.type = type;
-        }
-
-        public String getType()
-        {
-            return type;
-        }
-
-        public static EventType fromString(String text) {
-            for (EventType et : EventType.values()) {
-                if (et.type.equalsIgnoreCase(text)) {
-                    return et;
-                }
-            }
-            return null;
-        }
+        MATCH_START,
+        MATCH_PAUSE,
+        MATCH_FINISH
     }
 
     private Integer id;
     private Integer matchId;
     private Integer playerId;
-    private String type;
+    private EventType type;
     private Date date;
 
     private Match match;
@@ -99,12 +78,12 @@ public class Event implements Serializable
         this.playerId = playerId;
     }
 
-    public String getType()
+    public EventType getType()
     {
         return type;
     }
 
-    public void setType(String type)
+    public void setType(EventType type)
     {
         this.type = type;
     }

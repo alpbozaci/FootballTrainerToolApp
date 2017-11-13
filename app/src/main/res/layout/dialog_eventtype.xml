@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:drawableRight="@drawable/goal"
-            android:text="@string/eventtype_goal"/>
+            android:text="@string/eventtype_own_player_goal"/>
 
         <Button
             android:id="@+id/button_eventtype_assist"
@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:drawableRight="@drawable/assist"
-            android:text="@string/eventtype_assist"/>
+            android:text="@string/eventtype_own_player_assist"/>
 
         <Button
             android:id="@+id/button_eventtype_goodplay"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/thumb_up"
-            android:text="@string/eventtype_goodplay"/>
+            android:text="@string/eventtype_own_player_goodplay"/>
 
         <Button
             android:id="@+id/button_eventtype_badplay"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/thumb_down"
-            android:text="@string/eventtype_badplay"/>
+            android:text="@string/eventtype_own_player_badplay"/>
 
         <Button
             android:id="@+id/button_eventtype_player_in"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/player_in"
-            android:text="@string/eventtype_player_in"/>
+            android:text="@string/eventtype_own_player_in"/>
 
         <Button
             android:id="@+id/button_eventtype_player_out"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/player_out"
-            android:text="@string/eventtype_player_out"/>
+            android:text="@string/eventtype_own_player_out"/>
 
         <Button
             android:id="@+id/button_eventtype_yellow_card"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/yellow_card"
-            android:text="@string/eventtype_yellow_card"/>
+            android:text="@string/eventtype_own_player_yellow_card"/>
 
         <Button
             android:id="@+id/button_eventtype_red_card"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/red_card"
-            android:text="@string/eventtype_red_card"/>
+            android:text="@string/eventtype_own_player_red_card"/>
 
         <Button
             android:id="@+id/button_eventtype_injured"
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableRight="@drawable/first_aid_kit"
-            android:text="@string/eventtype_injured"/>
+            android:text="@string/eventtype_own_player_injured"/>
 
     </LinearLayout>
 

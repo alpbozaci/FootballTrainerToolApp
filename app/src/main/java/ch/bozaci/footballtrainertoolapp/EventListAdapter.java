@@ -114,10 +114,8 @@ public class EventListAdapter extends BaseAdapter
 
     private Drawable getIcon(Event event)
     {
-        Event.EventType eventType = Event.EventType.fromString(event.getType());
-
         Drawable icon;
-        switch (eventType)
+        switch (event.getType())
         {
             case OWN_PLAYER_PRESENT:
                 return null;
@@ -158,83 +156,82 @@ public class EventListAdapter extends BaseAdapter
 
     private String getText(Event event)
     {
-        Event.EventType eventType = Event.EventType.fromString(event.getType());
         String eventDate = DateUtil.dateFormat.format(event.getDate());
 
-        switch (eventType)
+        switch (event.getType())
         {
             case OWN_PLAYER_PRESENT:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER ANWESEND: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_present) + " : " + playerName + System.lineSeparator() + eventDate;
             }
 
             case OWN_PLAYER_ABSENT:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER ABWESEND: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_absent) + " : " + playerName + System.lineSeparator() + eventDate;
             }
 
             case OWN_PLAYER_GOAL:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER SCHIESST GOAL: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_goal) + " : " + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_ASSIST:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER ASSISTIERT: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_assist) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_GOODPLAY:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER GUTER AKTION: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_goodplay) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_BADPLAY:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER SCHLECHTE AKTION: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_badplay) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_IN:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER EINGEWECHSELT: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_in) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_OUT:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER AUSGEWECHSELT: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_out) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_YELLOW_CARD:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER GELBE KARTE: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_yellow_card) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_RED_CARD:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER ROTE KARTE: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_red_card) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OWN_PLAYER_INJURED:
             {
                 String playerName = event.getPlayer().toString();
-                return "SPIELER VERLETZT: " + playerName + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_own_player_injured) + " : "  + playerName + System.lineSeparator() + eventDate;
             }
             case OPPOSING_TEAM_GOAL:
             {
-                return "GEGENMANNSCHAFT SCHIESST GOAL" + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_opposing_team_goal) + " : "  + System.lineSeparator() + eventDate;
             }
             case MATCH_START:
             {
-                return "MATCH START" + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_match_start) + " : "  + System.lineSeparator() + eventDate;
             }
             case MATCH_PAUSE:
             {
-                return "MATCH PAUSE" + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_match_pause) + " : "  + System.lineSeparator() + eventDate;
             }
             case MATCH_FINISH:
             {
-                return "MATCH ENDE" + System.lineSeparator() + eventDate;
+                return mContext.getResources().getString(R.string.eventtype_match_finish) + " : "  + System.lineSeparator() + eventDate;
             }
             default:
                 return "?";
