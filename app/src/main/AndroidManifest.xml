@@ -30,6 +30,8 @@
         </activity>
         <activity android:name=".PlayerSelectListActivity">
         </activity>
+        <activity android:name=".StatisticActivity">
+        </activity>
     </application>
 
 </manifest>

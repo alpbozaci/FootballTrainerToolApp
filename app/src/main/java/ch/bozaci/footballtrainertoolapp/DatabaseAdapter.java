@@ -281,27 +281,8 @@ public class DatabaseAdapter
 
     public List<Event> getEventList() throws ParseException
     {
-        List<Event> eventList = new ArrayList<>();
-
-        Cursor cursor = mSqlDatabase.query(Event.TABLE, null, null, null, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst())
-        {
-            do
-            {
-                Event event = new Event();
-                event.setId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_ID)));
-                event.setMatchId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_MATCH_ID)));
-                event.setPlayerId(cursor.getInt(cursor.getColumnIndex(Event.COLUMN_PLAYER_ID)));
-                event.setType(Event.EventType.valueOf(cursor.getString(cursor.getColumnIndex(Event.COLUMN_TYPE))));
-                event.setDate(DateUtil.dateFormat.parse(cursor.getString(cursor.getColumnIndex(Event.COLUMN_DATE))));
-
-                eventList.add(event);
-            }
-            while (cursor.moveToNext());
-        }
-
-        return eventList;
+        String whereClause = null;
+        return getEventList(whereClause);
     }
 
     public List<Event> getEventList(Match match) throws ParseException
@@ -314,6 +295,24 @@ public class DatabaseAdapter
     {
         String whereClause = Event.COLUMN_PLAYER_ID + " = " + player.getId();
         return getEventList(whereClause);
+    }
+
+    public List<Event> getEventList(Match match, Player player) throws ParseException
+    {
+        String whereClause = Event.COLUMN_MATCH_ID + " = " + match.getId() + " AND " + Event.COLUMN_PLAYER_ID + " = " + player.getId();
+        return getEventList(whereClause);
+    }
+
+    public Boolean hasEvent(Match match, Player player, Event.EventType eventType) throws ParseException
+    {
+        String whereClause = Event.COLUMN_MATCH_ID + " = " + match.getId() + " AND " + Event.COLUMN_PLAYER_ID + " = " + player.getId() + " AND " + Event.COLUMN_TYPE + " = " + "'" + String.valueOf(eventType) + "'" ;
+        return !getEventList(whereClause).isEmpty();
+    }
+
+    public Integer eventAmount(Match match, Player player, Event.EventType eventType) throws ParseException
+    {
+        String whereClause = Event.COLUMN_MATCH_ID + " = " + match.getId() + " AND " + Event.COLUMN_PLAYER_ID + " = " + player.getId() + " AND " + Event.COLUMN_TYPE + " = " + "'" + String.valueOf(eventType) + "'" ;
+        return getEventList(whereClause).size();
     }
 
     private List<Event> getEventList(String whereClause) throws ParseException

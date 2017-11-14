@@ -8,13 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,7 +38,7 @@ public class PlayerListActivity extends Activity
     private PlayerListAdapter mPlayerListAdapter;
     private ListView mPlayerListView;
     private ImageView mImageViewPicture;
-    private DatabaseAdapter databaseAdapter;
+    private DatabaseAdapter mDatabaseAdapter;
 
     private enum DialogMode
     {
@@ -56,7 +54,7 @@ public class PlayerListActivity extends Activity
 
         setContentView(R.layout.activity_player_list);
 
-        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
+        mDatabaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
         mAddButton = (FloatingActionButton) findViewById(R.id.button_add_player);
         mAddButton.setOnClickListener(new AddPlayerButtonClickListener());
@@ -112,7 +110,7 @@ public class PlayerListActivity extends Activity
     {
         mPlayerList.clear();
 
-        List<Player> dbPlayerList = databaseAdapter.getPlayerList();
+        List<Player> dbPlayerList = mDatabaseAdapter.getPlayerList();
 
         for (Player player : dbPlayerList)
         {
@@ -300,14 +298,14 @@ public class PlayerListActivity extends Activity
 
     private void addPlayer(Player player)
     {
-        databaseAdapter.addPlayer(player);
+        mDatabaseAdapter.addPlayer(player);
         Log.i(LOG_TAG, "player added: " + player.toString());
         loadPlayerList();
     }
 
     private void updatePlayer(Player player)
     {
-        databaseAdapter.updatePlayer(player);
+        mDatabaseAdapter.updatePlayer(player);
         Log.i(LOG_TAG, "player updated: " + player.toString());
         loadPlayerList();
     }
@@ -318,10 +316,10 @@ public class PlayerListActivity extends Activity
 
         try
         {
-            List<Event> eventList = databaseAdapter.getEventList(player);
+            List<Event> eventList = mDatabaseAdapter.getEventList(player);
             if (eventList.isEmpty())
             {
-                databaseAdapter.deletePlayer(player.getId());
+                mDatabaseAdapter.deletePlayer(player.getId());
                 Log.i(LOG_TAG, "player deleted: " + player.toString());
                 loadPlayerList();
             }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,7 +24,7 @@ public class MatchSelectListActivity extends Activity
     private MatchSelectListAdapter mSelectMatchAdapter;
     private ListView mMatchListView;
 
-    private DatabaseAdapter databaseAdapter;
+    private DatabaseAdapter mDatabaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,7 +42,7 @@ public class MatchSelectListActivity extends Activity
 
         mMatchListView.setOnItemClickListener(new MatchSelectListActivity.MatchClickListener());
 
-        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
+        mDatabaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
         loadMatchList();
     }
@@ -88,10 +87,10 @@ public class MatchSelectListActivity extends Activity
         try
         {
             mMatchList.clear();
-            List<Match> dbMatchList = databaseAdapter.getMatchList();
+            List<Match> dbMatchList = mDatabaseAdapter.getMatchList();
             for (Match match : dbMatchList)
             {
-                List<Event> eventList = databaseAdapter.getEventList(match);
+                List<Event> eventList = mDatabaseAdapter.getEventList(match);
                 match.setEventList(eventList);
                 mMatchList.add(match);
             }
@@ -111,7 +110,15 @@ public class MatchSelectListActivity extends Activity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             Match match = mMatchList.get(position);
-            Intent intent = new Intent(MatchSelectListActivity.this, PlayerSelectListActivity.class);
+            Intent intent;
+            if (match.isPlayed())
+            {
+                intent = new Intent(MatchSelectListActivity.this, StatisticActivity.class);
+            }
+            else
+            {
+                intent = new Intent(MatchSelectListActivity.this, PlayerSelectListActivity.class);
+            }
             intent.putExtra("match", match);
             startActivity(intent);
         }

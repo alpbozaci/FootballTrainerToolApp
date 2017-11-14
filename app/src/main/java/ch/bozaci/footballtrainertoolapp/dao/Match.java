@@ -143,4 +143,12 @@ public class Match implements Serializable
         return DateUtil.dateFormat.format(date) + System.getProperty("line.separator") + homeTeam + " - " + guestTeam + System.getProperty("line.separator") + type;
     }
 
+    public Boolean isPlayed()
+    {
+        if (getEventList() != null && !getEventList().isEmpty())
+        {
+            return true;
+        }
+        return false;
+    }
 }

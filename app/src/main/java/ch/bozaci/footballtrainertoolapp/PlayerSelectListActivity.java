@@ -24,7 +24,7 @@ public class PlayerSelectListActivity extends Activity
     private List<Integer> mSelectedPlayerIdList;
     private List<Integer> mUnselectedPlayerIdList;
     private PlayerSelectListAdapter mSelectPlayerAdapter;
-    private DatabaseAdapter databaseAdapter;
+    private DatabaseAdapter mDatabaseAdapter;
 
     public static final String INTENTVALUE_MATCH = "match";
     public static final String INTENTVALUE_SElECTED_PLAYER_ID_LIST = "selectedPlayerIdList";
@@ -43,7 +43,7 @@ public class PlayerSelectListActivity extends Activity
             mMatch = (Match)bundle.getSerializable("match");
         }
 
-        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
+        mDatabaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
         mPlayerList = new ArrayList<>();
         mSelectedPlayerIdList = new ArrayList<>();
@@ -61,7 +61,7 @@ public class PlayerSelectListActivity extends Activity
 
     private void loadDBPlayerList()
     {
-        List<Player> dbPlayerList = databaseAdapter.getPlayerList();
+        List<Player> dbPlayerList = mDatabaseAdapter.getPlayerList();
 
         for (Player player : dbPlayerList)
         {

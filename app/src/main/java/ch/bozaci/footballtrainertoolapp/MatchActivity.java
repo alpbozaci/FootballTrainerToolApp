@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +33,6 @@ public class MatchActivity extends Activity
     private EventListAdapter mEventListAdapter;
 
     private ListView mSelectPlayerListView;
-    private TableLayout mTableLayout;
     private ListView mEventListView;
 
     private TextView mScoreHomeTeamTextView;
@@ -56,7 +54,7 @@ public class MatchActivity extends Activity
 
     private Match mMatch;
 
-    private DatabaseAdapter databaseAdapter;
+    private DatabaseAdapter mDatabaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -66,15 +64,9 @@ public class MatchActivity extends Activity
 
         setContentView(R.layout.activity_match);
 
-        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
+        mDatabaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
         Bundle bundle = getIntent().getExtras();
-
-        if (bundle == null)
-        {
-            Toast.makeText(this, "Error: no parameter", Toast.LENGTH_LONG);
-            return;
-        }
 
         mMatch = (Match)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_MATCH);
 
@@ -215,7 +207,7 @@ public class MatchActivity extends Activity
     {
         for (Integer playerId : playerIdList)
         {
-            Player player = databaseAdapter.getPlayer(playerId);
+            Player player = mDatabaseAdapter.getPlayer(playerId);
             playerList.add(player);
         }
     }
@@ -276,7 +268,7 @@ public class MatchActivity extends Activity
         for (Event event : mEventList)
         {
             Log.i(LOG_TAG, "event added to db : " + event.getType());
-            databaseAdapter.addEvent(event);
+            mDatabaseAdapter.addEvent(event);
         }
     }
 

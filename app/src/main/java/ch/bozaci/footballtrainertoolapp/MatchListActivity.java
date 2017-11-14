@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.util.DateUtil;
 
@@ -38,7 +36,7 @@ public class MatchListActivity extends Activity
     private ArrayAdapter<Match> mMatchListAdapter;
     private ListView mMatchListView;
 
-    private DatabaseAdapter databaseAdapter;
+    private DatabaseAdapter mDatabaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,7 +46,7 @@ public class MatchListActivity extends Activity
 
         setContentView(R.layout.activity_match_list);
 
-        databaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
+        mDatabaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
         mAddButton = (FloatingActionButton) findViewById(R.id.button_add_match);
         mAddButton.setOnClickListener(new AddMatchClickListener());
@@ -106,7 +104,7 @@ public class MatchListActivity extends Activity
 
         try
         {
-            List<Match> dbMatchList = databaseAdapter.getMatchList();
+            List<Match> dbMatchList = mDatabaseAdapter.getMatchList();
             for (Match match : dbMatchList)
             {
                 mMatchList.add(match);
@@ -327,23 +325,23 @@ public class MatchListActivity extends Activity
 
     private void addMatch(Match match)
     {
-        databaseAdapter.addMatch(match);
+        mDatabaseAdapter.addMatch(match);
         Log.i(LOG_TAG, "match added: " + match.toString());
         loadMatchList();
     }
 
     private void updateMatch(Match match)
     {
-        databaseAdapter.updateMatch(match);
+        mDatabaseAdapter.updateMatch(match);
         Log.i(LOG_TAG, "match updated: " + match.toString());
         loadMatchList();
     }
 
     private void deleteMatch(Match match)
     {
-        Integer deletedCount = databaseAdapter.deleteEventList(match.getId());
+        Integer deletedCount = mDatabaseAdapter.deleteEventList(match.getId());
         Log.i(LOG_TAG, "events deleted: " + deletedCount);
-        databaseAdapter.deleteMatch(match.getId());
+        mDatabaseAdapter.deleteMatch(match.getId());
         Log.i(LOG_TAG, "match deleted: " + match.toString());
         loadMatchList();
     }

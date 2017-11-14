@@ -13,14 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:layout_marginTop="2dp"
-
+        android:background="@drawable/gradient_background_light2dark_gray"
         android:orientation="horizontal">
 
         <ListView
             android:id="@+id/listview_player"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/gradient_background_light2dark_gray"
             />
 
     </LinearLayout>
