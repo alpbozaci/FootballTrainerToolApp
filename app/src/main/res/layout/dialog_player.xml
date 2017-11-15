@@ -22,7 +22,6 @@
             android:id="@+id/edittext_player_firstname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text=""
             />
 
@@ -37,7 +36,6 @@
             android:id="@+id/edittext_player_lastname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text=""
             />
 
@@ -53,7 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:ems="10"
             android:text=""
             />
 

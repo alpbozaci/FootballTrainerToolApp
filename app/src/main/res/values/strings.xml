@@ -62,9 +62,9 @@
     <string name="eventtype_match_pause">MATCH PAUSE</string>
     <string name="eventtype_match_finish">MATCH ENDE</string>
 
-
     <string name="player_list_empty">Keine Spieler ausgewählt</string>
     <string name="delete_player_not_allowed">Spieler kann nicht gelöscht werden, da ein Spieler-Ereignis vorhanden ist!</string>
 
+    <string name="evaluate">Bewerten</string>
 
 </resources>

@@ -22,7 +22,6 @@
             android:id="@+id/edittext_match_hometeam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text=""
             />
 
@@ -37,7 +36,6 @@
             android:id="@+id/edittext_match_guestteam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text=""
             />
 
@@ -82,9 +80,9 @@
         <DatePicker
             android:id="@+id/datepicker_match_date"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:layout_margin="10dp"
-            android:background="#ffffff"
+            android:layout_height="120dp"
+            android:layout_margin="2dp"
+            android:background="#dddddd"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             />
@@ -92,10 +90,10 @@
         <TimePicker
             android:id="@+id/timepicker_match_time"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="120dp"
             android:timePickerMode="spinner"
-            android:layout_margin="10dp"
-            android:background="#ffffff"
+            android:layout_margin="2dp"
+            android:background="#dddddd"
             />
 
         <Button

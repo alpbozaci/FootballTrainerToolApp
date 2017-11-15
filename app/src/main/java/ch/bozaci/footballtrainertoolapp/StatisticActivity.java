@@ -5,13 +5,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.util.List;
@@ -26,14 +22,24 @@ public class StatisticActivity extends Activity
 
     private DatabaseAdapter mDatabaseAdapter;
 
-    String[] columns = {"", "GOAL", "ASSIST", "GUT", "SCHLECHT", "REIN", "RAUS", "VERLETZT"};
-
+    String[] mColumns;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
+
+        mColumns = new String[]{
+                "",
+                getString(R.string.eventtype_own_player_goal),
+                getString(R.string.eventtype_own_player_assist),
+                getString(R.string.eventtype_own_player_goodplay),
+                getString(R.string.eventtype_own_player_badplay),
+                getString(R.string.eventtype_own_player_in),
+                getString(R.string.eventtype_own_player_out),
+                getString(R.string.eventtype_own_player_injured),
+        };
 
         Bundle bundle = getIntent().getExtras();
         Match match = (Match)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_MATCH);
@@ -59,9 +65,9 @@ public class StatisticActivity extends Activity
         TableRow tableRow = new TableRow(this);
         tableRowParams.width = 100;
 
-        for (int n = 0; n < columns.length; n++)
+        for (int n = 0; n < mColumns.length; n++)
         {
-            TextView textView = createTextView(columns[n]);
+            TextView textView = createTextView(mColumns[n]);
             tableRow.addView(textView, tableRowParams);
         }
 
@@ -196,7 +202,7 @@ public class StatisticActivity extends Activity
     {
         TextView textView = new TextView(this);
         textView.setBackgroundColor(backgroundColor);
-        textView.setTextSize(12);
+        textView.setTextSize(10);
         textView.setText(text);
         textView.setTypeface(typeface);
         textView.setGravity(Gravity.CENTER);
