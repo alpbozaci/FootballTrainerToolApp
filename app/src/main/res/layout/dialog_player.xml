@@ -14,42 +14,42 @@
         <TextView
             android:id="@+id/textview_player_firstname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/firstname"
             />
 
         <EditText
             android:id="@+id/edittext_player_firstname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text=""
             />
 
         <TextView
             android:id="@+id/textview_player_lastname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/lastname"
             />
 
         <EditText
             android:id="@+id/edittext_player_lastname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text=""
             />
 
         <TextView
             android:id="@+id/textview_player_number"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/playernumber"
             />
 
         <EditText
             android:id="@+id/edittext_player_number"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="numberDecimal"
             android:text=""
             />
@@ -73,6 +73,13 @@
                 android:text="FOTO"
                 />
         </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkbox_player_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            />
 
         <Button
             android:id="@+id/button_player_dialog_save"

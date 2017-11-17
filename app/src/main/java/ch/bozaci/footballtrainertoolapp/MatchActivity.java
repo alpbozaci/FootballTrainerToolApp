@@ -3,6 +3,7 @@ package ch.bozaci.footballtrainertoolapp;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -11,7 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +25,8 @@ public class MatchActivity extends Activity
 {
     private static final String LOG_TAG = MatchActivity.class.getSimpleName();
 
+    private List<Integer> mSelectedPlayerIdList;
+    private List<Integer> mUnselectedPlayerIdList;
     private List<Player> mSelectedPlayerList;
     private List<Player> mUnselectedPlayerList;
     private List<Event> mEventList;
@@ -75,14 +77,13 @@ public class MatchActivity extends Activity
         homeTeam.setText(mMatch.getHomeTeam());
         guestTeam.setText(mMatch.getGuestTeam());
 
-        mSelectedPlayerList = new ArrayList<>();
+        mSelectedPlayerList   = new ArrayList<>();
         mUnselectedPlayerList = new ArrayList<>();
 
-        List<Integer> playerIdList;
-        playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
-        loadDBPlayerList(playerIdList, mSelectedPlayerList);
-        playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_UNSElECTED_PLAYER_ID_LIST);
-        loadDBPlayerList(playerIdList, mUnselectedPlayerList);
+        mSelectedPlayerIdList   = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
+        mUnselectedPlayerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_UNSElECTED_PLAYER_ID_LIST);
+        loadDBPlayerList(mSelectedPlayerIdList, mSelectedPlayerList);
+        loadDBPlayerList(mUnselectedPlayerIdList, mUnselectedPlayerList);
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabhost);
         tabHost.setup();
@@ -131,7 +132,7 @@ public class MatchActivity extends Activity
 
         //TAB 2
         mEventList = new ArrayList<>();
-        mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener(), new MyDeleteEventLongClickListener());
+        mEventListAdapter = new EventListAdapter(this, mEventList, new MyEventClickListener(), new MyEventLongClickListener());
         mEventListView = (ListView) findViewById(R.id.listview_event);
         mEventListView.setAdapter(mEventListAdapter);
 
@@ -332,8 +333,16 @@ public class MatchActivity extends Activity
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
+                changeGuiElementsOnFinishMatch();
+                handleAddNoPlayerEvent(Event.EventType.MATCH_FINISH);
                 saveMatchEvents();
                 alertDialog.dismiss();
+
+                Intent intent = new Intent(MatchActivity.this, PlayerEvaluateListActivity.class);
+                intent.putExtra(PlayerSelectListActivity.INTENTVALUE_MATCH, mMatch);
+                intent.putIntegerArrayListExtra(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST, (ArrayList)mSelectedPlayerIdList);
+
+                startActivity(intent);
             }
         });
 
@@ -518,8 +527,6 @@ public class MatchActivity extends Activity
         @Override
         public void onClick(View v)
         {
-            changeGuiElementsOnFinishMatch();
-            handleAddNoPlayerEvent(Event.EventType.MATCH_FINISH);
             showFinishMatchDialog();
         }
     }
@@ -661,7 +668,7 @@ public class MatchActivity extends Activity
         }
     }
 
-    class MyDeleteEventLongClickListener implements EventLongClickListener
+    class MyEventLongClickListener implements EventLongClickListener
     {
         @Override
         public void onLongEventClicked(Event event)

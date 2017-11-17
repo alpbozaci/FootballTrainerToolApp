@@ -66,5 +66,8 @@
     <string name="delete_player_not_allowed">Spieler kann nicht gelöscht werden, da ein Spieler-Ereignis vorhanden ist!</string>
 
     <string name="evaluate">Bewerten</string>
+    <string name="player_active">Spieler aktiv</string>
+    <string name="player_inactive">Spieler inaktiv</string>
 
 </resources>
+

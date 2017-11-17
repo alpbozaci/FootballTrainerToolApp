@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -156,9 +158,28 @@ public class PlayerListActivity extends Activity
 
         mImageViewPicture = (ImageView) playerDialog.findViewById(R.id.imageview_picture);
 
+        final CheckBox checkBox = (CheckBox) playerDialog.findViewById(R.id.checkbox_player_state);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (isChecked)
+                {
+                    checkBox.setText(getResources().getString(R.string.player_active));
+                }
+                else
+                {
+                    checkBox.setText(getResources().getString(R.string.player_inactive));
+                }
+            }
+        });
+
         if (dialogMode == DialogMode.ADD)
         {
             playerDialog.setTitle(R.string.title_add_player);
+            checkBox.setChecked(true);
+            checkBox.setText(getResources().getString(R.string.player_active));
         }
         if (dialogMode == DialogMode.EDIT)
         {
@@ -174,6 +195,17 @@ public class PlayerListActivity extends Activity
 
             Bitmap bitmap = PictureUtil.convertByteArrayToBitmap(player.getPicture());
             mImageViewPicture.setImageBitmap(bitmap);
+
+            if (player.getState() == Player.PlayerState.ACTIVE)
+            {
+                checkBox.setChecked(true);
+                checkBox.setText(getResources().getString(R.string.player_active));
+            }
+            else
+            {
+                checkBox.setChecked(false);
+                checkBox.setText(getResources().getString(R.string.player_inactive));
+            }
         }
 
         Button camera = (Button) playerDialog.findViewById(R.id.button_camera);
@@ -253,10 +285,12 @@ public class PlayerListActivity extends Activity
         EditText editTextFirstName    = (EditText) dialog.findViewById(R.id.edittext_player_firstname);
         EditText editTextLastName     = (EditText) dialog.findViewById(R.id.edittext_player_lastname);
         EditText editTextPlayerNumber = (EditText) dialog.findViewById(R.id.edittext_player_number);
+        CheckBox checkBoxPlayerState  = (CheckBox) dialog.findViewById(R.id.checkbox_player_state);
 
         String firstName    = editTextFirstName.getText().toString();
         String lastName     = editTextLastName.getText().toString();
         String playerNumber = editTextPlayerNumber.getText().toString();
+        Boolean playerState = checkBoxPlayerState.isChecked();
 
         byte[] picture = new byte[0];
         if (mImageViewPicture.getDrawable() != null)
@@ -269,6 +303,15 @@ public class PlayerListActivity extends Activity
         player.setLastName(lastName);
         player.setPlayerNumber(Integer.valueOf(playerNumber));
         player.setPicture(picture);
+
+        if (playerState)
+        {
+            player.setState(Player.PlayerState.ACTIVE);
+        }
+        else
+        {
+            player.setState(Player.PlayerState.INACTIVE);
+        }
 
         return player;
     }

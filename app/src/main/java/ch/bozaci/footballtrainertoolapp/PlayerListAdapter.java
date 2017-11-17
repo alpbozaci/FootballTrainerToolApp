@@ -1,6 +1,8 @@
 package ch.bozaci.footballtrainertoolapp;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +83,17 @@ public class PlayerListAdapter extends BaseAdapter
         viewHolder.textViewPlayerName.setText(player.getFirstName() + " " + player.getLastName());
         viewHolder.textViewPlayerNo.setText("" + player.getPlayerNumber());
         viewHolder.imageViewPlayerFoto.setImageBitmap(PictureUtil.convertByteArrayToBitmap(player.getPicture()));
+
+        if (player.getState().equals(Player.PlayerState.ACTIVE))
+        {
+            viewHolder.textViewPlayerName.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+            viewHolder.textViewPlayerName.setTextColor(Color.BLACK);
+        }
+        else
+        {
+            viewHolder.textViewPlayerName.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
+            viewHolder.textViewPlayerName.setTextColor(Color.GRAY);
+        }
 
         return convertView;
     }

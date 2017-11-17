@@ -124,9 +124,13 @@ public class MatchSelectListAdapter extends BaseAdapter
             {
                 viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_green, null));
             }
-            else
+            else if (myTeamScore < otherTeamScore)
             {
                 viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_red, null));
+            }
+            else
+            {
+                viewHolder.textViewMatchScore.setBackground(mContext.getResources().getDrawable(R.drawable.gradient_background_light2dark_gray, null));
             }
         }
     }

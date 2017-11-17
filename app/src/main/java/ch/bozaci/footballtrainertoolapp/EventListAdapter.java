@@ -23,14 +23,14 @@ public class EventListAdapter extends BaseAdapter
     private List<Event> mEventList;
     private LayoutInflater mLayoutInflater;
     private MatchActivity.MyEventClickListener mEventClickListener;
-    private MatchActivity.MyDeleteEventLongClickListener mEventLongClickListener;
+    private MatchActivity.MyEventLongClickListener mEventLongClickListener;
 
 
     public EventListAdapter(
             Context context,
             List<Event> eventList,
             MatchActivity.MyEventClickListener eventClickListener,
-            MatchActivity.MyDeleteEventLongClickListener eventLongClickListener)
+            MatchActivity.MyEventLongClickListener eventLongClickListener)
     {
         this.mContext = context;
         this.mEventList = eventList;

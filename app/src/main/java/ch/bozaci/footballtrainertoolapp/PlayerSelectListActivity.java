@@ -61,7 +61,7 @@ public class PlayerSelectListActivity extends Activity
 
     private void loadDBPlayerList()
     {
-        List<Player> dbPlayerList = mDatabaseAdapter.getPlayerList();
+        List<Player> dbPlayerList = mDatabaseAdapter.getPlayerList(Player.PlayerState.ACTIVE);
 
         for (Player player : dbPlayerList)
         {

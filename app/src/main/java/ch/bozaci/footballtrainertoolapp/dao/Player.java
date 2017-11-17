@@ -17,12 +17,20 @@ public class Player implements Serializable
     public static final String COLUMN_LASTNAME      = "lastname";
     public static final String COLUMN_PLAYERNUMBER  = "playernumber";
     public static final String COLUMN_PICTURE       = "picture";
+    public static final String COLUMN_STATE         = "state";
+
+    public static enum PlayerState
+    {
+        ACTIVE,
+        INACTIVE;
+    }
 
     private Integer id;
     private String firstName;
     private String lastName;
     private Integer playerNumber;
     private byte[] picture;
+    private PlayerState state;
 
     public Integer getId()
     {
@@ -72,6 +80,16 @@ public class Player implements Serializable
     public void setPicture(byte[] picture)
     {
         this.picture = picture;
+    }
+
+    public PlayerState getState()
+    {
+        return state;
+    }
+
+    public void setState(PlayerState state)
+    {
+        this.state = state;
     }
 
     @Override

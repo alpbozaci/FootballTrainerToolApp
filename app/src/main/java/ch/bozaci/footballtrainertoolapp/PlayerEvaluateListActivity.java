@@ -22,11 +22,10 @@ public class PlayerEvaluateListActivity extends Activity
 {
     private static final String LOG_TAG = PlayerEvaluateListActivity.class.getSimpleName();
 
+    private Match mMatch;
     private List<Player> mPlayerList;
     private PlayerEvaluateListAdapter mListAdapter;
     private DatabaseAdapter mDatabaseAdapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,20 +37,22 @@ public class PlayerEvaluateListActivity extends Activity
 
         mPlayerList = new ArrayList<>();
 
-        loadDBPlayerList();
+        Bundle bundle = getIntent().getExtras();
+
+        mMatch = (Match)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_MATCH);
+        List<Integer> playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
+        loadDBPlayerList(playerIdList);
 
         ListView listView = (ListView) findViewById(R.id.listview_evaluate_player);
         mListAdapter = new PlayerEvaluateListAdapter(this, mPlayerList, new MyPlayerEvaluateClickListener());
         listView.setAdapter(mListAdapter);
-
     }
 
-    private void loadDBPlayerList()
+    private void loadDBPlayerList(List<Integer> playerIdList)
     {
-        List<Player> dbPlayerList = mDatabaseAdapter.getPlayerList();
-
-        for (Player player : dbPlayerList)
+        for (Integer id : playerIdList)
         {
+            Player player = mDatabaseAdapter.getPlayer(id);
             mPlayerList.add(player);
         }
     }

@@ -23,7 +23,7 @@ public class DatabaseAdapter
 {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private int DATABASE_VERSION = 4;
+    private int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "footballtrainertoolapp";
 
     private Context mContext;
@@ -83,6 +83,7 @@ public class DatabaseAdapter
         contentValues.put(Player.COLUMN_LASTNAME, player.getLastName());
         contentValues.put(Player.COLUMN_PLAYERNUMBER, player.getPlayerNumber());
         contentValues.put(Player.COLUMN_PICTURE, player.getPicture());
+        contentValues.put(Player.COLUMN_STATE, String.valueOf(player.getState()));
 
         return (int)mSqlDatabase.insert(Player.TABLE, null, contentValues);
     }
@@ -102,6 +103,7 @@ public class DatabaseAdapter
             player.setLastName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_LASTNAME)));
             player.setPlayerNumber(cursor.getInt(cursor.getColumnIndex(Player.COLUMN_PLAYERNUMBER)));
             player.setPicture(cursor.getBlob(cursor.getColumnIndex(Player.COLUMN_PICTURE)));
+            player.setState(Player.PlayerState.valueOf(cursor.getString(cursor.getColumnIndex(Player.COLUMN_STATE))));
         }
 
         return player;
@@ -109,9 +111,21 @@ public class DatabaseAdapter
 
     public List<Player> getPlayerList()
     {
+        String whereClause = null;
+        return getPlayerList(whereClause);
+    }
+
+    public List<Player> getPlayerList(Player.PlayerState playerState)
+    {
+        String whereClause = Player.COLUMN_STATE + " = '" + String.valueOf(playerState) + "'";
+        return getPlayerList(whereClause);
+    }
+
+    private List<Player> getPlayerList(String whereClause)
+    {
         List<Player> playerList = new ArrayList<>();
 
-        Cursor cursor = mSqlDatabase.query(Player.TABLE, null, null, null, null, null, null);
+        Cursor cursor = mSqlDatabase.query(Player.TABLE, null, whereClause, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst())
         {
@@ -123,6 +137,7 @@ public class DatabaseAdapter
                 player.setLastName(cursor.getString(cursor.getColumnIndex(Player.COLUMN_LASTNAME)));
                 player.setPlayerNumber(cursor.getInt(cursor.getColumnIndex(Player.COLUMN_PLAYERNUMBER)));
                 player.setPicture(cursor.getBlob(cursor.getColumnIndex(Player.COLUMN_PICTURE)));
+                player.setState(Player.PlayerState.valueOf(cursor.getString(cursor.getColumnIndex(Player.COLUMN_STATE))));
 
                 playerList.add(player);
             }
@@ -139,6 +154,7 @@ public class DatabaseAdapter
         contentValues.put(Player.COLUMN_LASTNAME, player.getLastName());
         contentValues.put(Player.COLUMN_PLAYERNUMBER, player.getPlayerNumber());
         contentValues.put(Player.COLUMN_PICTURE, player.getPicture());
+        contentValues.put(Player.COLUMN_STATE, String.valueOf(player.getState()));
 
         String whereClause = Player.COLUMN_ID + " = " + player.getId();
 
@@ -389,7 +405,8 @@ public class DatabaseAdapter
                         Player.COLUMN_FIRSTNAME     + " TEXT, " +
                         Player.COLUMN_LASTNAME      + " TEXT, " +
                         Player.COLUMN_PLAYERNUMBER  + " INTEGER, " +
-                        Player.COLUMN_PICTURE       + " BLOB" +
+                        Player.COLUMN_PICTURE       + " BLOB, " +
+                        Player.COLUMN_STATE         + " TEXT" +
                         ");"
                     ;
 
