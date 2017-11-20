@@ -6,21 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="100"
     tools:context="ch.bozaci.footballtrainertoolapp.PlayerSelectListActivity">
 
     <ListView
         android:id="@+id/listview_select_player"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_height="0dp"
+        android:layout_weight="90"
         />
 
     <Button
-        android:id="@+id/button_next"
+        android:id="@+id/button_select_player_next"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="10"
         android:text="@string/next"
-        android:layout_weight="1"
+        android:background="@drawable/button_style"
+        android:textColor="#fff"
+        android:layout_margin="5dp"
         />
 
 </LinearLayout>

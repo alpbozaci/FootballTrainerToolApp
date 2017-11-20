@@ -25,6 +25,11 @@ public class MatchActivity extends Activity
 {
     private static final String LOG_TAG = MatchActivity.class.getSimpleName();
 
+    enum MatchState
+    {
+        IDLE, RUNNING, PAUSED, FINISHED
+    }
+
     private List<Integer> mSelectedPlayerIdList;
     private List<Integer> mUnselectedPlayerIdList;
     private List<Player> mSelectedPlayerList;
@@ -55,6 +60,8 @@ public class MatchActivity extends Activity
     private Thread mTimerThread;
 
     private Match mMatch;
+
+    private MatchState mMatchState;
 
     private DatabaseAdapter mDatabaseAdapter;
 
@@ -97,6 +104,8 @@ public class MatchActivity extends Activity
         tab2.setIndicator(getString(R.string.history));
         tab2.setContent(R.id.tab2);
         tabHost.addTab(tab2);
+
+        mMatchState = MatchState.IDLE;
 
         //TAB 1
         mTimerThread = new Thread(timer);
@@ -333,8 +342,6 @@ public class MatchActivity extends Activity
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                changeGuiElementsOnFinishMatch();
-                handleAddNoPlayerEvent(Event.EventType.MATCH_FINISH);
                 saveMatchEvents();
                 alertDialog.dismiss();
 
@@ -409,23 +416,39 @@ public class MatchActivity extends Activity
 
     private void updateTimer()
     {
-        mElapsedFullTimeInSeconds++;
-        mElapsedPartTimeInSeconds++;
+        if (mMatchState == MatchState.RUNNING)
+        {
+            mElapsedFullTimeInSeconds++;
+            mElapsedPartTimeInSeconds++;
 
-        Integer minFullTime = mElapsedFullTimeInSeconds / 60;
-        Integer secFullTime = mElapsedFullTimeInSeconds % 60;
-        Integer minPartTime = mElapsedPartTimeInSeconds / 60;
-        Integer secPartTime = mElapsedPartTimeInSeconds % 60;
+            Integer minFullTime = mElapsedFullTimeInSeconds / 60;
+            Integer secFullTime = mElapsedFullTimeInSeconds % 60;
+            Integer minPartTime = mElapsedPartTimeInSeconds / 60;
+            Integer secPartTime = mElapsedPartTimeInSeconds % 60;
 
-        String formattedMinFullTime = String.format("%02d", minFullTime);
-        String formattedSecFullTime = String.format("%02d", secFullTime);
-        String formattedMinPartTime = String.format("%02d", minPartTime);
-        String formattedSecPartTime = String.format("%02d", secPartTime);
+            String formattedMinFullTime = String.format("%02d", minFullTime);
+            String formattedSecFullTime = String.format("%02d", secFullTime);
+            String formattedMinPartTime = String.format("%02d", minPartTime);
+            String formattedSecPartTime = String.format("%02d", secPartTime);
 
-        mFullTimerMinTextView.setText(formattedMinFullTime);
-        mFullTimerSecTextView.setText(formattedSecFullTime);
-        mPartTimerMinTextView.setText(formattedMinPartTime);
-        mPartTimerSecTextView.setText(formattedSecPartTime);
+            mFullTimerMinTextView.setText(formattedMinFullTime);
+            mFullTimerSecTextView.setText(formattedSecFullTime);
+            mPartTimerMinTextView.setText(formattedMinPartTime);
+            mPartTimerSecTextView.setText(formattedSecPartTime);
+        }
+        if (mMatchState == MatchState.PAUSED)
+        {
+            mElapsedPartTimeInSeconds++;
+
+            Integer minPartTime = mElapsedPartTimeInSeconds / 60;
+            Integer secPartTime = mElapsedPartTimeInSeconds % 60;
+
+            String formattedMinPartTime = String.format("%02d", minPartTime);
+            String formattedSecPartTime = String.format("%02d", secPartTime);
+
+            mPartTimerMinTextView.setText(formattedMinPartTime);
+            mPartTimerSecTextView.setText(formattedSecPartTime);
+        }
     }
 
     private void changeGuiElementsOnStartMatch()
@@ -442,7 +465,14 @@ public class MatchActivity extends Activity
         mPauseMatchButton.setEnabled(true);
         mFinishMatchButton.setEnabled(true);
         //------------------------------------------------------------------------------------------
-        mTimerThread.start();
+        if (mMatchState == MatchState.IDLE)
+        {
+            mTimerThread.start();
+        }
+        else
+        {
+            resetPartTimer();
+        }
     }
 
     private void changeGuiElementsOnPauseMatch()
@@ -458,8 +488,6 @@ public class MatchActivity extends Activity
         mStartMatchButton.setEnabled(true);
         mPauseMatchButton.setEnabled(false);
         mFinishMatchButton.setEnabled(false);
-        //------------------------------------------------------------------------------------------
-        mTimerThread.interrupt();
         //------------------------------------------------------------------------------------------
         resetPartTimer();
     }
@@ -509,6 +537,8 @@ public class MatchActivity extends Activity
         {
             changeGuiElementsOnStartMatch();
             handleAddNoPlayerEvent(Event.EventType.MATCH_START);
+            // set state after changeGuiElement !!!
+            mMatchState = MatchState.RUNNING;
         }
     }
 
@@ -519,6 +549,8 @@ public class MatchActivity extends Activity
         {
             changeGuiElementsOnPauseMatch();
             handleAddNoPlayerEvent(Event.EventType.MATCH_PAUSE);
+            // set state after changeGuiElement !!!
+            mMatchState = MatchState.PAUSED;
         }
     }
 
@@ -527,6 +559,10 @@ public class MatchActivity extends Activity
         @Override
         public void onClick(View v)
         {
+            changeGuiElementsOnFinishMatch();
+            handleAddNoPlayerEvent(Event.EventType.MATCH_FINISH);
+            // set state after changeGuiElement !!!
+            mMatchState = MatchState.FINISHED;
             showFinishMatchDialog();
         }
     }

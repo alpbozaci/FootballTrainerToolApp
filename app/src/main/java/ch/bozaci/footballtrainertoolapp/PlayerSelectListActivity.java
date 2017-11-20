@@ -55,7 +55,7 @@ public class PlayerSelectListActivity extends Activity
         mSelectPlayerAdapter = new PlayerSelectListAdapter(this, mPlayerList, new MyActivateDeactivatePlayerClickListener());
         listView.setAdapter(mSelectPlayerAdapter);
 
-        Button button = (Button) findViewById(R.id.button_next);
+        Button button = (Button) findViewById(R.id.button_select_player_next);
         button.setOnClickListener(new MyNextButtonClickListener());
     }
 

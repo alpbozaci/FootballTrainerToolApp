@@ -2,6 +2,7 @@ package ch.bozaci.footballtrainertoolapp;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -46,6 +48,9 @@ public class PlayerEvaluateListActivity extends Activity
         ListView listView = (ListView) findViewById(R.id.listview_evaluate_player);
         mListAdapter = new PlayerEvaluateListAdapter(this, mPlayerList, new MyPlayerEvaluateClickListener());
         listView.setAdapter(mListAdapter);
+
+        Button button = (Button) findViewById(R.id.button_evaluate_player_next);
+        button.setOnClickListener(new PlayerEvaluateListActivity.MyNextButtonClickListener());
     }
 
     private void loadDBPlayerList(List<Integer> playerIdList)
@@ -124,5 +129,15 @@ public class PlayerEvaluateListActivity extends Activity
         });
 
         evaluateDialog.show();
+    }
+
+    class MyNextButtonClickListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+            Intent intent = new Intent(PlayerEvaluateListActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 }

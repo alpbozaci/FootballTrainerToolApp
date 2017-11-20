@@ -23,6 +23,7 @@
         android:textStyle="bold"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:background="@drawable/button_style"
         />
 
     <Button
@@ -37,6 +38,7 @@
         android:textStyle="bold"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:background="@drawable/button_style"
         />
 
     <Button
@@ -51,6 +53,7 @@
         android:textStyle="bold"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:background="@drawable/button_style"
         />
 
 </LinearLayout>
