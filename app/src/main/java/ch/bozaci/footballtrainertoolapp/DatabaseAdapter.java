@@ -121,6 +121,23 @@ public class DatabaseAdapter
         return getPlayerList(whereClause);
     }
 
+    public List<Player> getPlayerList(Match match) throws ParseException
+    {
+        List<Player> playerList = new ArrayList<>();
+
+        List<Event> eventList = getEventList(match);
+
+        for (Event event : eventList)
+        {
+            if(event.getType() == Event.EventType.OWN_PLAYER_PRESENT || event.getType() == Event.EventType.OWN_PLAYER_ABSENT)
+            {
+                Player player = getPlayer(event.getPlayerId());
+                playerList.add(player);
+            }
+        }
+        return playerList;
+    }
+
     private List<Player> getPlayerList(String whereClause)
     {
         List<Player> playerList = new ArrayList<>();

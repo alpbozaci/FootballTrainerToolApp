@@ -23,7 +23,7 @@
         android:layout_weight="10"
         android:text="@string/next"
         android:background="@drawable/button_style"
-        android:textColor="#fff"
+        android:textColor="#3f3f3f"
         android:layout_margin="5dp"
         />
 

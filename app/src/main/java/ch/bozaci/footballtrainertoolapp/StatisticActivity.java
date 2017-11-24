@@ -4,17 +4,20 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
+import ch.bozaci.footballtrainertoolapp.util.IntentConstants;
 
 public class StatisticActivity extends Activity
 {
@@ -42,7 +45,7 @@ public class StatisticActivity extends Activity
         };
 
         Bundle bundle = getIntent().getExtras();
-        Match match = (Match)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_MATCH);
+        Match match = (Match)bundle.getSerializable(IntentConstants.INTENTVALUE_MATCH);
 
         mDatabaseAdapter = DatabaseAdapter.getInstance(getApplicationContext());
 
@@ -76,8 +79,6 @@ public class StatisticActivity extends Activity
 
     private void createDataRows(TableLayout tableLayout, Match match)
     {
-        List<Player> playerList = mDatabaseAdapter.getPlayerList();
-
         TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
         tableRowParams.setMargins(1,1,1,1);
         tableRowParams.weight = 1;
@@ -88,6 +89,8 @@ public class StatisticActivity extends Activity
             TableRow tableRow = null;
             Integer amount;
             TextView textView;
+
+            List<Player> playerList = mDatabaseAdapter.getPlayerList(match);
 
             for (Player player : playerList)
             {
@@ -180,6 +183,7 @@ public class StatisticActivity extends Activity
         catch (ParseException e)
         {
             e.printStackTrace();
+            Log.e(LOG_TAG, "data problem");
         }
     }
 
@@ -219,4 +223,5 @@ public class StatisticActivity extends Activity
 
         textView.setText(text);
     }
+
 }

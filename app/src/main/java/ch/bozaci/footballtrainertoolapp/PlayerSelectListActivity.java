@@ -14,6 +14,7 @@ import java.util.List;
 
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
+import ch.bozaci.footballtrainertoolapp.util.IntentConstants;
 
 public class PlayerSelectListActivity extends Activity
 {
@@ -26,9 +27,7 @@ public class PlayerSelectListActivity extends Activity
     private PlayerSelectListAdapter mSelectPlayerAdapter;
     private DatabaseAdapter mDatabaseAdapter;
 
-    public static final String INTENTVALUE_MATCH = "match";
-    public static final String INTENTVALUE_SElECTED_PLAYER_ID_LIST = "selectedPlayerIdList";
-    public static final String INTENTVALUE_UNSElECTED_PLAYER_ID_LIST = "unselectedPlayerIdList";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -117,9 +116,9 @@ public class PlayerSelectListActivity extends Activity
             }
 
             Intent intent = new Intent(PlayerSelectListActivity.this, MatchActivity.class);
-            intent.putExtra(INTENTVALUE_MATCH, mMatch);
-            intent.putIntegerArrayListExtra(INTENTVALUE_SElECTED_PLAYER_ID_LIST, (ArrayList)mSelectedPlayerIdList);
-            intent.putIntegerArrayListExtra(INTENTVALUE_UNSElECTED_PLAYER_ID_LIST, (ArrayList)mUnselectedPlayerIdList);
+            intent.putExtra(IntentConstants.INTENTVALUE_MATCH, mMatch);
+            intent.putIntegerArrayListExtra(IntentConstants.INTENTVALUE_SElECTED_PLAYER_ID_LIST, (ArrayList)mSelectedPlayerIdList);
+            intent.putIntegerArrayListExtra(IntentConstants.INTENTVALUE_UNSElECTED_PLAYER_ID_LIST, (ArrayList)mUnselectedPlayerIdList);
 
             startActivity(intent);
         }

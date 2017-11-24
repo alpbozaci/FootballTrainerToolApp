@@ -19,6 +19,7 @@ import java.util.List;
 
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
+import ch.bozaci.footballtrainertoolapp.util.IntentConstants;
 
 public class PlayerEvaluateListActivity extends Activity
 {
@@ -41,8 +42,8 @@ public class PlayerEvaluateListActivity extends Activity
 
         Bundle bundle = getIntent().getExtras();
 
-        mMatch = (Match)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_MATCH);
-        List<Integer> playerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
+        mMatch = (Match)bundle.getSerializable(IntentConstants.INTENTVALUE_MATCH);
+        List<Integer> playerIdList = (ArrayList<Integer>)bundle.getSerializable(IntentConstants.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
         loadDBPlayerList(playerIdList);
 
         ListView listView = (ListView) findViewById(R.id.listview_evaluate_player);

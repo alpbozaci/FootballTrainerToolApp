@@ -20,6 +20,7 @@ import java.util.List;
 import ch.bozaci.footballtrainertoolapp.dao.Event;
 import ch.bozaci.footballtrainertoolapp.dao.Match;
 import ch.bozaci.footballtrainertoolapp.dao.Player;
+import ch.bozaci.footballtrainertoolapp.util.IntentConstants;
 
 public class MatchActivity extends Activity
 {
@@ -77,7 +78,7 @@ public class MatchActivity extends Activity
 
         Bundle bundle = getIntent().getExtras();
 
-        mMatch = (Match)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_MATCH);
+        mMatch = (Match)bundle.getSerializable(IntentConstants.INTENTVALUE_MATCH);
 
         TextView homeTeam  = (TextView) findViewById(R.id.textview_hometeam);
         TextView guestTeam = (TextView) findViewById(R.id.textview_guestteam);
@@ -87,8 +88,8 @@ public class MatchActivity extends Activity
         mSelectedPlayerList   = new ArrayList<>();
         mUnselectedPlayerList = new ArrayList<>();
 
-        mSelectedPlayerIdList   = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
-        mUnselectedPlayerIdList = (ArrayList<Integer>)bundle.getSerializable(PlayerSelectListActivity.INTENTVALUE_UNSElECTED_PLAYER_ID_LIST);
+        mSelectedPlayerIdList   = (ArrayList<Integer>)bundle.getSerializable(IntentConstants.INTENTVALUE_SElECTED_PLAYER_ID_LIST);
+        mUnselectedPlayerIdList = (ArrayList<Integer>)bundle.getSerializable(IntentConstants.INTENTVALUE_UNSElECTED_PLAYER_ID_LIST);
         loadDBPlayerList(mSelectedPlayerIdList, mSelectedPlayerList);
         loadDBPlayerList(mUnselectedPlayerIdList, mUnselectedPlayerList);
 
@@ -346,8 +347,8 @@ public class MatchActivity extends Activity
                 alertDialog.dismiss();
 
                 Intent intent = new Intent(MatchActivity.this, PlayerEvaluateListActivity.class);
-                intent.putExtra(PlayerSelectListActivity.INTENTVALUE_MATCH, mMatch);
-                intent.putIntegerArrayListExtra(PlayerSelectListActivity.INTENTVALUE_SElECTED_PLAYER_ID_LIST, (ArrayList)mSelectedPlayerIdList);
+                intent.putExtra(IntentConstants.INTENTVALUE_MATCH, mMatch);
+                intent.putIntegerArrayListExtra(IntentConstants.INTENTVALUE_SElECTED_PLAYER_ID_LIST, (ArrayList)mSelectedPlayerIdList);
 
                 startActivity(intent);
             }

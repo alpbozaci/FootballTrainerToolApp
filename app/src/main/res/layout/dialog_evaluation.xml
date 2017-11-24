@@ -14,13 +14,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="100">
 
             <TextView
                 android:id="@+id/textview_evaluate_total"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="30"
                 android:text="Gesamt Bewertung"
                 android:gravity="center"
                 />
@@ -28,18 +29,18 @@
             <SeekBar
                 android:id="@+id/seekBar_evaluate_total"
                 style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_weight="60"
                 android:max="4"
                 android:progress="0"
                 />
 
             <TextView
                 android:id="@+id/textview_evaluate_total_value"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="10"
                 android:text=""
                 android:gravity="center"
                 />
